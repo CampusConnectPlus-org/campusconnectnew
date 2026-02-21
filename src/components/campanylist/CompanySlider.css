@@ -1,0 +1,58 @@
+.slider-container {
+  width: 100%;
+  overflow: hidden;
+  background: #f8f9fa;
+  padding: 30px 0;
+}
+
+.slider-track {
+  display: flex;
+  width: max-content;
+  animation: scroll 20s linear infinite;
+}
+
+.company-card {
+  min-width: 200px;
+  margin: 0 30px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.company-card img {
+  width: 120px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.company-card p {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.company-card:hover {
+  transform: scale(1.1);
+}
+
+/* Animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .company-card {
+    min-width: 150px;
+    margin: 0 15px;
+  }
+
+  .company-card img {
+    width: 90px;
+    height: 50px;
+  }
+}
