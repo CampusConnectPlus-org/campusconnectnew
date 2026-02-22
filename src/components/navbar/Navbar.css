@@ -45,6 +45,25 @@
   color: #007bff;
 }
 
+
+/* .dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 60px;
+  list-style: none;
+  background: rgba(48, 48, 207, 0.5);
+  color: white;
+  width: auto;
+}
+
+.dropdown-menu li {
+  padding: 5px 5px;
+
+} */
+
 /* Profile */
 .profile-wrapper {
   position: relative;

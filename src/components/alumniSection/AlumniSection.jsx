@@ -1,8 +1,8 @@
 
 import React from "react";
-import "./Alumni.css";
+import "./AlumniSection.css";
 // import { useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 const alumniData = [
   {
     id: 1,
@@ -32,9 +32,8 @@ const alumniData = [
 
 const Alumni = () => {
   // const navigate = useNavigate();
-
   return (
-    <div className="alumni-container">
+    <div className="alumni-container"  id="alumni">
       <h2 className="title">Meet Our Alumni</h2>
 
       {alumniData.map((alumni, index) => (
@@ -58,9 +57,12 @@ const Alumni = () => {
       ))}
 
       <div className="btn-container">
-        <button onClick={() => navigate("/alumni")} className="more-btn">
+      
+        <Link to="/alumni">
+           <button className="more-btn">
           View More Alumni
         </button>
+        </Link>
       </div>
     </div>
   );

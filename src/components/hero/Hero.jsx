@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"; 
 import { motion } from "framer-motion";
+import alumni from "../../assets/alumni.jpg";
  import "./Hero.css";
+ 
 
 const slides = [ 
   { title: "Alumni MeetUp 2026",
    desc: "Join workshops, hackathons and guest speakers.", 
-   img: "https://firebasestorage.googleapis.com/v0/b/alumini-admin.appspot.com/o/manage-gallery%2F2025-05-30T13%3A21%3A24.157Zgallery4.jpg?alt=media&token=34c047f9-7afc-4834-a680-68a6a0c41207",
+   img: alumni,
    },
   { title: "Cultural Fest 2026", 
     desc: "Music, dance and celebration with campus friends.",
