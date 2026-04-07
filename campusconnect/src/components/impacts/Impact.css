@@ -1,0 +1,75 @@
+/* Main Section */
+.impact-section {
+  width: 100%;
+  padding: 60px 20px;
+  text-align: center;
+  background: #f5f7fa;
+}
+
+/* Heading */
+.impact-heading {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #1a2a44;
+}
+
+/* Container */
+.impact-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  max-width: 1300px;
+  margin: auto;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Each Box */
+.impact-box {
+  flex: 1;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #0f3057, #1e5f9a);
+  color: white;
+  transition: 0.3s ease;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.impact-box:last-child {
+  border-right: none;
+}
+
+.impact-box h1 {
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.impact-box p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+/* Hover Effect */
+/* .impact-box:hover {
+  background: linear-gradient(135deg, #1e5f9a, #0f3057);
+  transform: translateY(-5px);
+} */
+
+/* Responsive */
+@media (max-width: 768px) {
+  /* .impact-container {
+    flex-direction: column;
+  } */
+
+  .impact-box {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .impact-box:last-child {
+    border-bottom: none;
+  }
+}

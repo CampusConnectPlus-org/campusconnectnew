@@ -1,0 +1,35 @@
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  background: #1e2a38;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar h2 {
+  margin-bottom: 30px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.sidebar li:hover,
+.sidebar .active {
+  background: #3b82f6;
+}
+
+.logout {
+  margin-top: auto;
+  cursor: pointer;
+}

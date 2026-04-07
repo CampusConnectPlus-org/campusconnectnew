@@ -1,0 +1,18 @@
+.table-header button{
+    background-color: #1e54d8;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.edit, .delete{
+    background-color: #1e54d8;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 6px;
+    
+}
