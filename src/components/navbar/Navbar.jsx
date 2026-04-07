@@ -54,13 +54,8 @@ const Navbar = () => {
 
 <div className={`nav-links ${menuOpen ? "active" : ""}`}>
                <Link to="/">Home</Link>
-               {/* <Link to="/" onClick={() => setOpenClubs(!openClubs)}>CTAE Clubs {openClubs && (<ul className="dropdown-menu"> 
-                <li>tech club</li>
-                <li>cultural club</li>
-                <li>sports club</li>
-               </ul>)}
-               </Link> */}
-                   <Link to="/">CTAE Club</Link>
+               {/* NEW ADDITION: Link to CTAE Coding Club detail page */}
+               <Link to="/clubs/ctae-coding-club">CTAE Club</Link>
                <Link to="/event">Event</Link>
                <Link to="/placement">Placement</Link>
                <Link to="/" onClick={scrollToAlumni}>Alumni</Link>

@@ -1,0 +1,479 @@
+/* NEW ADDITION: CTAE Club Page Styling */
+/* Matches the theme of home page with navy blue (#16328d) and blue accents */
+
+.ctae-club-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* NEW: Clubs Tab Switcher Styling */
+.club-switcher {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 20px;
+  margin: 20px;
+}
+
+.club-tab {
+  background-color: #ffffff;
+  border: 2px solid #dbeafe;
+  color: #16328d;
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.club-tab:hover {
+  background-color: #eff6ff;
+}
+
+.club-tab.active {
+  background-color: #2563eb;
+  color: white;
+  border-color: #2563eb;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18);
+}
+
+/* NEW: Hero Banner Styling */
+.club-hero {
+  background: linear-gradient(135deg, #16328d 0%, #1e40af 100%);
+  color: white;
+  padding: 60px 40px;
+  margin: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+.hero-text h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: white;
+}
+
+.hero-text p {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.join-btn {
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.join-btn:hover {
+  background-color: #1e40af;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+.hero-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.code-icon {
+  font-size: 120px;
+  color: #60a5fa;
+  text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+}
+
+/* NEW: About Section Styling */
+.about-section {
+  padding: 60px 40px;
+  background-color: #f8f9fa;
+  margin: 20px;
+  border-radius: 15px;
+}
+
+.about-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-text {
+  margin-bottom: 50px;
+}
+
+.about-text h2 {
+  font-size: 32px;
+  color: #16328d;
+  margin-bottom: 16px;
+}
+
+.about-text p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+}
+
+/* NEW: Team Members Section Styling */
+.team-section h3 {
+  font-size: 24px;
+  color: #16328d;
+  margin-bottom: 24px;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+}
+
+.team-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.team-card:hover {
+  box-shadow: 0 8px 20px rgba(22, 50, 141, 0.2);
+}
+
+.team-card img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 16px;
+  border: 4px solid #2563eb;
+}
+
+.team-card h4 {
+  font-size: 18px;
+  color: #16328d;
+  margin-bottom: 8px;
+}
+
+.team-card p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* NEW: Achievements Section Styling */
+.achievements-section {
+  padding: 60px 40px;
+  background-color: white;
+  margin: 20px;
+  border-radius: 15px;
+}
+
+.achievements-section h2 {
+  font-size: 32px;
+  color: #16328d;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.achievement-card {
+  background: linear-gradient(135deg, #e0e7ff 0%, #f0f4ff 100%);
+  border-left: 5px solid #2563eb;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.achievement-card:hover {
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+}
+
+.achievement-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.achievement-card p {
+  font-size: 16px;
+  color: #16328d;
+  font-weight: 600;
+}
+
+/* NEW: Events Section Styling */
+.events-section {
+  padding: 60px 40px;
+  background-color: #f8f9fa;
+  margin: 20px;
+  border-radius: 15px;
+}
+
+.events-section h2 {
+  font-size: 32px;
+  color: #16328d;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.event-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.event-card:hover {
+  box-shadow: 0 12px 25px rgba(22, 50, 141, 0.2);
+  transform: translateY(-5px);
+}
+
+.event-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.event-content {
+  padding: 24px;
+}
+
+.event-content h3 {
+  font-size: 20px;
+  color: #16328d;
+  margin-bottom: 12px;
+}
+
+.event-date {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.event-desc {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.register-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.register-btn:hover {
+  background-color: #1e40af;
+}
+
+/* NEW: Gallery Section Styling */
+.gallery-section {
+  padding: 60px 40px;
+  background-color: white;
+  margin: 20px;
+  border-radius: 15px;
+}
+
+.gallery-section h2 {
+  font-size: 32px;
+  color: #16328d;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.gallery-subtitle {
+  font-size: 16px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.gallery-item {
+  border-radius: 10px;
+  overflow: hidden;
+  height: 250px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.1);
+}
+
+/* NEW: Image Modal/Lightbox Styling */
+.image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  background: white;
+  border-radius: 15px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.modal-content img {
+  width: 100%;
+  height: auto;
+  max-height: 85vh;
+  object-fit: contain;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: white;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #16328d;
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+
+.close-btn:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.1);
+}
+
+/* NEW: Responsive Design */
+@media (max-width: 768px) {
+  .club-hero {
+    padding: 40px 20px;
+    margin: 10px;
+  }
+
+  .hero-content {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .hero-text h1 {
+    font-size: 32px;
+  }
+
+  .hero-icon {
+    width: 100%;
+    text-align: center;
+  }
+
+  .code-icon {
+    font-size: 80px;
+  }
+
+  .about-section,
+  .achievements-section,
+  .events-section,
+  .gallery-section {
+    padding: 40px 20px;
+    margin: 10px;
+  }
+
+  .team-grid,
+  .achievements-grid,
+  .events-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+
+  .event-card img {
+    height: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-text h1 {
+    font-size: 24px;
+  }
+
+  .hero-text p {
+    font-size: 14px;
+  }
+
+  .about-section,
+  .achievements-section,
+  .events-section,
+  .gallery-section {
+    padding: 30px 15px;
+  }
+}
