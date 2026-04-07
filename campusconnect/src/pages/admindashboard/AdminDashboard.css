@@ -1,0 +1,27 @@
+.dashboard {
+  display: flex;
+  background: #f5f6fa;
+}
+
+.main {
+  flex: 1;
+  padding: 20px;
+}
+
+.cards {
+  display: flex;
+  gap: 20px;
+}
+
+.content {
+  display: flex;
+  gap: 20px;
+}
+
+.left {
+  flex: 2;
+}
+
+.right {
+  flex: 1;
+}

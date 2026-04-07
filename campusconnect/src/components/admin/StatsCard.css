@@ -1,0 +1,11 @@
+.card {
+  flex: 1;
+  padding: 20px;
+  border-radius: 12px;
+  color: white;
+}
+
+.blue { background: #3b82f6; }
+.green { background: #22c55e; }
+.orange { background: #f97316; }
+.red { background: #ef4444; }
