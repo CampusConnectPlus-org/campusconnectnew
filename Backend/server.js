@@ -13,9 +13,12 @@ app.use(cors());
 
 
 
-mongoose.connect("mongodb://127.0.0.1:27017/alumniDB");
+// mongoose.connect("mongodb://127.0.0.1:27017/alumniDB");
+mongoose.connect("mongodb+srv://gujarrajendra015_db_user:project1020@cluster0.nehqfmw.mongodb.net/?appName=Cluster0")
+.then(() =>{ console.log("Connected to MongoDB Atlas")})
+.catch((err) => { console.error("Error connecting to MongoDB Atlas:", err) });
 
-// const User = require("./models/User");
+const User = require("./models/User");
 const Alumni = require("./models/Alumni");
 
 
@@ -58,7 +61,7 @@ const Alumni = require("./models/Alumni");
 //   const newUser = new User(
 //   { 
 //     name:"Rajendra Kumar",
-//     enrollmentNumber: "CTAE/2022/324",
+//     enrollmentNumber: "2022/CTAE/327",
 //     email: "gujarrajendra8955@gmail.com",
 //     password: "123456",
 //     profileImage:"/images/rajendra.jpeg"

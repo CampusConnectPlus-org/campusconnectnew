@@ -11,6 +11,7 @@ const AddUserModal = ({ showForm, setShowForm, fetchUsers }) => {
     profileImage: null,
     role: "user"
   });
+ 
 
   const handleChange = (e) => {
     

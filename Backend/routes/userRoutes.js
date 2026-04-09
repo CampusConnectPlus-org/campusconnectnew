@@ -159,5 +159,33 @@ router.delete('/alumni/:id', verifyToken, isAdmin, async (req, res) => {
     }
 });
 
+// update alumni
+router.put("/update/:id", upload.single("image"), async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updateData = {
+      name: req.body.name,
+      company: req.body.company,
+      role: req.body.role,
+    };
+
+    if (req.file) {
+      updateData.image = req.file.filename;
+    }
+
+    const updatedAlumni = await Alumni.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true }
+    );
+
+    res.json(updatedAlumni);
+
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;
 

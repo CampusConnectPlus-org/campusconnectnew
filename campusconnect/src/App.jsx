@@ -18,7 +18,7 @@ import DashboardHome from './pages/dashboardhome/DashboardHome'
 import AlumniRecord from './pages/admindashboard/adminpage/AlumniRecord'
 import ManageEvent from './pages/admindashboard/manageevent/ManageEvent'
 import ManageUser from './pages/admindashboard/manageuser/ManageUser'
-
+import CTAEClub from './pages/clubs/CTAEClub'
 
 
 
@@ -106,6 +106,7 @@ console.log("Admin in App:", admin);
         <Route path='/placement' element={<Placement/>}/>
         <Route path='/alumni' element={<AlumniPage/>}/>
         <Route path='/event' element={<Event/>}/>
+        <Route path='/clubs' element={<CTAEClub/>}/>
        
           
         </Route>

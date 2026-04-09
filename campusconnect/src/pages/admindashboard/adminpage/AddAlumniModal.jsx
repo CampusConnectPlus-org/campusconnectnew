@@ -114,6 +114,7 @@ try{
       dataToSend.append("name", alumniFormData.name);
     dataToSend.append("role", alumniFormData.role);
     dataToSend.append("batch", alumniFormData.batch);
+    dataToSend.append("desc", alumniFormData.desc);
     dataToSend.append("email", alumniFormData.email);
     dataToSend.append("linkedin", alumniFormData.linkedin);
     dataToSend.append("image", alumniFormData.image);

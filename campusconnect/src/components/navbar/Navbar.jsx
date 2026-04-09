@@ -44,7 +44,7 @@ setUser(null);
 
       <div className={`nav-links ${menuOpen ? "active" : ""}`}>
         <Link to="/">Home</Link>
-        <Link to="/">CTAE Club</Link>
+        <Link to="/clubs">CTAE Club</Link>
         <Link to="/event">Event</Link>
         <Link to="/placement">Placement</Link>
         <Link to="/" onClick={scrollToAlumni}>Alumni</Link>
