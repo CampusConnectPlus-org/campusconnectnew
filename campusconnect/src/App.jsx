@@ -112,7 +112,10 @@ console.log("Admin in App:", admin);
         </Route>
 
 
-{/* <Route path='/admindashboard' element={<AdminDashboard admin={admin} setAdmin={setAdmin}/>}/> */}
+<Route path='/adminlogin' element={<AdminLogin setAdmin={setAdmin}/>}/>
+
+<Route element={<ProtectedRoute/>}>
+
 <Route path="/admindashboard" element={<AdminDashboard admin={admin} setAdmin={setAdmin}/>}>
 <Route index element={<DashboardHome  />}/>
 <Route path='manageuser' element={<ManageUser />}/>
@@ -121,7 +124,15 @@ console.log("Admin in App:", admin);
 
 
 </Route>
-<Route path='/adminlogin' element={<AdminLogin setAdmin={setAdmin}/>}/>
+</Route>
+
+      {/* <Route path='/admindashboard' element = {
+              <>
+               <AdminDashboard />
+               <DashboardHome  />
+              </>
+            }/> */}
+
 
 {/* <Route path='/event' element={<Event />} />
     <>
