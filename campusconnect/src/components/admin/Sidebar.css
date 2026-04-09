@@ -18,14 +18,27 @@
 }
 
 .sidebar li {
-  padding: 12px;
+  padding: 0;
   margin-bottom: 10px;
-  cursor: pointer;
   border-radius: 8px;
+  list-style: none;
 }
 
-.sidebar li:hover,
-.sidebar .active {
+.sidebar li a {
+  display: block;
+  padding: 12px;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.sidebar li a:hover {
+  background: #3b82f6;
+}
+
+.sidebar li a.nav-active {
   background: #3b82f6;
 }
 

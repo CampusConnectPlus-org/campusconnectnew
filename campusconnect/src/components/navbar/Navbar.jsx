@@ -1,32 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 
 
 
-const Navbar = ({ user, setUser}) => {
+const Navbar = ({ user, setUser, admin, setAdmin }) => {
   const [showProfile, setShowProfile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const hideTimeoutRef = useRef(null);
   //  const [student, setStudent] = useState(null);
   //  const [openClubs, setOpenClubs] = useState(false);
   const navigate = useNavigate();
   // const token = localStorage.getItem("token");
-  
+
 
 
   //    const handleLogout = () => {
   //     navigate("/login");
   // };
 
-  const  handleLogout = ()=>{
+  const handleLogout = () => {
+    clearTimeout(hideTimeoutRef.current);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("admin");
+    navigate("/");
 
-localStorage.removeItem("token");
-localStorage.removeItem("user");
-navigate("/login");
+    setUser(null);
+    setAdmin(null);
+  };
 
-setUser(null);
+  const handleProfileEnter = () => {
+    clearTimeout(hideTimeoutRef.current);
+    setShowProfile(true);
+  };
 
-};
+  const handleProfileLeave = () => {
+    hideTimeoutRef.current = setTimeout(() => {
+      setShowProfile(false);
+    }, 200);
+  };
 
   const scrollToAlumni = () => {
     const section = document.getElementById("alumni");
@@ -48,33 +61,31 @@ setUser(null);
         <Link to="/event">Event</Link>
         <Link to="/placement">Placement</Link>
         <Link to="/" onClick={scrollToAlumni}>Alumni</Link>
-        
+
       </div>
 
 
       {/* Right Profile */}
       <div
         className="profile-wrapper"
-      
-        // onClick={() => setShowProfile(true)}
-          onMouseEnter={() => setShowProfile(true)}
-        onMouseLeave={() => setShowProfile(false)}
+        onMouseEnter={handleProfileEnter}
+        onMouseLeave={handleProfileLeave}
       >
-          
-        {user ? (
+
+        {user || admin ? (
           <>
             <img
-              src={`http://localhost:5000/uploads/${user.profileImage}`} 
+              src={`http://localhost:5000/uploads/${user ? user.profileImage : admin.profileImage}`}
               alt="profile"
               className="profile-img"
             />
 
             {showProfile && (
-              <div className="profile-dropdown">
-                <img src={`http://localhost:5000/uploads/${user.profileImage}`} alt="" />
-                <h4>{user.name}</h4>
-                <p>{user.email}</p>
-                {/* <p className="role">{user.role}</p> */}
+              <div className="profile-dropdown" onMouseEnter={handleProfileEnter} onMouseLeave={handleProfileLeave}>
+                <img src={`http://localhost:5000/uploads/${user ? user.profileImage : admin.profileImage}`} alt="" />
+                <h4>{user ? user.name : admin.name}</h4>
+                <p>{user ? user.email : admin.email}</p>
+                {/* <p className="role">{user ? user.role : 'Admin'}</p> */}
 
                 <button>View Profile</button>
                 <button className="logout" onClick={handleLogout}>Logout</button>
@@ -82,20 +93,20 @@ setUser(null);
             )}
           </>
         ) : (
-         <div className="buttons">
-           <Link to="/adminlogin">
-            <button onClick={() =>{navigate('./adminlogin')}} className="login-btn">Admin Login</button>
-          </Link>
-           <Link to="/login">
-            <button className="login-btn">Login</button>
-          </Link>
-         </div>
-          
+          <div className="buttons">
+            <Link to="/adminlogin">
+              <button onClick={() => { navigate('./adminlogin') }} className="login-btn">Admin Login</button>
+            </Link>
+            <Link to="/login">
+              <button className="login-btn">Login</button>
+            </Link>
+          </div>
+
         )}
-        
-      
+
+
       </div>
-      
+
     </nav>
   );
 };

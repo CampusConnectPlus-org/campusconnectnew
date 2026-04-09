@@ -1,10 +1,13 @@
 // server.js
 
+const dns = require('node:dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/userRoutes");
+const placementRoutes = require("./routes/placementRoutes");
 
 const app = express();
 app.use(express.json());
@@ -14,9 +17,9 @@ app.use(cors());
 
 
 // mongoose.connect("mongodb://127.0.0.1:27017/alumniDB");
-mongoose.connect("mongodb+srv://gujarrajendra015_db_user:project1020@cluster0.nehqfmw.mongodb.net/?appName=Cluster0")
-.then(() =>{ console.log("Connected to MongoDB Atlas")})
-.catch((err) => { console.error("Error connecting to MongoDB Atlas:", err) });
+mongoose.connect("mongodb+srv://gujarrajendra015_db_user:project1020@cluster0.nehqfmw.mongodb.net/test?appName=Cluster0")
+  .then(() => { console.log("Connected to MongoDB Atlas") })
+  .catch((err) => { console.error("Error connecting to MongoDB Atlas:", err) });
 
 const User = require("./models/User");
 const Alumni = require("./models/Alumni");
@@ -30,7 +33,7 @@ const Alumni = require("./models/Alumni");
 //   company: String,
 //   position: String,
 //    desc:String
-  
+
 
 // });
 // async function createAlumni() {
@@ -54,7 +57,7 @@ const Alumni = require("./models/Alumni");
 // createAlumni();
 
 
- 
+
 
 // async function createUser() {
 
@@ -124,8 +127,9 @@ app.get("/alumni", async (req, res) => {
 });
 
 
-app.use("/api/auth",authRoutes);
-app.use("/admin",userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/admin", userRoutes);
+app.use("/api/placements", placementRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/alumniimage", express.static("alumniimage"));
 
@@ -142,13 +146,13 @@ app.use("/alumniimage", express.static("alumniimage"));
 //   if(!user){
 //     return res.json({message:"User not found"});
 //   }
- 
+
 //   const isMatch = await bcrypt.compare(password,user.password);
 
 //   if(!isMatch){
 //     return res.json({message:"Wrong password"});
 //   }
-  
+
 //   const token = jwt.sign({id:user._id},
 //     "secretkey",
 //     {expiresIn:"id"}
@@ -160,31 +164,31 @@ app.use("/alumniimage", express.static("alumniimage"));
 //       enrollmentNumber:user.enrollmentNumber
 //     }
 //   });
-  // try {
+// try {
 
-  //   // check if user exists
-  //   const user = await User.findOne({ enrollmentNumber: enrollmentNumber, password : password });
+//   // check if user exists
+//   const user = await User.findOne({ enrollmentNumber: enrollmentNumber, password : password });
 
-  //   if (user) {
-  //      res.json({
-  //       success: true,
-  //       message:"Login successful",
-  //       user:user
-  //       // userId:user._id 
-  //       });
-  //   }
-  //   else{
-  //       res.json({
-  //           success:false,
-  //           message : "Invalid enrollmentNumber or password"
-           
-             
-  //       })
-  //   }
+//   if (user) {
+//      res.json({
+//       success: true,
+//       message:"Login successful",
+//       user:user
+//       // userId:user._id 
+//       });
+//   }
+//   else{
+//       res.json({
+//           success:false,
+//           message : "Invalid enrollmentNumber or password"
 
-  // } catch (error) {
-  //   res.status(500).json({ message: "Server error" });
-  // }
+
+//       })
+//   }
+
+// } catch (error) {
+//   res.status(500).json({ message: "Server error" });
+// }
 
 // });
 
