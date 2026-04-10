@@ -1,7 +1,7 @@
 /* Event Container */
 .event-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(145deg, #eef4ff 0%, #dbe7ff 48%, #c7dbff 100%);
   padding: 20px 0;
 }
 
@@ -64,46 +64,80 @@
   font-weight: 300;
 }
 
-/* Filter Section */
-.filter-section {
-  padding: 40px;
+/* Section Headings */
+.section-heading-wrap {
   text-align: center;
+  max-width: 900px;
+  margin: 0 auto 35px;
+}
+
+.section-tag {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 30px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.section-subtext {
+  font-size: 15px;
+  color: #334155;
+  line-height: 1.7;
+}
+
+/* Upcoming Section */
+.upcoming-events {
+  padding: 60px 40px;
   max-width: 1400px;
   margin: 0 auto;
 }
 
-.category-filter {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
+.upcoming-events h2 {
+  font-size: 36px;
+  color: #1e3a8a;
+  margin-bottom: 10px;
+  font-weight: 800;
 }
 
-.filter-btn {
-  background: white;
-  border: 2px solid #ddd;
-  padding: 12px 25px;
-  border-radius: 25px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  color: #555;
-  font-size: 14px;
+.upcoming-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
 }
 
-.filter-btn:hover {
-  border-color: #16328d;
-  color: #16328d;
+.upcoming-card {
+  background: linear-gradient(165deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 12px 32px rgba(37, 99, 235, 0.12);
 }
 
-.filter-btn.active {
-  background: linear-gradient(135deg, #16328d 0%, #2563eb 100%);
-  color: white;
-  border-color: transparent;
-  box-shadow: 0 5px 15px rgba(22, 50, 141, 0.3);
+.upcoming-card-head h3 {
+  font-size: 22px;
+  color: #0f172a;
+  margin: 10px 0 0;
+  line-height: 1.35;
 }
 
-/* All Events Grid */
+.category-chip {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #2563eb;
+  background: #eff6ff;
+  padding: 6px 10px;
+  border-radius: 20px;
+}
+
+/* Past Events Grid */
 .all-events {
   padding: 60px 40px;
   max-width: 1400px;
@@ -112,10 +146,9 @@
 
 .all-events h2 {
   font-size: 36px;
-  color: #2c3e50;
-  margin-bottom: 40px;
-  text-align: center;
-  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 10px;
+  font-weight: 800;
 }
 
 .event-grid {
@@ -125,10 +158,10 @@
 }
 
 .event-card {
-  background: white;
-  border-radius: 12px;
+  background: #ffffff;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.11);
   transition: all 0.3s ease;
   cursor: pointer;
   display: flex;
@@ -137,7 +170,7 @@
 }
 
 .event-card:hover {
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 20px 50px rgba(22, 50, 141, 0.2);
 }
 
 .event-card-image {
@@ -179,7 +212,7 @@
 
 .event-card-content h3 {
   font-size: 18px;
-  color: #2c3e50;
+  color: #0f172a;
   margin-bottom: 12px;
   font-weight: 700;
 }
@@ -201,10 +234,16 @@
 
 .event-description {
   color: #555;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
   margin-bottom: 15px;
   flex: 1;
+}
+
+.event-card-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .open-btn {
@@ -217,12 +256,28 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 13px;
-  align-self: flex-start;
+}
+
+.participate-btn {
+  background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 13px;
 }
 
 .open-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(22, 50, 141, 0.4);
+}
+
+.participate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
 }
 
 /* Modal */
@@ -425,9 +480,25 @@
   margin-top: 15px;
 }
 
-.modal-actions {
+.past-gallery-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.past-gallery-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #dbeafe;
+  box-shadow: 0 6px 18px rgba(30, 64, 175, 0.15);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
   gap: 12px;
   padding-top: 20px;
   border-top: 2px solid #f0f0f0;
@@ -464,6 +535,70 @@
   background: #f5f5f5;
 }
 
+/* Participate Modal */
+.participate-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  width: min(620px, 100%);
+  padding: 28px;
+  position: relative;
+  box-shadow: 0 20px 55px rgba(15, 23, 42, 0.28);
+}
+
+.participate-header h2 {
+  font-size: 30px;
+  color: #0f172a;
+  margin: 0 0 10px;
+}
+
+.participate-header p {
+  color: #475569;
+  margin: 0 0 18px;
+}
+
+.participate-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-field span {
+  font-size: 13px;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.form-field input,
+.form-field select {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 11px 12px;
+  background: #f8fafc;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.participate-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .event-hero {
@@ -474,20 +609,8 @@
     font-size: 36px;
   }
 
-  .featured-carousel {
-    grid-template-columns: 1fr;
-  }
-
-  .category-filter {
-    gap: 10px;
-  }
-
-  .filter-btn {
-    padding: 10px 15px;
-    font-size: 13px;
-  }
-
   .featured-events,
+  .upcoming-events,
   .all-events,
   .filter-section {
     padding: 40px 20px;
@@ -507,6 +630,19 @@
 
   .modal-actions {
     grid-template-columns: 1fr;
+  }
+
+  .participate-form {
+    grid-template-columns: 1fr;
+  }
+
+  .event-card-actions {
+    flex-direction: column;
+  }
+
+  .open-btn,
+  .participate-btn {
+    width: 100%;
   }
 
   .schedule-grid {
