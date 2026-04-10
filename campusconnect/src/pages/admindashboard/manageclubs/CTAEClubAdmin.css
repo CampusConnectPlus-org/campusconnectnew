@@ -1,0 +1,50 @@
+.club-admin-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.club-admin-sidebar {
+  width: 200px;
+  background: #2d2d2d;
+  color: white;
+  padding: 20px;
+}
+
+.club-admin-sidebar button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  background: #444;
+  color: white;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.club-admin-sidebar button.active {
+  background: #ff6b6b;
+}
+
+.club-admin-main {
+  flex: 1;
+  padding: 20px;
+}
+
+section {
+  margin-bottom: 20px;
+}
+
+input, textarea {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+.request-card{
+padding:12px;
+margin:10px 0;
+border-radius:8px;
+background:#f7f7f7;
+border:1px solid #ddd;
+}
