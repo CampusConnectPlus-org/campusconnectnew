@@ -5,6 +5,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/userRoutes");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
@@ -13,7 +16,12 @@ app.use(cors());
 
 
 
-mongoose.connect("mongodb://127.0.0.1:27017/alumniDB");
+const mongoUri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/alumniDB";
+
+mongoose
+  .connect(mongoUri)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // const User = require("./models/User");
 const Alumni = require("./models/Alumni");
@@ -185,8 +193,8 @@ app.use("/alumniimage", express.static("alumniimage"));
 
 // });
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
 
 
