@@ -1,67 +1,75 @@
-import React from "react";
-import { useNavigate } from "react-router";
-import { useState } from "react";
+import React, { useRef, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import './AdminNavbar.css'
-import { Link } from "react-router";
 
-const AdminNavbar = ({admin}) => {
-    const [showProfile, setShowProfile] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
+const AdminNavbar = ({ admin, setAdmin }) => {
+  const [showProfile, setShowProfile] = useState(false);
+  const hideTimeoutRef = useRef(null);
   const navigate = useNavigate();
 
-  const  handleLogout = ()=>{
+  const handleLogout = () => {
+    clearTimeout(hideTimeoutRef.current);
+    localStorage.removeItem("token");
+    localStorage.removeItem("admin");
+    setAdmin(null);
+    navigate("/", { replace: true });
+  };
 
-// localStorage.removeItem("token");
-localStorage.removeItem("admin");
-navigate("/",{replace:true});
-setAdmin(null);
+  const handleProfileEnter = () => {
+    clearTimeout(hideTimeoutRef.current);
+    setShowProfile(true);
+  };
 
-      if(!admin) return 
-};
+  const handleProfileLeave = () => {
+    hideTimeoutRef.current = setTimeout(() => {
+      setShowProfile(false);
+    }, 200);
+  };
+
   return (
-      <nav className="admin-navbar">
-              <h2>Admin Dashboard</h2>
-             
+    <nav className="admin-navbar">
+      <h2>Admin Dashboard</h2>
 
-     {/* Right Profile */}
-           <div
-              className="profile-wrapper"
-              onMouseEnter={() => setShowProfile(true)}
-              onMouseLeave={() => setShowProfile(false)}
-            >
-                
-              {admin ? (
-                <> <p>Welcome, Admin</p>
-                  <img
-                    src={`http://localhost:5000/uploads/${admin.profileImage}`}
-                    alt="profile"
-                    className="profile-img"
-                  />
-      
-                  {showProfile && (
-                    <div className="profile-dropdown">
-                      <img src={`http://localhost:5000/uploads/${admin.profileImage}`} alt="" />
-                      <h4>{admin.name}</h4>
-                      <p>{admin.email}</p>
-                      {/* <p className="role">{admin.role}</p> */}
-      
-                      <button>View Profile</button>
-                      <button className="logout" onClick={handleLogout}>Logout</button>
-                    </div>
-                  )}
-                </>
-              ) : (
-               <div className="buttons">
-                 <Link to="/adminlogin">
-                  <button onClick={() =>{navigate('/adminlogin')}} className="login-btn">Logout</button>
-                </Link>
-               </div>
-                
-              )}
-              
-            
-            </div>
-            </nav>
+
+      {/* Right Profile */}
+      <div
+        className="profile-wrapper"
+        onMouseEnter={handleProfileEnter}
+        onMouseLeave={handleProfileLeave}
+      >
+
+        {admin ? (
+          <> <p>Welcome, Admin</p>
+            <img
+              src={`http://localhost:5000/uploads/${admin.profileImage}`}
+              alt="profile"
+              className="profile-img"
+            />
+
+            {showProfile && (
+              <div className="profile-dropdown" onMouseEnter={handleProfileEnter} onMouseLeave={handleProfileLeave}>
+                <img src={`http://localhost:5000/uploads/${admin.profileImage}`} alt="" />
+                <h4>{admin.name}</h4>
+                <p>{admin.email}</p>
+                {/* <p className="role">{admin.role}</p> */}
+
+                <button>View Profile</button>
+                <button className="logout" onClick={handleLogout}>Logout</button>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="buttons">
+            <Link to="/adminlogin">
+              <button onClick={() => { navigate('/adminlogin') }} className="login-btn">Logout</button>
+            </Link>
+          </div>
+
+        )}
+
+
+      </div>
+    </nav>
   );
 };
 

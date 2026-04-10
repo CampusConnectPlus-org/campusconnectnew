@@ -4,7 +4,7 @@ import "./UsersTable.css";
 import AddUserModal from "./AddUserModel";
 const UsersTable = () => {
     const [showForm,setShowForm] = useState(false);
-    const [users,setUsers] = useState([]);
+    const [userData,setUserData] = useState([]);
 
 
     const fetchUsers = async () => {
@@ -18,7 +18,7 @@ const UsersTable = () => {
 
             const data = await res.json();
             console.log(data);
-            setUsers(data);
+            setUserData(data);
 
         } catch (err) {
             console.error(err);
@@ -40,7 +40,7 @@ const deleteUser = async (id) => {
         });
 
         // UI update (important)
-        setUsers(users.filter(user => user._id !== id));
+        setUserData(userData.filter(userData => userData._id !== id));
 
     } catch (err) {
         console.error(err);
@@ -65,14 +65,14 @@ const deleteUser = async (id) => {
         </thead>
 
         <tbody>
-          {users.map((user) => (
-            <tr key={user._id}>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.enrollmentNumber}</td>
+          {userData.map((data) => (
+            <tr key={data._id}>
+              <td>{data.name}</td>
+              <td>{data.email}</td>
+              <td>{data.enrollmentNumber}</td>
               <td>
                 <button className="edit">Edit</button>
-                <button onClick={() =>  deleteUser(user._id) } className="delete">Delete</button>
+                <button onClick={() =>  deleteUser(data._id) } className="delete">Delete</button>
               </td>
             </tr>
           ))}

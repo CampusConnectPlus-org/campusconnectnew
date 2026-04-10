@@ -10,74 +10,80 @@ const jwt = require("jsonwebtoken");
 
 
 // admin login api
-router.post("/admin", async (req,res)=>{
+router.post("/admin", async (req, res) => {
 
-const {email,password} = req.body;
+    const { email, password } = req.body;
 
-const admin = await Admin.findOne({email});
+    const admin = await Admin.findOne({ email });
 
-if(!admin){
-return res.json({message:"admin not found"});
-}
+    if (!admin) {
+        return res.json({ message: "admin not found" });
+    }
 
-const isMatch = await bcrypt.compare(password,admin.password);
+    const isMatch = await bcrypt.compare(password, admin.password);
 
-if(!isMatch){
-return res.json({message:"Wrong password"});
-}
+    if (!isMatch) {
+        return res.json({ message: "Wrong password" });
+    }
 
-const token = jwt.sign(
-{id:admin._id,
-    role:"admin"
-},
-"secretkey",
-{expiresIn:"1d"}
-);
+    const token = jwt.sign(
+        {
+            id: admin._id,
+            role: "admin"
+        },
+        "secretkey",
+        { expiresIn: "1d" }
+    );
 
-res.json({
-token,
-admin:{
-name:admin.name,
-email:admin.email,
-profileImage:admin.profileImage
-}
-});
+    res.json({
+        token,
+        admin: {
+            name: admin.name,
+            email: admin.email,
+            profileImage: admin.profileImage
+        }
+    });
 
 });
 // LOGIN API
-router.post("/login", async (req,res)=>{
+router.post("/login", async (req, res) => {
 
-const {enrollmentNumber,password} = req.body;
+    const { enrollmentNumber, password } = req.body;
 
-const user = await User.findOne({enrollmentNumber});
+    // console.log(`Login attempt for enrollment: ${enrollmentNumber}`);
 
-if(!user){
-return res.json({message:"User not found"});
-}
+    const user = await User.findOne({ enrollmentNumber });
 
-const isMatch = await bcrypt.compare(password,user.password);
+    if (!user) {
+        return res.json({ message: "User not found" });
+    }
 
-if(!isMatch){
-return res.json({message:"Wrong password"});
-}
+    // console.log(`User ID for enrollment ${enrollmentNumber}: ${user._id}`);
 
-const token = jwt.sign(
-{id:user._id,
-    role:user.role
-},
-"secretkey",
-{expiresIn:"1d"}
-);
+    const isMatch = await bcrypt.compare(password, user.password);
 
-res.json({
-token,
-user:{
-name:user.name,
-enrollmentNumber:user.enrollmentNumber,
-email:user.email,
-profileImage:user.profileImage
-}
-});
+    if (!isMatch) {
+        return res.json({ message: "Wrong password" });
+    }
+
+    const token = jwt.sign(
+        {
+            id: user._id,
+            role: user.role
+        },
+        "secretkey",
+        { expiresIn: "1d" }
+    );
+
+    res.json({
+        token,
+        user: {
+            name: user.name,
+            enrollmentNumber: user.enrollmentNumber,
+            email: user.email,
+            profileImage: user.profileImage
+        }
+    });
 
 });
 
