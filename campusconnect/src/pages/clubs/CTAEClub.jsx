@@ -5,6 +5,103 @@ import { motion } from 'framer-motion';
 const CTAEClub = () => {
   const [selectedClubId, setSelectedClubId] = useState('coding');
   const [expandedEvent, setExpandedEvent] = useState(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isParticipateOpen, setIsParticipateOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    branch: '',
+    mobile: '',
+    email: '',
+    collegeYear: '',
+    gender: '',
+    dob: '',
+    hobby: '',
+    contribution: '',
+    enrollmentNo: '',
+  });
+  const [participateFormData, setParticipateFormData] = useState({
+    firstName: '',
+    lastName: '',
+    branch: '',
+    mobile: '',
+    email: '',
+    collegeYear: '',
+    gender: '',
+  });
+
+  const openRegistrationForm = () => {
+    setIsFormOpen(true);
+  };
+
+  const closeRegistrationForm = () => {
+    setIsFormOpen(false);
+  };
+
+  const openParticipateForm = () => {
+    setIsParticipateOpen(true);
+  };
+
+  const closeParticipateForm = () => {
+    setIsParticipateOpen(false);
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleParticipateInputChange = (event) => {
+    const { name, value } = event.target;
+    setParticipateFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    console.log('Club registration submitted:', {
+      club: selectedClub.name,
+      ...formData,
+    });
+    setIsFormOpen(false);
+    setFormData({
+      firstName: '',
+      lastName: '',
+      branch: '',
+      mobile: '',
+      email: '',
+      collegeYear: '',
+      gender: '',
+      dob: '',
+      hobby: '',
+      contribution: '',
+      enrollmentNo: '',
+    });
+  };
+
+  const handleParticipateSubmit = (event) => {
+    event.preventDefault();
+    console.log('Event participation submitted:', {
+      club: selectedClub.name,
+      event: selectedEvent?.title || 'Selected Event',
+      ...participateFormData,
+    });
+    setIsParticipateOpen(false);
+    setParticipateFormData({
+      firstName: '',
+      lastName: '',
+      branch: '',
+      mobile: '',
+      email: '',
+      collegeYear: '',
+      gender: '',
+    });
+  };
 
   const clubs = [
     {
@@ -249,6 +346,7 @@ const CTAEClub = () => {
   ];
 
   const selectedClub = clubs.find((club) => club.id === selectedClubId) || clubs[0];
+  const selectedEvent = selectedClub.upcomingEvents.find((event) => event.id === expandedEvent);
 
   return (
     <div className="ctae-club-container">
@@ -271,7 +369,7 @@ const CTAEClub = () => {
           <div className="hero-text">
             <h1>{selectedClub.heroTitle}</h1>
             <p>{selectedClub.heroDescription}</p>
-            <button className="join-btn">Join Now</button>
+            <button className="join-btn" onClick={openRegistrationForm}>Join Now</button>
           </div>
           <div className="hero-icon">
             <div className="code-icon">{selectedClub.heroIcon}</div>
@@ -330,12 +428,19 @@ const CTAEClub = () => {
                     <p className="event-desc">{event.description}</p>
                   </motion.div>
                 )}
-                <button
-                  className="view-btn"
-                  onClick={() => setExpandedEvent(expandedEvent === event.id ? null : event.id)}
-                >
-                  {expandedEvent === event.id ? 'Hide Details' : 'View'}
-                </button>
+                <div className="event-actions">
+                  <button
+                    className="view-btn"
+                    onClick={() => setExpandedEvent(expandedEvent === event.id ? null : event.id)}
+                  >
+                    {expandedEvent === event.id ? 'Hide Details' : 'View'}
+                  </button>
+                  {expandedEvent === event.id && (
+                    <button className="participate-btn" onClick={openParticipateForm}>
+                      Participate
+                    </button>
+                  )}
+                </div>
               </motion.div>
             ))}
           </div>
@@ -343,6 +448,312 @@ const CTAEClub = () => {
           <p className="no-events">Coming soon! Stay tuned for exciting events.</p>
         )}
       </section>
+
+      {isFormOpen && (
+        <div className="modal-overlay" onClick={closeRegistrationForm}>
+          <motion.div
+            className="registration-modal"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="modal-header">
+              <div>
+                <p className="modal-label">Club Join Request</p>
+                <h2>Register for {selectedClub.name}</h2>
+                <p className="modal-subtitle">
+                  Share your details and tell us what you can bring to the club.
+                </p>
+              </div>
+              <button className="modal-close" onClick={closeRegistrationForm}>
+                ×
+              </button>
+            </div>
+
+            <form className="registration-form" onSubmit={handleFormSubmit}>
+              <div className="form-grid">
+                <label className="form-field">
+                  <span>First Name</span>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </label>
+
+                <label className="form-field">
+                  <span>Last Name</span>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </label>
+
+                <label className="form-field">
+                  <span>Branch</span>
+                  <input
+                    type="text"
+                    name="branch"
+                    value={formData.branch}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </label>
+
+                <label className="form-field">
+                  <span>Enrollment No.</span>
+                  <input
+                    type="text"
+                    name="enrollmentNo"
+                    value={formData.enrollmentNo}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </label>
+
+                <label className="form-field">
+                  <span>Mobile No.</span>
+                  <input
+                    type="tel"
+                    name="mobile"
+                    value={formData.mobile}
+                    onChange={handleInputChange}
+                    required
+                    pattern="[0-9]{10}"
+                    placeholder="9876543210"
+                  />
+                </label>
+
+                <label className="form-field">
+                  <span>Email</span>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </label>
+
+                <label className="form-field">
+                  <span>College Year</span>
+                  <select
+                    name="collegeYear"
+                    value={formData.collegeYear}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="" disabled>
+                      Select year
+                    </option>
+                    <option value="First Year">First Year</option>
+                    <option value="Second Year">Second Year</option>
+                    <option value="Third Year">Third Year</option>
+                    <option value="Final Year">Final Year</option>
+                  </select>
+                </label>
+
+                <label className="form-field">
+                  <span>Gender</span>
+                  <select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="" disabled>
+                      Select gender
+                    </option>
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                    <option value="Non-binary">Non-binary</option>
+                    <option value="Prefer not to say">Prefer not to say</option>
+                  </select>
+                </label>
+
+                <label className="form-field">
+                  <span>Date of Birth</span>
+                  <input
+                    type="date"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </label>
+
+                <label className="form-field form-span-full">
+                  <span>Hobby</span>
+                  <input
+                    type="text"
+                    name="hobby"
+                    value={formData.hobby}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </label>
+
+                <label className="form-field form-span-full">
+                  <span>What can you bring to the club?</span>
+                  <textarea
+                    name="contribution"
+                    value={formData.contribution}
+                    onChange={handleInputChange}
+                    rows="4"
+                    required
+                  />
+                </label>
+              </div>
+
+              <div className="modal-actions">
+                <button type="button" className="secondary-btn" onClick={closeRegistrationForm}>
+                  Cancel
+                </button>
+                <button type="submit" className="primary-btn">
+                  Submit Registration
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
+
+      {isParticipateOpen && (
+        <div className="modal-overlay" onClick={closeParticipateForm}>
+          <motion.div
+            className="registration-modal"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="modal-header">
+              <div>
+                <p className="modal-label">Event Participation</p>
+                <h2>Participate in {selectedEvent?.title || 'this event'}</h2>
+                <p className="modal-subtitle">
+                  Tell us about yourself and get ready to join the event.
+                </p>
+              </div>
+              <button className="modal-close" onClick={closeParticipateForm}>
+                ×
+              </button>
+            </div>
+
+            <form className="registration-form" onSubmit={handleParticipateSubmit}>
+              <div className="form-grid">
+                <label className="form-field">
+                  <span>First Name</span>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={participateFormData.firstName}
+                    onChange={handleParticipateInputChange}
+                    required
+                  />
+                </label>
+
+                <label className="form-field">
+                  <span>Last Name</span>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={participateFormData.lastName}
+                    onChange={handleParticipateInputChange}
+                    required
+                  />
+                </label>
+
+                <label className="form-field">
+                  <span>Branch</span>
+                  <input
+                    type="text"
+                    name="branch"
+                    value={participateFormData.branch}
+                    onChange={handleParticipateInputChange}
+                    required
+                  />
+                </label>
+
+                <label className="form-field">
+                  <span>Mobile No.</span>
+                  <input
+                    type="tel"
+                    name="mobile"
+                    value={participateFormData.mobile}
+                    onChange={handleParticipateInputChange}
+                    required
+                    pattern="[0-9]{10}"
+                    placeholder="9876543210"
+                  />
+                </label>
+
+                <label className="form-field">
+                  <span>Email</span>
+                  <input
+                    type="email"
+                    name="email"
+                    value={participateFormData.email}
+                    onChange={handleParticipateInputChange}
+                    required
+                  />
+                </label>
+
+                <label className="form-field">
+                  <span>Gender</span>
+                  <select
+                    name="gender"
+                    value={participateFormData.gender}
+                    onChange={handleParticipateInputChange}
+                    required
+                  >
+                    <option value="" disabled>
+                      Select gender
+                    </option>
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                    <option value="Non-binary">Non-binary</option>
+                    <option value="Prefer not to say">Prefer not to say</option>
+                  </select>
+                </label>
+
+                <label className="form-field form-span-full">
+                  <span>College Year</span>
+                  <select
+                    name="collegeYear"
+                    value={participateFormData.collegeYear}
+                    onChange={handleParticipateInputChange}
+                    required
+                  >
+                    <option value="" disabled>
+                      Choose year
+                    </option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                  </select>
+                </label>
+              </div>
+
+              <div className="modal-actions">
+                <button type="button" className="secondary-btn" onClick={closeParticipateForm}>
+                  Cancel
+                </button>
+                <button type="submit" className="primary-btn">
+                  Submit Participation
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };

@@ -14,6 +14,11 @@ require:true
     type: String,
     required: true
   },
+  role:{
+    type:String,
+    enum: ["superadmin", "admin"],
+    default: "admin"
+  },
   profileImage:{
     type:String
   },

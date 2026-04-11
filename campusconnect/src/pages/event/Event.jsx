@@ -4,286 +4,341 @@ import { motion } from 'framer-motion';
 
 const Event = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [activeCategory, setActiveCategory] = useState('all');
+  const [isParticipateOpen, setIsParticipateOpen] = useState(false);
+  const [participateEvent, setParticipateEvent] = useState(null);
+  const [participateForm, setParticipateForm] = useState({
+    name: '',
+    year: '',
+    branch: '',
+    email: '',
+    mobile: '',
+    gender: '',
+  });
 
   const events = [
     {
       id: 1,
-      title: 'Cultural Fest 2024',
-      category: 'cultural',
-      date: 'April 20-22, 2024',
-      location: 'Main Campus Grounds',
-      image1: 'public/eventimage/cultural-fest-1.jpg',
-      image2: 'public/eventimage/cultural-fest-2.jpg',
-      featured: true,
-      description: 'Experience the vibrant tapestry of Indian culture at our grand Cultural Fest! A celebration of art, music, dance, and traditions from across the country.',
+      title: 'Tech Innovation Summit 2026',
+      category: 'technical',
+      status: 'upcoming',
+      date: 'May 24-25, 2026',
+      location: 'Innovation Center & Smart Lab',
+      image1: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1400&q=80',
+      description: 'A two-day summit featuring AI demos, startup talks, and live product showcases by student teams.',
       details: {
-        overview: 'Join us for three days of mesmerizing performances, food stalls, art exhibitions, and interactive cultural workshops.',
+        overview: 'Bring your ideas to life through workshops, keynote sessions, and rapid prototype challenges.',
         highlights: [
-          'Classical Dance Performances (Bharatanatyam, Kathak, Kathakali)',
-          'Live Music Concert with renowned artists',
-          'Cultural Fashion Show showcasing traditional attire',
-          'Art & Craft Exhibition',
-          'International Food Court',
-          'Mehndi & Henna Stalls',
-          'Rangoli Competition',
-          'Cultural Quiz & Knowledge Sessions'
+          'AI and Robotics Demo Arena',
+          'Startup Mentorship Clinic',
+          'Innovation Pitch Showcase',
+          'Cloud and App Development Workshops'
         ],
         schedule: [
-          { day: 'Day 1', events: 'Opening Ceremony, Classical Dance, Traditional Music' },
-          { day: 'Day 2', events: 'Fashion Show, Food Festival, Art Exhibition' },
-          { day: 'Day 3', events: 'Live Concert, Closing Ceremony, Prize Distribution' }
-        ],
-        attendance: '5000+ expected',
-        entryFee: 'Free for students'
+          { day: 'Day 1', events: 'Opening keynote, demo arena, workshop tracks' },
+          { day: 'Day 2', events: 'Mentoring rounds, pitch showcase, awards' }
+        ]
       }
     },
     {
       id: 2,
-      title: 'Winter Fest',
-      category: 'fest',
-      date: 'December 10-12, 2024',
-      location: 'Campus Auditorium & Grounds',
-      featured: true,
-      description: 'Experience the magical winter season with performances, competitions, and festive celebrations.',
+      title: 'Alumni Career Connect 2026',
+      category: 'alumni',
+      status: 'upcoming',
+      date: 'July 12, 2026',
+      location: 'Convention Hall',
+      image1: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1400&q=80',
+      description: 'A career-focused networking event connecting students with alumni mentors and recruiters.',
       details: {
-        overview: 'A three-day extravaganza celebrating the winter season with music, dance, sports, and fun activities for all.',
+        overview: 'Students can attend mentoring circles, resume clinics, and domain-specific networking sessions.',
         highlights: [
-          'DJ Night & Dance Party',
-          'Winter Sports Tournaments (Basketball, Badminton, Table Tennis)',
-          'Band Performances',
-          'Bonfire Gathering',
-          'Food Carnival',
-          'Photography Exhibition',
-          'Stand-up Comedy Show',
-          'Prize Games & Activities'
+          'One-on-one mentorship slots',
+          'Resume and LinkedIn review desk',
+          'Industry panel conversations',
+          'Internship opportunity announcements'
         ],
         schedule: [
-          { day: 'Day 1', events: 'Opening Ceremony, Sports Events, DJ Night' },
-          { day: 'Day 2', events: 'Band Performance, Food Carnival, Photography Walk' },
-          { day: 'Day 3', events: 'Comedy Show, Closing Ceremony, Awards' }
-        ],
-        attendance: '4000+ expected',
-        entryFee: 'Minimal registration fee'
+          { day: 'Morning', events: 'Registration, opening session, panel talks' },
+          { day: 'Afternoon', events: 'Mentoring circles and networking tables' }
+        ]
       }
     },
     {
       id: 3,
-      title: 'Hackathon 2024',
-      category: 'technical',
-      date: 'May 1-2, 2024',
-      location: 'Computer Lab & Innovation Center',
-      featured: true,
-      description: '48-hour coding marathon where innovation meets competition. Build amazing projects and win exciting prizes!',
+      title: 'Research Expo 2026',
+      category: 'seminar',
+      status: 'upcoming',
+      date: 'September 6, 2026',
+      location: 'Seminar Complex',
+      image1: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1400&q=80',
+      description: 'An interdisciplinary research expo with paper presentations, poster sessions, and expert lectures.',
       details: {
-        overview: 'A thrilling 48-hour hackathon where teams compete to build creative technology solutions. Open to all students.',
+        overview: 'Showcase your latest work and explore research opportunities across engineering, management, and science streams.',
         highlights: [
-          'Real-time Problem Statements',
-          'Mentorship from Industry Professionals',
-          'Access to Latest Technologies & APIs',
-          '24/7 Food & Refreshments',
-          'Workshops on Web Dev, AI/ML, and IoT',
-          'Live Judging & Feedback',
-          'Prize Pool: ₹2,00,000+',
-          'Networking with Tech Companies'
+          'Poster presentation zone',
+          'Faculty and industry keynote sessions',
+          'Best paper and best poster awards',
+          'Research collaboration desk'
         ],
         schedule: [
-          { day: 'Day 1', events: 'Registration, Kickoff, Problem Statement Release, Workshops' },
-          { day: 'Day 2', events: 'Development Continues, Mentor Support, Final Hour Sprint' },
-          { day: 'Day 3', events: 'Presentations, Judging, Prize Distribution' }
-        ],
-        attendance: '200+ participants (50+ teams)',
-        entryFee: 'Free (Team of 2-4 members)'
+          { day: 'Session 1', events: 'Keynote and poster round' },
+          { day: 'Session 2', events: 'Paper talks, panel, and closing awards' }
+        ]
       }
     },
     {
       id: 4,
-      title: 'Alumni Meet-Up 2024',
-      category: 'alumni',
-      date: 'March 15, 2024',
-      location: 'Campus Convention Center',
-      featured: true,
-      description: 'Reconnect with your alma mater! A grand reunion of alumni across all batches and departments.',
+      title: 'Winter Carnival',
+      category: 'fest',
+      status: 'past',
+      date: 'December 10-12, 2025',
+      location: 'Main Ground & Amphitheatre',
+      image1: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1400&q=80',
+      description: 'A festive winter celebration with music, bonfire nights, and student performances.',
       details: {
-        overview: 'A nostalgic gathering where alumni share their journey, success stories, and reconnect with batch mates.',
+        overview: 'Winter Carnival brought together music, games, food streets, and seasonal decor across campus.',
         highlights: [
-          'Welcome Reception & Dinner',
-          'Campus Tour for Alumni Families',
-          'Success Story Sessions by Distinguished Alumni',
-          'Career Mentoring for Current Students',
-          'Batch-wise Reunion Meetups',
-          'Entertainment & Cultural Program',
-          'Alumni-Student Networking Session',
-          'Photo Booth & Memory Lane Exhibition'
+          'DJ and live band nights',
+          'Bonfire circle and food court',
+          'Student dance and fashion performances',
+          'Night photography corner'
         ],
-        schedule: [
-          { day: 'Morning', events: 'Registration, Campus Tour' },
-          { day: 'Afternoon', events: 'Success Stories, Networking, Mentoring Sessions' },
-          { day: 'Evening', events: 'Dinner, Cultural Program, Batch Reunions' }
-        ],
-        attendance: '1000+ alumni expected',
-        entryFee: 'Complimentary for alumni'
+        galleryImages: [
+          'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80',
+          'https://images.unsplash.com/photo-1464375117522-1311dd6a1fd2?auto=format&fit=crop&w=900&q=80',
+          'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=900&q=80'
+        ]
       }
     },
     {
       id: 5,
-      title: 'University-Wide Fest',
-      category: 'fest',
-      date: 'August 5-8, 2024',
-      location: 'Multiple Venues Across Campus',
-      featured: true,
-      description: 'The largest inter-college festival showcasing talent, art, and innovation from across the university.',
+      title: 'College Fest',
+      category: 'cultural',
+      status: 'past',
+      date: 'October 2-4, 2025',
+      location: 'Central Stage & Activity Block',
+      image1: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&w=1400&q=80',
+      description: 'Three days of dance, art, drama, and competitions celebrating campus culture.',
       details: {
-        overview: 'A four-day mega event featuring competitions, performances, and exhibitions from multiple colleges.',
+        overview: 'College Fest featured cultural showcases, literary contests, and high-energy student performances.',
         highlights: [
-          'Inter-College Dance Competition',
-          'Battle of Bands',
-          'Fashion Show (College-wise)',
-          'Debate & Speech Championship',
-          'Sports Tournament',
-          'Art & Photography Contest',
-          'Tech Innovation Showcase',
-          'Cultural Exhibition Hall'
+          'Battle of dance crews',
+          'Theatre and mono-act stage',
+          'Creative arts and rangoli challenge',
+          'Campus talent awards'
         ],
-        schedule: [
-          { day: 'Day 1', events: 'Opening Ceremony, Dance Competition, Debate Preliminaries' },
-          { day: 'Day 2', events: 'Battle of Bands, Fashion Shows, Sports Events' },
-          { day: 'Day 3', events: 'Art Contest, Tech Showcase, Comedy Night' },
-          { day: 'Day 4', events: 'Finals, Performances, Closing Ceremony' }
-        ],
-        attendance: '10000+ across all days',
-        entryFee: 'Variable per event'
+        galleryImages: [
+          'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=80',
+          'https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?auto=format&fit=crop&w=900&q=80',
+          'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=900&q=80'
+        ]
       }
     },
     {
       id: 6,
-      title: 'Guest Lecture Series & Seminars',
-      category: 'seminar',
-      date: 'Every Month (Ongoing)',
-      location: 'Seminar Hall & Online',
-      featured: false,
-      description: 'Regular seminars featuring industry experts, thought leaders, and accomplished professionals.',
+      title: 'University Fest',
+      category: 'fest',
+      status: 'past',
+      date: 'August 14-17, 2025',
+      location: 'University Arena',
+      image1: 'https://images.unsplash.com/photo-1521334884684-d80222895322?auto=format&fit=crop&w=1400&q=80',
+      description: 'The annual inter-college mega fest with competitions, concerts, and exhibitions.',
       details: {
-        overview: 'Interactive sessions with professionals from various fields to share insights on career, innovation, and life.',
+        overview: 'University Fest hosted teams from multiple colleges for sports, culture, and innovation battles.',
         highlights: [
-          'Leadership & Entrepreneurship Talks',
-          'Tech Industry Insights',
-          'Skills Development Workshops',
-          'Career Guidance Sessions',
-          'Research Presentations',
-          'Q&A with Renowned Speakers',
-          'Networking Opportunities',
-          'Certificate of Attendance'
+          'Inter-college showdown rounds',
+          'Headline artist concert',
+          'Innovation and startup pavilion',
+          'Sports finals and closing parade'
         ],
-        schedule: [
-          { day: 'Monthly', events: '2-3 seminars covering diverse topics' },
-          { day: 'Duration', events: '1-2 hours each session' },
-          { day: 'Mode', events: 'In-person + Online streaming' }
-        ],
-        attendance: '200-500 per session',
-        entryFee: 'Free for all students'
+        galleryImages: [
+          'https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=900&q=80',
+          'https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=900&q=80',
+          'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=900&q=80'
+        ]
       }
     },
     {
       id: 7,
-      title: 'College-Wise Science Fest',
+      title: 'Summer Carnival',
       category: 'fest',
-      date: 'June 15-17, 2024',
-      location: 'Science Block & Lab Areas',
-      featured: false,
-      description: 'Showcase of innovative science projects and research work by students.',
+      status: 'past',
+      date: 'May 18-19, 2025',
+      location: 'Open Air Theatre',
+      image1: 'https://images.unsplash.com/photo-1472653431158-6364773b2a56?auto=format&fit=crop&w=1400&q=80',
+      description: 'A colorful summer event with music, games, and daytime activities for all students.',
       details: {
-        overview: 'Science students exhibit their research, experiments, and innovative projects in an interactive setup.',
+        overview: 'Summer Carnival filled the campus with open-air fun zones, performances, and creative competitions.',
         highlights: [
-          'Research Project Exhibition',
-          'Live Experiments & Demonstrations',
-          'Innovation Challenge',
-          'Science Quiz',
-          'Robotics & Automation Display',
-          'Environmental Sustainability Projects',
-          'Mentoring from Research Scholars',
-          'Certificate & Awards for Best Projects'
+          'Sunset acoustic sessions',
+          'Color splash activity zone',
+          'Food trucks and summer treats',
+          'Outdoor gaming and team challenges'
         ],
-        schedule: [
-          { day: 'Day 1', events: 'Project Setup, Opening, Live Demonstrations' },
-          { day: 'Day 2', events: 'Exhibits, Quiz, Innovation Challenge' },
-          { day: 'Day 3', events: 'Special Talks, Awards Ceremony, Closing' }
-        ],
-        attendance: '2000+ visitors',
-        entryFee: 'Free entry'
-      }
-    },
-    {
-      id: 8,
-      title: 'Commerce & Management Fest',
-      category: 'fest',
-      date: 'July 20-21, 2024',
-      location: 'Commerce Department',
-      featured: false,
-      description: 'Business simulation, case competitions, and industry interactions for commerce students.',
-      details: {
-        overview: 'An engaging fest for business students featuring case studies, stock market simulations, and startup pitches.',
-        highlights: [
-          'Business Case Competition',
-          'Stock Market Simulation',
-          'Startup Pitch Competition',
-          'Resume Workshop',
-          'Industry Panel Discussion',
-          'Entrepreneurship Games',
-          'Prizes & Internship Opportunities',
-          'Networking with Business Leaders'
-        ],
-        schedule: [
-          { day: 'Day 1', events: 'Registration, Case Competition, Simulation Games' },
-          { day: 'Day 2', events: 'Startup Pitches, Panel Discussion, Awards' }
-        ],
-        attendance: '800+ participants',
-        entryFee: 'Registration fee per event'
-      }
-    },
-    {
-      id: 9,
-      title: 'Arts & Literature Festival',
-      category: 'fest',
-      date: 'September 10-12, 2024',
-      location: 'Auditorium & Exhibition Hall',
-      featured: false,
-      description: 'Celebration of literary arts, poetry, drama, and creative writing.',
-      details: {
-        overview: 'A festival celebrating the written and spoken word through poetry, drama, storytelling, and creative workshops.',
-        highlights: [
-          'Poetry Slam & Shayari Night',
-          'Drama Performances',
-          'Short Film Festival',
-          'Creative Writing Workshop',
-          'Book Discussion Forum',
-          'Author Meet & Greet',
-          'Literary Art Exhibition',
-          'Prizes for Best Performances'
-        ],
-        schedule: [
-          { day: 'Day 1', events: 'Poetry Slam, Drama Performances, Workshops' },
-          { day: 'Day 2', events: 'Film Screening, Author Session, Creative Writing' },
-          { day: 'Day 3', events: 'Final Night, Awards, Closing Ceremony' }
-        ],
-        attendance: '1500+ expected',
-        entryFee: 'Nominal entry fee'
+        galleryImages: [
+          'https://images.unsplash.com/photo-1496024840928-4c417adf211d?auto=format&fit=crop&w=900&q=80',
+          'https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&w=900&q=80',
+          'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=900&q=80'
+        ]
       }
     }
   ];
 
-  const categories = [
-    { id: 'all', label: 'All Events' },
-    { id: 'cultural', label: 'Cultural' },
-    { id: 'fest', label: 'Fests' },
-    { id: 'technical', label: 'Technical' },
-    { id: 'alumni', label: 'Alumni' },
-    { id: 'seminar', label: 'Seminars' }
-  ];
+  const monthLookup = {
+    january: 0,
+    february: 1,
+    march: 2,
+    april: 3,
+    may: 4,
+    june: 5,
+    july: 6,
+    august: 7,
+    september: 8,
+    october: 9,
+    november: 10,
+    december: 11,
+  };
 
-  const filteredEvents = activeCategory === 'all' 
-    ? events 
-    : events.filter(event => event.category === activeCategory);
+  const parseEventDateRange = (dateText) => {
+    if (!dateText) {
+      return null;
+    }
+
+    const normalized = dateText.trim();
+
+    if (/ongoing/i.test(normalized)) {
+      return { start: null, end: null };
+    }
+
+    const rangeMatch = normalized.match(
+      /\b(January|February|March|April|May|June|July|August|September|October|November|December)\b\s+(\d{1,2})\s*[-–]\s*(\d{1,2}),?\s*(\d{4})/i
+    );
+
+    if (rangeMatch) {
+      const monthIndex = monthLookup[rangeMatch[1].toLowerCase()];
+      const startDay = Number(rangeMatch[2]);
+      const endDay = Number(rangeMatch[3]);
+      const year = Number(rangeMatch[4]);
+
+      return {
+        start: new Date(year, monthIndex, startDay),
+        end: new Date(year, monthIndex, endDay, 23, 59, 59, 999),
+      };
+    }
+
+    const singleDateMatch = normalized.match(
+      /\b(January|February|March|April|May|June|July|August|September|October|November|December)\b\s+(\d{1,2}),?\s*(\d{4})/i
+    );
+
+    if (singleDateMatch) {
+      const monthIndex = monthLookup[singleDateMatch[1].toLowerCase()];
+      const day = Number(singleDateMatch[2]);
+      const year = Number(singleDateMatch[3]);
+
+      return {
+        start: new Date(year, monthIndex, day),
+        end: new Date(year, monthIndex, day, 23, 59, 59, 999),
+      };
+    }
+
+    const monthYearMatch = normalized.match(
+      /\b(January|February|March|April|May|June|July|August|September|October|November|December)\b\s*,?\s*(\d{4})/i
+    );
+
+    if (monthYearMatch) {
+      const monthIndex = monthLookup[monthYearMatch[1].toLowerCase()];
+      const year = Number(monthYearMatch[2]);
+
+      return {
+        start: new Date(year, monthIndex, 1),
+        end: new Date(year, monthIndex + 1, 0, 23, 59, 59, 999),
+      };
+    }
+
+    const yearMatch = normalized.match(/\b(\d{4})\b/);
+    if (!yearMatch) {
+      return null;
+    }
+
+    const year = Number(yearMatch[1]);
+    return {
+      start: new Date(year, 0, 1),
+      end: new Date(year, 11, 31, 23, 59, 59, 999),
+    };
+  };
+
+  const getEventStatus = (event) => {
+    const range = parseEventDateRange(event.date);
+
+    if (!range) {
+      return event.status || 'upcoming';
+    }
+
+    if (!range.start || !range.end) {
+      return 'upcoming';
+    }
+
+    return new Date() > range.end ? 'past' : 'upcoming';
+  };
+
+  const normalizedEvents = events.map((event) => ({
+    ...event,
+    status: getEventStatus(event),
+  }));
+
+  const upcomingEvents = normalizedEvents.filter((event) => event.status === 'upcoming');
+  const pastEvents = normalizedEvents.filter((event) => event.status === 'past');
+
+  const openParticipateForm = (event) => {
+    setParticipateEvent(event);
+    setIsParticipateOpen(true);
+  };
+
+  const closeParticipateForm = () => {
+    setIsParticipateOpen(false);
+    setParticipateEvent(null);
+  };
+
+  const handleParticipateInput = (e) => {
+    const { name, value } = e.target;
+    setParticipateForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleParticipateSubmit = (e) => {
+    e.preventDefault();
+    console.log('Participate form submitted:', {
+      event: participateEvent?.title,
+      ...participateForm,
+    });
+
+    setParticipateForm({
+      name: '',
+      year: '',
+      branch: '',
+      email: '',
+      mobile: '',
+      gender: '',
+    });
+    closeParticipateForm();
+  };
+
+  const getEventImages = (event) => {
+    if (!event) {
+      return [];
+    }
+
+    const uploadedGallery = Array.isArray(event.details?.galleryImages)
+      ? event.details.galleryImages
+      : [];
+
+    const directImages = [event.image1, event.image2, event.image3, event.image4].filter(Boolean);
+
+    return [...new Set([...uploadedGallery, ...directImages])];
+  };
+
+  const selectedEventImages = getEventImages(selectedEvent);
 
   return (
     <div className="event-container">
@@ -300,28 +355,63 @@ const Event = () => {
         </motion.div>
       </section>
 
-      {/* Category Filter */}
-      <section className="filter-section">
-        <div className="category-filter">
-          {categories.map((category) => (
-            <motion.button
-              key={category.id}
-              className={`filter-btn ${activeCategory === category.id ? 'active' : ''}`}
-              onClick={() => setActiveCategory(category.id)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+      {/* Upcoming Events Section */}
+      <section className="upcoming-events">
+        <div className="section-heading-wrap">
+          <p className="section-tag">Plan Ahead</p>
+          <h2>Upcoming Events</h2>
+          <p className="section-subtext">
+            Explore what is coming next and reserve your participation in advance.
+          </p>
+        </div>
+
+        <div className="upcoming-grid">
+          {upcomingEvents.map((event, index) => (
+            <motion.article
+              key={event.id}
+              className="upcoming-card"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: index * 0.08 }}
+              viewport={{ once: true }}
             >
-              {category.label}
-            </motion.button>
+              <div className="upcoming-card-head">
+                <span className="category-chip">{event.category}</span>
+                <h3>{event.title}</h3>
+              </div>
+
+              <div className="event-meta">
+                <span>📅 {event.date}</span>
+                <span>📍 {event.location}</span>
+              </div>
+
+              <p className="event-description">{event.description}</p>
+
+              <div className="event-card-actions">
+                <button className="open-btn" onClick={() => setSelectedEvent(event)}>
+                  Read Details
+                </button>
+                <button className="participate-btn" onClick={() => openParticipateForm(event)}>
+                  Participate
+                </button>
+              </div>
+            </motion.article>
           ))}
         </div>
       </section>
 
-      {/* All Events Grid */}
+      {/* Past Events Section */}
       <section className="all-events">
-        <h2>All Events</h2>
+        <div className="section-heading-wrap">
+          <p className="section-tag">Memories</p>
+          <h2>Past Events</h2>
+          <p className="section-subtext">
+            Event cards with photos that can be displayed from admin-uploaded images.
+          </p>
+        </div>
+
         <div className="event-grid">
-          {filteredEvents.map((event, index) => (
+          {pastEvents.map((event, index) => (
             <motion.div
               key={event.id}
               className="event-card"
@@ -332,7 +422,7 @@ const Event = () => {
               whileHover={{ y: -8 }}
             >
               <div className="event-card-image">
-                <img src={event.image1 || 'https://via.placeholder.com/350x200'} alt={event.title} />
+                <img src={event.image1 || 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=900&q=80'} alt={event.title} />
                 <div className="category-tag">{event.category}</div>
               </div>
               <div className="event-card-content">
@@ -342,11 +432,8 @@ const Event = () => {
                   <span className="location">📍 {event.location}</span>
                 </div>
                 <p className="event-description">{event.description}</p>
-                <button 
-                  className="open-btn"
-                  onClick={() => setSelectedEvent(event)}
-                >
-                  Learn More
+                <button className="open-btn" onClick={() => setSelectedEvent(event)}>
+                  View Highlights
                 </button>
               </div>
             </motion.div>
@@ -418,45 +505,165 @@ const Event = () => {
                 </ul>
               </div>
 
-              <div className="section">
-                <h3>Schedule</h3>
-                <div className="schedule-grid">
-                  {selectedEvent.details.schedule.map((item, index) => (
-                    <div key={index} className="schedule-item">
-                      <p className="schedule-day">{item.day}</p>
-                      <p className="schedule-events">{item.events}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="section info-grid">
-                <div className="info-box">
-                  <p className="info-label">Expected Attendance</p>
-                  <p className="info-value">{selectedEvent.details.attendance}</p>
-                </div>
-                <div className="info-box">
-                  <p className="info-label">Entry Fee</p>
-                  <p className="info-value">{selectedEvent.details.entryFee}</p>
-                </div>
-              </div>
-
-              {selectedEvent.image2 && (
+              {selectedEvent.status === 'past' && selectedEventImages.length > 0 && (
                 <div className="section">
-                  <h3>Event Gallery</h3>
-                  <img 
-                    src={selectedEvent.image2} 
-                    alt="Event gallery" 
-                    className="gallery-image"
-                  />
+                  <h3>Past Event Moments</h3>
+                  <div className="past-gallery-grid">
+                    {selectedEventImages.map((image, index) => (
+                      <img
+                        key={`${selectedEvent.id}-gallery-${index}`}
+                        src={image}
+                        alt={`${selectedEvent.title} moment ${index + 1}`}
+                        className="past-gallery-image"
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
 
-              <div className="modal-actions">
-                <button className="register-btn">Register Now</button>
-                <button className="share-btn">Share Event</button>
-              </div>
+              {selectedEvent.status !== 'past' && selectedEvent.details.schedule && (
+                <div className="section">
+                  <h3>Schedule</h3>
+                  <div className="schedule-grid">
+                    {selectedEvent.details.schedule.map((item, index) => (
+                      <div key={index} className="schedule-item">
+                        <p className="schedule-day">{item.day}</p>
+                        <p className="schedule-events">{item.events}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {selectedEvent.status === 'upcoming' && (
+                <div className="modal-actions">
+                  <button className="register-btn" onClick={() => openParticipateForm(selectedEvent)}>
+                    Participate
+                  </button>
+                  <button className="share-btn">Share Event</button>
+                </div>
+              )}
             </div>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {isParticipateOpen && (
+        <motion.div
+          className="modal-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          onClick={closeParticipateForm}
+        >
+          <motion.div
+            className="participate-modal"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button className="close-btn" onClick={closeParticipateForm}>
+              ✕
+            </button>
+
+            <div className="participate-header">
+              <p className="section-tag">Participation Form</p>
+              <h2>{participateEvent?.title || 'Event Participation'}</h2>
+              <p>Please fill in your details to participate in this event.</p>
+            </div>
+
+            <form className="participate-form" onSubmit={handleParticipateSubmit}>
+              <label className="form-field">
+                <span>Name</span>
+                <input
+                  type="text"
+                  name="name"
+                  value={participateForm.name}
+                  onChange={handleParticipateInput}
+                  required
+                />
+              </label>
+
+              <label className="form-field">
+                <span>Year</span>
+                <select
+                  name="year"
+                  value={participateForm.year}
+                  onChange={handleParticipateInput}
+                  required
+                >
+                  <option value="" disabled>
+                    Select year
+                  </option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+              </label>
+
+              <label className="form-field">
+                <span>Branch</span>
+                <input
+                  type="text"
+                  name="branch"
+                  value={participateForm.branch}
+                  onChange={handleParticipateInput}
+                  required
+                />
+              </label>
+
+              <label className="form-field">
+                <span>Email</span>
+                <input
+                  type="email"
+                  name="email"
+                  value={participateForm.email}
+                  onChange={handleParticipateInput}
+                  required
+                />
+              </label>
+
+              <label className="form-field">
+                <span>Mobile No.</span>
+                <input
+                  type="tel"
+                  name="mobile"
+                  value={participateForm.mobile}
+                  onChange={handleParticipateInput}
+                  pattern="[0-9]{10}"
+                  placeholder="9876543210"
+                  required
+                />
+              </label>
+
+              <label className="form-field">
+                <span>Gender</span>
+                <select
+                  name="gender"
+                  value={participateForm.gender}
+                  onChange={handleParticipateInput}
+                  required
+                >
+                  <option value="" disabled>
+                    Select gender
+                  </option>
+                  <option value="Female">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Non-binary">Non-binary</option>
+                  <option value="Prefer not to say">Prefer not to say</option>
+                </select>
+              </label>
+
+              <div className="participate-actions">
+                <button type="button" className="share-btn" onClick={closeParticipateForm}>
+                  Cancel
+                </button>
+                <button type="submit" className="register-btn">
+                  Submit
+                </button>
+              </div>
+            </form>
           </motion.div>
         </motion.div>
       )}

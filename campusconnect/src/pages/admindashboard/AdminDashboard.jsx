@@ -6,7 +6,7 @@ import "./AdminDashboard.css";
 // import DashboardHome from "../dashboardhome/DashboardHome";
 // import { useEffect,useState } from "react";
 
-const AdminDashboard = ({admin,setAdmin}) => {
+const AdminDashboard = ({admin, setAdmin}) => {
 
  
   return (
@@ -17,7 +17,7 @@ const AdminDashboard = ({admin,setAdmin}) => {
     
         <div className="main">
         <AdminNavbar admin={admin} setAdmin={setAdmin} />
-          <Outlet  />
+          <Outlet />
       </div>
       
 

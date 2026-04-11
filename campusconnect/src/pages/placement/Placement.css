@@ -1,0 +1,365 @@
+/* Container Layout */
+.placement-wrapper {
+    background-color: #f4f7f6;
+    min-height: 100vh;
+}
+
+.placement-hero {
+    background: linear-gradient(135deg, #16328d 0%, #1e41b0 100%);
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.placement-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.placement-content {
+    max-width: 1200px;
+    margin: -40px auto 40px;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+/* Sections General */
+section {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #f0f0f0;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.section-header h2 {
+    color: #16328d;
+    font-size: 1.5rem;
+}
+
+/* Stats and Trends */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 10px;
+}
+
+.stat-card.highlight {
+    background: #e0f7fa;
+    border: 1px solid #00bcd4;
+}
+
+.stat-card h3 {
+    font-size: 1.6rem;
+    color: #16328d;
+    /* margin-bottom: 5px; */
+    margin: 10px 0 5px;
+}
+
+.year-badge {
+    background: #16328d;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.mini-meta {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 5px;
+    border-top: 1px solid #eee;
+    padding-top: 5px;
+}
+
+.trend-container {
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+}
+
+.chart-container {
+    display: flex;
+    align-items: flex-end;
+    height: 200px;
+    margin-top: 20px;
+    /* padding-left: 30px; */
+    padding: 0 10px 0 40px;
+    border-left: 2px solid #ccc;
+    border-bottom: 2px solid #ccc;
+    position: relative;
+}
+
+.y-axis {
+    position: absolute;
+    left: 10px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 5px;
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.trend-chart-mock {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    width: 100%;
+    height: 100%;
+}
+
+.trend-bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60px;
+}
+
+/* .bar {
+    width: 40px;
+    background: #00bcd4;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.3s ease;
+} */
+.bar {
+    width: 45px;
+    background: linear-gradient(to top, #16328d, #00bcd4);
+    border-radius: 4px 4px 0 0;
+    transition: all 0.5s ease-in-out;
+    min-height: 20px;
+    /* Ensures even small values are visible */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.bar-value {
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.bar-label {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Filter UI */
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-group select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+}
+
+/* Drive Cards */
+.drives-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.drive-card {
+    padding: 20px;
+    border: 1px solid #eef2f6;
+    border-radius: 12px;
+    background: #fff;
+    transition: transform 0.2s;
+}
+
+.drive-card:hover {
+    transform: translateY(-5px);
+}
+
+.drive-info h4 {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.role {
+    color: #00bcd4;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.drive-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.9rem;
+    margin: 15px 0;
+}
+
+.apply-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: #16328d;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: opacity 0.2s;
+}
+
+.apply-btn.disabled {
+    background: #cbd5e0;
+    cursor: not-allowed;
+}
+
+.apply-btn:hover:not(.disabled) {
+    opacity: 0.9;
+}
+
+/* Status & Alerts */
+.status-alert {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 5px solid #4caf50;
+}
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.status-badge.selected {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-badge.shortlisted {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+/* Table for Placed Students */
+.placed-table-wrapper {
+    overflow-x: auto;
+}
+
+.placed-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.placed-table th,
+.placed-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.placed-table th {
+    background: #f1f4ff;
+    color: #16328d;
+    font-weight: bold;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+/*Branch Filter Dropdown */
+.branch-select {
+    padding: 8px 12px;
+    border: 2px solid #16328d;
+    /* Match navbar */
+    border-radius: 6px;
+    background-color: white;
+    color: #16328d;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+}
+
+.branch-select:hover {
+    background-color: #f0f4ff;
+}
+
+/* Section grid placement - Professional 3-row layout */
+.drives-section {
+    grid-column: 1 / 3;
+    grid-row: 1;
+}
+
+.applications-section {
+    grid-column: 1 / 2;
+    grid-row: 2;
+}
+
+.placed-students-section {
+    grid-column: 2 / 3;
+    grid-row: 2;
+}
+
+.stats-section {
+    grid-column: 1 / 3;
+    grid-row: 3;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .placement-content {
+        grid-template-columns: 1fr;
+    }
+
+    .drives-section,
+    .applications-section,
+    .placed-students-section,
+    .stats-section {
+        grid-column: auto;
+        grid-row: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}

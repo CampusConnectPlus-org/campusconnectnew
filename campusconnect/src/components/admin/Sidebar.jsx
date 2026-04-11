@@ -1,24 +1,26 @@
 import React from "react";
 import "./Sidebar.css";
-import { NavLink, useNavigate } from "react-router";
+import { NavLink } from "react-router-dom";
+
 
 const Sidebar = () => {
-  const navigate = useNavigate;
-  const changePage = () =>{
-    navigate("/adminpages")
-  }
+ 
   return (
     <div className="sidebar">
       <h2>🎓 CampusConnect</h2>
       <ul>
-        <li className="active"><NavLink  to="/admindashboard" style={{textDecoration:"none" , color:"white", background:"none"}}>Dashboard</NavLink></li>
-        <li> <NavLink to="/admindashboard/manageuser" style={{textDecoration:"none" , color:"white", background:"none"}} >Manage Users</NavLink></li>
-        <li ><NavLink  to="/admindashboard/adminpage" style={{textDecoration:"none" , color:"white", background:"none"}}>Alumni Recoard</NavLink></li>
-        <li><NavLink  to="/admindashboard/manageevent" style={{textDecoration:"none" , color:"white", background:"none"}}>Events</NavLink></li>
-        <li><NavLink  to="/admindashboard/adminpage" style={{textDecoration:"none" , color:"white", background:"none"}}>Settings</NavLink></li>
+        <li><NavLink to="/admindashboard" end className={({ isActive }) => isActive ? "nav-active" : ""}>Dashboard</NavLink></li>
+        <li><NavLink to="/admindashboard/manageuser" className={({ isActive }) => isActive ? "nav-active" : ""}>Manage Users</NavLink></li>
+        <li><NavLink to="/admindashboard/adminpage" className={({ isActive }) => isActive ? "nav-active" : ""}>Alumni Record</NavLink></li>
+        <li><NavLink to="/admindashboard/manageevent" className={({ isActive }) => isActive ? "nav-active" : ""}>Events</NavLink></li>
+        {/* <li><NavLink to="/admindashboard/addadmin" className={({ isActive }) => isActive ? "nav-active" : ""}>Add Admin</NavLink></li> */}
+        {/* <li><NavLink to="/admindashboard/settings" end className={({ isActive }) => isActive ? "nav-active" : ""}>Settings</NavLink></li> */}
       </ul>
+    
       <div className="logout">Logout</div>
+    
     </div>
+    
   );
 };
 

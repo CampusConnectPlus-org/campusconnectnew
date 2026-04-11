@@ -5,8 +5,7 @@ function ProtectedRoute() {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    return <Navigate to="/login" /> ,
-    <Navigate to="/adminlogin" />;
+    return <Navigate to="/login" /> ;
     
   }
 
