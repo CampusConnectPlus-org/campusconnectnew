@@ -50,6 +50,16 @@ const Sidebar = () => {
             Clubs
           </NavLink>
         </li>
+
+        {/* NEW: Placements Section */}
+        <li>
+          <NavLink
+            to="/admindashboard/manageplacements"
+            className={({ isActive }) => (isActive ? "nav-active" : "")}
+          >
+            Placements
+          </NavLink>
+        </li>
       </ul>
 
       <div className="logout">Logout</div>

@@ -6,6 +6,7 @@ const Application = require("../models/Application");
 const PlacementTrend = require("../models/PlacementTrend");
 const PlacementStat = require("../models/PlacementStat");
 const PlacedStudent = require("../models/PlacedStudent");
+const User = require("../models/User");
 
 router.get("/drives", async (req, res) => {
     try {
@@ -120,6 +121,134 @@ router.get("/applications", verifyToken, async (req, res) => {
     } catch (err) {
         console.error("Error fetching user applications:", err);
         res.status(500).json({ message: "Failed to load applications" });
+    }
+});
+
+// Admin: Create new placement drive
+router.post("/drives", verifyToken, async (req, res) => {
+    try {
+        const { company, role, branch, package: pkg, date, link } = req.body;
+
+        if (!company || !role || !pkg || !date) {
+            return res.status(400).json({ message: "Missing required fields: company, role, package, date" });
+        }
+
+        const newDrive = new PlacementDrive({
+            company,
+            role,
+            branch: branch || "All",
+            package: pkg,
+            date,
+            link: link || ""
+        });
+
+        const savedDrive = await newDrive.save();
+        res.status(201).json(savedDrive);
+    } catch (err) {
+        console.error("Error creating placement drive:", err);
+        res.status(500).json({ message: "Failed to create placement drive", error: err.message });
+    }
+});
+
+// Admin: Delete placement drive
+router.delete("/drives/:id", verifyToken, async (req, res) => {
+    try {
+        const drive = await PlacementDrive.findByIdAndDelete(req.params.id);
+        if (!drive) {
+            return res.status(404).json({ message: "Drive not found" });
+        }
+        res.json({ message: "Drive deleted successfully", drive });
+    } catch (err) {
+        console.error("Error deleting placement drive:", err);
+        res.status(500).json({ message: "Failed to delete placement drive", error: err.message });
+    }
+});
+
+// Admin: Create new placed student
+router.post("/placed-students", verifyToken, async (req, res) => {
+    try {
+        const { enrollmentNo, name, branch, company, package: pkg } = req.body;
+
+        if (!enrollmentNo || !name || !branch || !company || !pkg) {
+            return res.status(400).json({ message: "Missing required fields: enrollmentNo, name, branch, company, package" });
+        }
+
+        // Check if student is registered in the system
+        const registeredUser = await User.findOne({ enrollmentNumber: enrollmentNo });
+        if (!registeredUser) {
+            return res.status(404).json({ message: `Student with enrollment number ${enrollmentNo} is not registered in the system. Please check the enrollment number.` });
+        }
+
+        // Check if student already exists in placed students list
+        const existingStudent = await PlacedStudent.findOne({ enrollmentNo });
+        if (existingStudent) {
+            return res.status(409).json({ message: `Student with enrollment number ${enrollmentNo} is already in the placed students list.` });
+        }
+
+        const newPlacedStudent = new PlacedStudent({
+            enrollmentNo,
+            name,
+            branch,
+            company,
+            package: pkg
+        });
+
+        const savedStudent = await newPlacedStudent.save();
+        res.status(201).json(savedStudent);
+    } catch (err) {
+        console.error("Error creating placed student:", err);
+        res.status(500).json({ message: "Failed to create placed student", error: err.message });
+    }
+});
+
+// Admin: Delete placed student
+router.delete("/placed-students/:id", verifyToken, async (req, res) => {
+    try {
+        const student = await PlacedStudent.findByIdAndDelete(req.params.id);
+        if (!student) {
+            return res.status(404).json({ message: "Student not found" });
+        }
+        res.json({ message: "Student deleted successfully", student });
+    } catch (err) {
+        console.error("Error deleting placed student:", err);
+        res.status(500).json({ message: "Failed to delete placed student", error: err.message });
+    }
+});
+
+// Admin: Create new placement trend
+router.post("/trends", verifyToken, async (req, res) => {
+    try {
+        const { year, avg, companies } = req.body;
+
+        if (!year || !avg || !companies) {
+            return res.status(400).json({ message: "Missing required fields: year, avg, companies" });
+        }
+
+        const newTrend = new PlacementTrend({
+            year: parseInt(year),
+            avg: parseFloat(avg),
+            companies: parseInt(companies)
+        });
+
+        const savedTrend = await newTrend.save();
+        res.status(201).json(savedTrend);
+    } catch (err) {
+        console.error("Error creating placement trend:", err);
+        res.status(500).json({ message: "Failed to create placement trend", error: err.message });
+    }
+});
+
+// Admin: Delete placement trend
+router.delete("/trends/:id", verifyToken, async (req, res) => {
+    try {
+        const trend = await PlacementTrend.findByIdAndDelete(req.params.id);
+        if (!trend) {
+            return res.status(404).json({ message: "Trend not found" });
+        }
+        res.json({ message: "Trend deleted successfully", trend });
+    } catch (err) {
+        console.error("Error deleting placement trend:", err);
+        res.status(500).json({ message: "Failed to delete placement trend", error: err.message });
     }
 });
 
