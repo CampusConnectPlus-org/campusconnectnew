@@ -281,7 +281,7 @@
 }
 
 /* Modal */
-.modal-overlay {
+.event-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -296,7 +296,7 @@
   overflow-y: auto;
 }
 
-.modal-content {
+.event-modal-content {
   background: white;
   border-radius: 15px;
   max-width: 800px;
@@ -331,7 +331,7 @@
   transform: rotate(90deg);
 }
 
-.modal-header {
+.event-modal-header {
   position: relative;
 }
 
@@ -349,7 +349,8 @@
   font-weight: 700;
 }
 
-.modal-body {
+.event-modal-body
+ {
   padding: 25px;
 }
 

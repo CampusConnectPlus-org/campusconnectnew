@@ -16,8 +16,9 @@ import AdminDashboard from './pages/admindashboard/AdminDashboard'
 import AdminLogin from './pages/adminlogin/AdminLogin'
 import DashboardHome from './pages/dashboardhome/DashboardHome'
 import AlumniRecord from './pages/admindashboard/adminpage/AlumniRecord'
-import ManageEvent from './pages/admindashboard/manageevent/ManageEvent'
+import AdminEvents from './pages/admindashboard/manageevent/AdminEvents'
 import ManageUser from './pages/admindashboard/manageuser/ManageUser'
+import ManageClubs from './pages/admindashboard/manageclubs/ManageClubs'
 import CTAEClub from './pages/clubs/CTAEClub'
 // import AddAdmin from './pages/admindashboard/adminadd/AddAdmin'
 
@@ -94,13 +95,12 @@ const App = () => {
         </Route>
 
 
-{/* <Route path='/admindashboard' element={<AdminDashboard admin={admin} setAdmin={setAdmin}/>}/> */}
-<Route path="/admindashboard" element={<AdminDashboard admin={admin} setAdmin={setAdmin}/>}>
-<Route index element={<DashboardHome  />}/>
-<Route path='manageuser' element={<ManageUser />}/>
-<Route path='adminpage' element={<AlumniRecord/>}/>
-<Route path='manageevent' element={<ManageEvent/>}/>
-{/* <Route path='addadmin' element={<AddAdmin/>}/> */}
+        {/* <Route path='/admindashboard' element={<AdminDashboard admin={admin} setAdmin={setAdmin}/>}/> */}
+        <Route path="/admindashboard" element={<AdminDashboard admin={admin} setAdmin={setAdmin} />}>
+          <Route index element={<DashboardHome />} />
+          <Route path='manageuser' element={<ManageUser />} />
+          <Route path='adminpage' element={<AlumniRecord />} />
+          <Route path='manageevent' element={<ManageEvent />} />
 
 
 </Route>

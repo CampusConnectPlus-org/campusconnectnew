@@ -4,8 +4,7 @@ const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     if (req.originalUrl.includes("alumni")) {
       cb(null, "alumniimage/");
-    } 
-    else {
+    } else {
       cb(null, "uploads/");
     }
   },

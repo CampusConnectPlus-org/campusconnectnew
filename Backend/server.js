@@ -7,7 +7,8 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/userRoutes");
 // const adminRoutes = require("./routes/adminRoutes");
 const placementRoutes = require("./routes/placementRoutes");
-
+const eventRoutes = require("./routes/eventRoutes");
+const clubRoutes = require("./routes/clubs");
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -148,6 +149,8 @@ app.use("/api/placements", placementRoutes);
 // app.use("/api/admin", adminRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/alumniimage", express.static("alumniimage"));
+app.use("/api/clubs", clubRoutes);
+app.use("/api/events", eventRoutes);
 
 
 

@@ -13,10 +13,8 @@ const Sidebar = () => {
         <li><NavLink to="/admindashboard/manageuser" className={({ isActive }) => isActive ? "nav-active" : ""}>Manage Users</NavLink></li>
         <li><NavLink to="/admindashboard/adminpage" className={({ isActive }) => isActive ? "nav-active" : ""}>Alumni Record</NavLink></li>
         <li><NavLink to="/admindashboard/manageevent" className={({ isActive }) => isActive ? "nav-active" : ""}>Events</NavLink></li>
-        {/* <li><NavLink to="/admindashboard/addadmin" className={({ isActive }) => isActive ? "nav-active" : ""}>Add Admin</NavLink></li> */}
         {/* <li><NavLink to="/admindashboard/settings" end className={({ isActive }) => isActive ? "nav-active" : ""}>Settings</NavLink></li> */}
       </ul>
-    
       <div className="logout">Logout</div>
     
     </div>
@@ -25,5 +23,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
-

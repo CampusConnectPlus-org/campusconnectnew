@@ -1,107 +1,11 @@
 import React, { useState } from 'react';
 import './CTAEClub.css';
 import { motion } from 'framer-motion';
-
+import axios from "axios";
+import { useEffect } from "react";
 const CTAEClub = () => {
   const [selectedClubId, setSelectedClubId] = useState('coding');
   const [expandedEvent, setExpandedEvent] = useState(null);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isParticipateOpen, setIsParticipateOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    branch: '',
-    mobile: '',
-    email: '',
-    collegeYear: '',
-    gender: '',
-    dob: '',
-    hobby: '',
-    contribution: '',
-    enrollmentNo: '',
-  });
-  const [participateFormData, setParticipateFormData] = useState({
-    firstName: '',
-    lastName: '',
-    branch: '',
-    mobile: '',
-    email: '',
-    collegeYear: '',
-    gender: '',
-  });
-
-  const openRegistrationForm = () => {
-    setIsFormOpen(true);
-  };
-
-  const closeRegistrationForm = () => {
-    setIsFormOpen(false);
-  };
-
-  const openParticipateForm = () => {
-    setIsParticipateOpen(true);
-  };
-
-  const closeParticipateForm = () => {
-    setIsParticipateOpen(false);
-  };
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleParticipateInputChange = (event) => {
-    const { name, value } = event.target;
-    setParticipateFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    console.log('Club registration submitted:', {
-      club: selectedClub.name,
-      ...formData,
-    });
-    setIsFormOpen(false);
-    setFormData({
-      firstName: '',
-      lastName: '',
-      branch: '',
-      mobile: '',
-      email: '',
-      collegeYear: '',
-      gender: '',
-      dob: '',
-      hobby: '',
-      contribution: '',
-      enrollmentNo: '',
-    });
-  };
-
-  const handleParticipateSubmit = (event) => {
-    event.preventDefault();
-    console.log('Event participation submitted:', {
-      club: selectedClub.name,
-      event: selectedEvent?.title || 'Selected Event',
-      ...participateFormData,
-    });
-    setIsParticipateOpen(false);
-    setParticipateFormData({
-      firstName: '',
-      lastName: '',
-      branch: '',
-      mobile: '',
-      email: '',
-      collegeYear: '',
-      gender: '',
-    });
-  };
 
   const clubs = [
     {
@@ -346,7 +250,6 @@ const CTAEClub = () => {
   ];
 
   const selectedClub = clubs.find((club) => club.id === selectedClubId) || clubs[0];
-  const selectedEvent = selectedClub.upcomingEvents.find((event) => event.id === expandedEvent);
 
   return (
     <div className="ctae-club-container">
@@ -354,9 +257,9 @@ const CTAEClub = () => {
       <div className="club-switcher">
         {clubs.map((club) => (
           <button
-            key={club.id}
-            className={`club-tab ${selectedClubId === club.id ? 'active' : ''}`}
-            onClick={() => setSelectedClubId(club.id)}
+            key={club._id}
+className={`club-tab ${selectedClubId === club._id ? 'active' : ''}`}
+onClick={() => setSelectedClubId(club._id)}
           >
             {club.name}
           </button>
@@ -409,8 +312,8 @@ const CTAEClub = () => {
           <div className="events-grid">
             {selectedClub.upcomingEvents.map((event) => (
               <motion.div
-                key={event.id}
-                className={`event-card ${expandedEvent === event.id ? 'expanded' : ''}`}
+                key={event._id}
+                className={`event-card ${expandedEvent === event._id ? 'expanded' : ''}`}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
@@ -418,7 +321,7 @@ const CTAEClub = () => {
                   <h3>{event.title}</h3>
                   <p className="event-date">📅 {event.date}</p>
                 </div>
-                {expandedEvent === event.id && (
+                {expandedEvent === event._id && (
                   <motion.div
                     className="event-details"
                     initial={{ opacity: 0 }}
@@ -428,19 +331,12 @@ const CTAEClub = () => {
                     <p className="event-desc">{event.description}</p>
                   </motion.div>
                 )}
-                <div className="event-actions">
-                  <button
-                    className="view-btn"
-                    onClick={() => setExpandedEvent(expandedEvent === event.id ? null : event.id)}
-                  >
-                    {expandedEvent === event.id ? 'Hide Details' : 'View'}
-                  </button>
-                  {expandedEvent === event.id && (
-                    <button className="participate-btn" onClick={openParticipateForm}>
-                      Participate
-                    </button>
-                  )}
-                </div>
+                <button
+                  className="view-btn"
+                  onClick={() => setExpandedEvent(expandedEvent === event.id ? null : event.id)}
+                >
+                  {expandedEvent === event.id ? 'Hide Details' : 'View'}
+                </button>
               </motion.div>
             ))}
           </div>
