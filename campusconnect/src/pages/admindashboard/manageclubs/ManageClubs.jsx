@@ -46,28 +46,56 @@ const ManageClubs = () => {
   };
 
   // ------------------- Add New Club -------------------
-  const addNewClub = () => {
-    const newClub = {
-      name: "New Club",
-      heroTitle: "",
-      heroDescription: "",
-      about: "",
-      teamMembers: [],
-      achievements: [],
-      upcomingEvents: [],
-    };
+ const addNewClub = () => {
+  const clubName = prompt("Enter club name:");
 
-    axios
-      .post("http://localhost:5000/api/clubs", newClub)
-      .then((res) => {
-        const newId = res.data._id;
-        setClubs((prev) => [...prev, { id: newId, name: res.data.name }]);
-        setClubData((prev) => ({ ...prev, [newId]: res.data }));
-        setSelectedClubId(newId);
-      })
-      .catch((err) => console.log(err));
+  if (!clubName || clubName.trim() === "") {
+    alert("Club name required");
+    return;
+  }
+
+  const newClub = {
+    name: clubName,   // ✅ dynamic name
+    heroTitle: "",
+    heroDescription: "",
+    about: "",
+    teamMembers: [],
+    achievements: [],
+    upcomingEvents: [],
   };
 
+  axios
+    .post("http://localhost:5000/api/clubs", newClub)
+    .then((res) => {
+      const newId = res.data._id;
+      setClubs((prev) => [...prev, { id: newId, name: res.data.name }]);
+      setClubData((prev) => ({ ...prev, [newId]: res.data }));
+      setSelectedClubId(newId);
+    })
+    .catch((err) => console.log(err));
+  };
+  // -----------delete-------------
+const deleteClub = () => {
+  if (!window.confirm("Are you sure you want to delete this club?")) return;
+
+  axios
+    .delete(`http://localhost:5000/api/clubs/${selectedClubId}`)
+    .then(() => {
+      alert("Club deleted");
+
+      // remove from UI
+      setClubs((prev) => prev.filter((c) => c.id !== selectedClubId));
+
+      const updatedData = { ...clubData };
+      delete updatedData[selectedClubId];
+      setClubData(updatedData);
+
+      // select another club automatically
+      const remaining = Object.keys(updatedData);
+      setSelectedClubId(remaining.length ? remaining[0] : null);
+    })
+    .catch((err) => console.log(err));
+};
   return (
     <div className="club-admin-container">
       {/* ------------------- Club Selector ------------------- */}
@@ -231,6 +259,13 @@ const ManageClubs = () => {
           </section>
 
           <button onClick={saveChanges}>Save Changes</button>
+
+<button
+  onClick={deleteClub}
+  style={{ background: "red", color: "white", marginLeft: "10px" }}
+>
+  Delete Club
+</button>
           {/* ------------------- Join Requests ------------------- */}
 
 <section>

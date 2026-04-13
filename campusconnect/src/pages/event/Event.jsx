@@ -222,8 +222,10 @@ const normalizeEvents = (data) => {
       highlights: e.details?.highlights || [],
       schedule: e.details?.schedule || [],
       galleryImages: (e.details?.galleryImages || []).map(img =>
-        typeof img === "string" ? img : img.url
-      ),
+  typeof img === "string"
+    ? `http://localhost:5000/${img}`
+    : `http://localhost:5000/${img.url}`
+),
     },
   }));
 };
@@ -377,19 +379,15 @@ const handleParticipateSubmit = async (e) => {
   }
 };
 
-  const getEventImages = (event) => {
-    if (!event) {
-      return [];
-    }
+const getEventImages = (event) => {
+  if (!event) return [];
 
-    const uploadedGallery = Array.isArray(event.details?.galleryImages)
-      ? event.details.galleryImages
-      : [];
+  const uploadedGallery = Array.isArray(event.details?.galleryImages)
+    ? event.details.galleryImages
+    : [];
 
-    const directImages = [event.image1, event.image2, event.image3, event.image4].filter(Boolean);
-
-    return [...new Set([...uploadedGallery, ...directImages])];
-  };
+  return [event.image1, ...uploadedGallery].filter(Boolean);
+};
 
   const selectedEventImages = getEventImages(selectedEvent);
 

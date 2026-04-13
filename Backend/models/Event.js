@@ -161,6 +161,10 @@ const eventSchema = new mongoose.Schema({
   },
 
   details: {
+      overview: {
+    type: String,
+    default: ""
+  },
     galleryImages: [
       {
         url: String,
@@ -171,6 +175,12 @@ const eventSchema = new mongoose.Schema({
       },
     ],
     highlights: [String],
+     schedule: [
+    {
+      day: String,
+      events: String,
+    },
+  ],
     },
   participants: [
   {
