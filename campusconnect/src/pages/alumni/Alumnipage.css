@@ -1,0 +1,35 @@
+/* h2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    
+} */
+
+.alumni-container {
+  max-width: 1200px;
+  margin: 0 auto;
+    padding: 50px 20px;
+
+}
+
+.alumni-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.search-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 200px;
+  align-items: end;
+  color: black;
+  border: none;
+  background-color: #fff;
+  border: 2px solid #16328d;
+  border-color: #16328d;
+}   

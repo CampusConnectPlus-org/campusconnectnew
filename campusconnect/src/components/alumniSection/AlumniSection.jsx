@@ -59,7 +59,7 @@ const AlumniSection = () => {
             <h4>{alumni.role}</h4>
             <p className="year">{alumni.batch}</p>
             <p>{alumni.desc}</p>
-            <button  className="more-btn">View Profile</button>
+            {/* <button  className="more-btn">View Profile</button> */}
          <span><Link to={alumni.linkedin} ><button className="more-btn" id="linkedin" >LinkedIn</button></Link></span>
           </div>
         </div>

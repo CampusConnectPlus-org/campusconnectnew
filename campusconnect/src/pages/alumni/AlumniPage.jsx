@@ -2,9 +2,13 @@
 import React, { useEffect, useState } from "react";
 import Footer from '../../components/footer/Footer'
 import { Link } from "react-router-dom";
+import "./AlumniPage.css"
 
 const AlumniPage = () => {
   const [alumni, setAlumni] = useState([]);
+  const [filteredAlumni, setFilteredAlumni] = useState([]);
+  const [search, setSearch] = useState("");
+
   console.log(alumni)
 
     useEffect(() => {
@@ -13,8 +17,26 @@ const AlumniPage = () => {
       .then((data) => {
         console.log(data)
         setAlumni(data);
+        setFilteredAlumni(data); 
       });
   }, []);
+
+  // search filter logic
+  useEffect( () => {
+   let result = alumni;
+
+   // name filter
+   if(search) {
+    result = result.filter((alumnus) =>
+      alumnus.name.toLowerCase().includes(search.toLowerCase()) ||
+     alumnus.batch.toLowerCase().includes(search.toLowerCase())
+    );
+   }
+
+   setFilteredAlumni(result);
+  },[search, filteredAlumni, alumni]);
+
+
 //   const users = [
 //   {
 //     id: 1,
@@ -94,23 +116,34 @@ const AlumniPage = () => {
   <>
     <div className="alumnis-data">
         <div className="alumni-container"  id="alumni">
-      <h2 className="title">Meet Our Alumni</h2>
+     <div className="alumni-heading">
+       <h2 className="title">Meet Our Alumni</h2>
+   
+       <input type="text"
+        placeholder="Search by name or batch"
+        value={search}
+        onChange={(e) =>{setSearch(e.target.value)}}
+        className="search-input"  
+        />
+     </div>
 
-      {alumni.map((item, index) => (
+      {filteredAlumni.map((item, index) => (
         <div
-          key={item.id}
+          key={index}
+      
           className={`alumni-card ${index % 2 !== 0 ? "reverse" : ""}`}
         >
+          
           <div className="alumni-image">
             <img src={`http://localhost:5000/alumniimage/${item.image}`} alt={item.name} />
           </div>
 
-          <div className="alumni-content">
+          <div className="alumni-content" >
             <h3>{item.name}</h3>
             <h4>{item.role}</h4>
             <p className="year">{item.batch}</p>
             <p>{item.desc}</p>
-            <button className="more-btn">View Profile</button>
+            {/* <button className="more-btn">View Profile</button> */}
          <span>  <a href={item.linkedin} >  <button className="more-btn" id="linkedin">LinkedIn</button></a></span>
             
           </div>

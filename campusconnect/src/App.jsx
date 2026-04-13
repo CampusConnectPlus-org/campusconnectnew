@@ -23,6 +23,7 @@ import ManagePlacements from './pages/admindashboard/manageplacements/ManagePlac
 import CTAEClub from './pages/clubs/CTAEClub'
 // import ManageEvent from './pages/admindashboard/manageevent/ManageEvent'
 // import AddAdmin from './pages/admindashboard/adminadd/AddAdmin'
+import AboutCtae from './pages/aboutctae/AboutCtae'
 
 
 const App = () => {
@@ -92,6 +93,7 @@ const App = () => {
           <Route path='/alumni' element={<AlumniPage />} />
           <Route path='/event' element={<Event />} />
           <Route path='/clubs' element={<CTAEClub />} />
+          <Route path='/aboutctae' element={<AboutCtae />} />
 
 
         </Route>

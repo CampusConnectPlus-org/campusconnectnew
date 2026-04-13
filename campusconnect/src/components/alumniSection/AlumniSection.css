@@ -77,9 +77,9 @@
 .more-btn:hover {
   background: #2563eb;
 }
-#linkedin{
+/* #linkedin{
   margin-left: 10px;
-}
+} */
 
 /* Responsive */
 @media (max-width: 768px) {

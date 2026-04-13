@@ -55,7 +55,7 @@ export default function Login({ setUser }) {
     return (
         <div className="login-page">
             <div className="login-card">
-                <h2>CampusConnect</h2>
+                <h2>CampusConnect+</h2>
                 <p>Login to your account</p>
 
 

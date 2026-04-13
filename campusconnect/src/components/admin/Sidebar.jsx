@@ -7,7 +7,7 @@ const Sidebar = () => {
  
   return (
     <div className="sidebar">
-      <h2>🎓 CampusConnect</h2>
+      <h2>🎓 CampusConnect+</h2>
       <ul>
         <li>
           <NavLink

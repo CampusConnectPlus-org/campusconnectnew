@@ -9,14 +9,16 @@
   justify-content: center;
   align-items: center;
   
+  
 }
 
 .modal-content {
   background:#0f2a6d;
-  color: white;
+
   padding: 20px;
   border-radius: 10px;
   width: 300px;
+  color: black;
 }
 
 input, select {
@@ -25,7 +27,7 @@ input, select {
   padding: 8px;
     background: #1b3f99;
     border: none;
-    color: white;
+    color: black;
 }
 
 .add-btn{

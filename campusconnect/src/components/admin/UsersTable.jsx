@@ -57,10 +57,10 @@ const deleteUser = async (id) => {
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>EnrollmentNumner</th>
-            <th>Actions</th>
+            <td>Name</td>
+            <td>Email</td>
+            <td>EnrollmentNumber</td>
+            <td>Actions</td>
           </tr>
         </thead>
 
