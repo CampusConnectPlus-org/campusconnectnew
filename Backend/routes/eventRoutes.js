@@ -62,23 +62,28 @@ console.log("BODY:",req.body);
 console.log("FILE:",req.file);
 
 const newEvent = new Event({
+  title: req.body.title,
+  description: req.body.description,
+  date: new Date(req.body.date),
+  location: req.body.location,
+  category: req.body.category,
 
-title:req.body.title,
+  bannerImage: req.file ? req.file.path : "",
 
-date:new Date(req.body.date),
+  details: {
+    overview: req.body.overview || "",
 
-location:req.body.location,
+    highlights: req.body.highlights
+      ? JSON.parse(req.body.highlights)
+      : [],
 
-category:req.body.category,
+    // ✅ ADD THIS
+    schedule: req.body.schedule
+      ? JSON.parse(req.body.schedule)
+      : [],
 
-bannerImage:req.file
-? req.file.path
-        : "",
-details:{
-galleryImages:[],
-highlights:[]
-}
-
+    galleryImages: []
+  }
 });
 
 await newEvent.save();
@@ -274,10 +279,13 @@ router.put(
         location:req.body.location,
 
         category:req.body.category,
-
-        "details.highlights":
-
-          req.body.highlights || []
+"details.overview": req.body.overview || "",
+        "details.highlights": req.body.highlights
+  ? JSON.parse(req.body.highlights)
+          : [],
+        "details.schedule": req.body.schedule
+  ? JSON.parse(req.body.schedule)
+  : []
 
       };
 
@@ -318,48 +326,45 @@ router.put(
 
 );
 
-// PARTICIPATE IN EVENT
+//participant registration
 router.post("/register/:id", async (req, res) => {
   try {
-    const eventId = req.params.id;
+    const { name, year, branch, email, mobile, gender } = req.body;
 
-    const participant = {
-      name: req.body.name,
-      year: req.body.year,
-      branch: req.body.branch,
-      email: req.body.email,
-      mobile: req.body.mobile,
-      gender: req.body.gender,
-    };
-
-    const updatedEvent = await Event.findByIdAndUpdate(
-      eventId,
+    const event = await Event.findByIdAndUpdate(
+      req.params.id,
       {
         $push: {
-          participants: participant,
+          participants: {
+            name,
+            year,
+            branch,
+            email,
+            mobile,
+            gender,
+          },
         },
       },
       { new: true }
     );
 
-    if (!updatedEvent) {
-      return res.status(404).json({
-        message: "Event not found",
-      });
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
     }
 
-    res.status(200).json({
+    res.json({
       success: true,
-      message: "Registration successful",
-      data: updatedEvent,
+      message: "Registered successfully",
+      data: event,
     });
+
   } catch (err) {
-    console.log("REGISTRATION ERROR:", err);
     res.status(500).json({
-      success: false,
-      message: err.message,
+      error: err.message,
     });
   }
 });
+
+
 
 module.exports = router;

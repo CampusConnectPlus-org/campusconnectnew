@@ -70,4 +70,15 @@ router.post("/:id/participate", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+router.delete("/:id", async (req, res) => {
+  try {
+    await Club.findByIdAndDelete(req.params.id);
+
+    res.json({ message: "Club deleted successfully" });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
