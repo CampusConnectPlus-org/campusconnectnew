@@ -19,6 +19,7 @@ import AlumniRecord from './pages/admindashboard/adminpage/AlumniRecord'
 import AdminEvents from './pages/admindashboard/manageevent/AdminEvents'
 import ManageUser from './pages/admindashboard/manageuser/ManageUser'
 import ManageClubs from './pages/admindashboard/manageclubs/ManageClubs'
+import ManagePlacements from './pages/admindashboard/manageplacements/ManagePlacements'
 import CTAEClub from './pages/clubs/CTAEClub'
 // import ManageEvent from './pages/admindashboard/manageevent/ManageEvent'
 // import AddAdmin from './pages/admindashboard/adminadd/AddAdmin'
@@ -87,7 +88,7 @@ const App = () => {
         <Route path="/login" element={<Login setUser={setUser} />} />
         {/* protectedroutes */}
         <Route element={<ProtectedRoute />}>
-          <Route path='/placement' element={<Placement />} />
+          <Route path='/placement' element={<Placement user={user} setUser={setUser} />} />
           <Route path='/alumni' element={<AlumniPage />} />
           <Route path='/event' element={<Event />} />
           <Route path='/clubs' element={<CTAEClub />} />
@@ -101,7 +102,8 @@ const App = () => {
           <Route index element={<DashboardHome />} />
           <Route path='manageuser' element={<ManageUser />} />
           <Route path='adminpage' element={<AlumniRecord />} />
-          {/* <Route path='manageevent' element={<ManageEvent />} /> */}
+          <Route path='manageevent' element={< AdminEvents/>} />
+          <Route path='manageclubs' element={<ManageClubs/>} />
 
 
 </Route>
