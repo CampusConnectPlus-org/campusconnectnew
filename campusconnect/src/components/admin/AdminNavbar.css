@@ -3,13 +3,20 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-    height: 60px;
+  height: 64px;
   padding: 0 30px;
- 
+  border-radius: 14px;
+  background: linear-gradient(135deg, #1c3ea2 0%, #16328d 52%, #0f266f 100%);
+  box-shadow: 0 10px 24px rgba(15, 38, 111, 0.24);
+  color: #ffffff;
+}
 
-  background: #16328d;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  color: white;
+.admin-navbar h2 {
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #ffffff;
 }
 
 
@@ -22,6 +29,14 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  color: #ffffff;
+}
+
+.profile-wrapper p {
+  margin: 0;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1.3rem;
 }
 
 .profile-img {
@@ -30,6 +45,7 @@
   border-radius: 50%;
   cursor: pointer;
   object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.6);
 }
 
 /* Dropdown */
