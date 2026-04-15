@@ -2,9 +2,13 @@ import React from "react";
 import { useEffect, useState } from "react";
 import "./UsersTable.css";
 import AddUserModal from "./AddUserModel";
+// import EditUser from "../../pages/admindashboard/manageuser/EditUser";
+import EditUserModal from "./EditUserModal";
+
 const UsersTable = () => {
     const [showForm,setShowForm] = useState(false);
     const [userData,setUserData] = useState([]);
+    const [editUser,setEditUser] = useState(false);
 
 
     const fetchUsers = async () => {
@@ -19,6 +23,7 @@ const UsersTable = () => {
             const data = await res.json();
             console.log(data);
             setUserData(data);
+            setEditUser(false); // close edit modal after update
 
         } catch (err) {
             console.error(err);
@@ -53,6 +58,13 @@ const deleteUser = async (id) => {
         <h3>Users List</h3>
         <button onClick={() => setShowForm(true)}>Add User</button>
       </div>
+         {editUser && <EditUserModal 
+            editUser={editUser}
+             setEditUser={setEditUser}  
+             userData={editUser}
+             onUpdate={fetchUsers}
+             onClose={() => setEditUser(false)}
+             />}
  
       <table>
         <thead>
@@ -71,7 +83,7 @@ const deleteUser = async (id) => {
               <td>{data.email}</td>
               <td>{data.enrollmentNumber}</td>
               <td>
-                <button className="edit">Edit</button>
+                <button className="edit" onClick={ () =>{setEditUser(data)}}>Edit</button>
                 <button onClick={() =>  deleteUser(data._id) } className="delete">Delete</button>
               </td>
             </tr>

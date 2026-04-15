@@ -119,6 +119,9 @@ const AlumniPage = () => {
      <div className="alumni-heading">
        <h2 className="title">Meet Our Alumni</h2>
    
+      
+     </div>
+     <div className="filter-alumni">
        <input type="text"
         placeholder="Search by name or batch"
         value={search}

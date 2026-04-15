@@ -68,8 +68,8 @@ try{
                 image: null,
                
             });
-      fetchAlumni();
-      setShowForm(false);
+     fetchAlumni(); // refresh alumni list after adding new alumni
+      setShowForm(false); // close modal after successful submission
     } else {
       alert(data.msg);
     };

@@ -9,7 +9,9 @@ const storage = multer.diskStorage({
 
       cb(null, "uploads/events/");
 
-    }else {
+    }
+    
+    else {
       cb(null, "uploads/");
     }
   },

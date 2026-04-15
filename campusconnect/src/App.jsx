@@ -24,6 +24,7 @@ import CTAEClub from './pages/clubs/CTAEClub'
 // import ManageEvent from './pages/admindashboard/manageevent/ManageEvent'
 // import AddAdmin from './pages/admindashboard/adminadd/AddAdmin'
 import AboutCtae from './pages/aboutctae/AboutCtae'
+import './App.css'
 
 
 const App = () => {
@@ -106,6 +107,8 @@ const App = () => {
           <Route path='adminpage' element={<AlumniRecord />} />
           <Route path='manageevent' element={< AdminEvents/>} />
           <Route path='manageclubs' element={<ManageClubs/>} />
+          <Route path='manageplacements' element={<ManagePlacements/>} />
+          {/* <Route path='adminadd' element={<AddAdmin/>} /> */}
 
 
 </Route>

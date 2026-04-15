@@ -2,6 +2,7 @@ import React, { useState ,useEffect} from 'react';
 import './Event.css';
 import { motion } from 'framer-motion';
 import axios from "axios";
+import Footer from '../../components/footer/Footer';
 
   const API = "http://localhost:5000/api/events";
 
@@ -392,6 +393,7 @@ const getEventImages = (event) => {
   const selectedEventImages = getEventImages(selectedEvent);
 
   return (
+    <>
     <div className="event-container">
       {/* Hero Section */}
       <section className="event-hero">
@@ -720,6 +722,8 @@ const getEventImages = (event) => {
         </motion.div>
       )}
     </div>
+    <Footer />
+    </>
   );
 };
 

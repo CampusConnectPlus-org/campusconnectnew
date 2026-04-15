@@ -43,7 +43,7 @@ export default function AdminLogin({setAdmin}) {
         
         <div className="login-page">
             <div className="login-card">
-                <h2>CampusConnect</h2>
+                <h2>CampusConnect+</h2>
                 <p>Login to your Admin account</p>
 
 

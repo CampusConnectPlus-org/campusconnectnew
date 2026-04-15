@@ -1,4 +1,4 @@
-// const Admin = require("../models/Admin");
+const Admin = require("../models/Admin");
 
 // // module.exports =  async (req, res, next) => {
 // //     const admin = await Admin.findById(req.user.id);
@@ -22,7 +22,7 @@
 
 // const isSuperAdmin = (req, res, next) => {
 //   console.log("Admin",req.user);
-//    const admin = Admin.findById(req.user.id);
+//    const admin = Admin.findById(req.admin.id);
 //   if ( !admin || admin.role !== "superadmin") {
 //     return res.status(403).json({ message: "Access denied" });
 //   } 

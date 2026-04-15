@@ -3,6 +3,7 @@ import './CTAEClub.css';
 import { motion } from 'framer-motion';
 import axios from "axios";
 import { useEffect } from "react";
+import Footer from '../../components/footer/Footer';
 const CTAEClub = () => {
   const [clubs, setClubs] = useState([]);
 const [loading, setLoading] = useState(true);
@@ -387,6 +388,7 @@ if (loading || !selectedClub) {
   return <p>Loading clubs...</p>;
 }
   return (
+    <>
     <div className="ctae-club-container">
       {/* NEW: Club selector tabs for multiple clubs */}
       <div className="club-switcher">
@@ -793,6 +795,9 @@ onClick={() => setSelectedClubId(club._id)}
         </div>
       )}
     </div>
+    <Footer />
+    
+    </>
   );
 };
 

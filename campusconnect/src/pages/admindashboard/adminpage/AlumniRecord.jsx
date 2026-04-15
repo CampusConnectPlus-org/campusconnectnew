@@ -2,9 +2,13 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import "./AlumniRecord.css";
 import AddAlumniModal from './AddAlumniModal';
+import EditAlumniModal from './EditAlumniModal';
+
 const AlumniRecord = () => {
    const [showForm,setShowForm] = useState(false);
+   const [editingAlumni, setEditingAlumni] = useState(false);
  const [alumni, setAlumni] = useState([]);
+
  
    const fetchAlumni = async () => {
           try {
@@ -18,6 +22,7 @@ const AlumniRecord = () => {
               const data = await res.json();
               console.log(data);
               setAlumni(data);
+              setEditingAlumni(false); // close edit modal after update
   
           } catch (err) {
               console.error(err);
@@ -59,7 +64,20 @@ const AlumniRecord = () => {
   Add Alumni
 </button>
       </div>
-      {showForm && <AddAlumniModal showForm={showForm} setShowForm={setShowForm}  fetchAlumni={fetchAlumni}/>}
+      {showForm && <AddAlumniModal
+       showForm={showForm} 
+       setShowForm={setShowForm} 
+      fetchAlumni={fetchAlumni}
+       
+      />}
+
+      {editingAlumni && <EditAlumniModal 
+      editingAlumni={editingAlumni}
+       setEditingAlumni={setEditingAlumni}  
+       alumni={editingAlumni}
+       onUpdate={fetchAlumni}
+       onClose={() => setEditingAlumni(false)}
+       />}
      <table>
         <thead>
           <tr >
@@ -78,7 +96,7 @@ const AlumniRecord = () => {
               <td>{alumni.batch}</td>
               <td>{alumni.role}</td>
               <td>
-                <button className="edit">Edit</button>
+                <button className="edit" onClick={() => {setEditingAlumni(alumni)}}>Edit</button>
                 <button onClick={(e) => {
                   console.log("Delete button clicked for alumni with id:", alumni._id);
                   console.log(e.target)

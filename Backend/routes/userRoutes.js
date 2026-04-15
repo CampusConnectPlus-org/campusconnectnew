@@ -109,6 +109,37 @@ router.post('/users', verifyToken, isAdmin, upload.single("profileImage"), async
     res.status(500).json({ msg: "Server error" });
   }
 });
+
+// edit user
+router.put("/update/:id", upload.single("profileImage"), async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updateData = {
+      name: req.body.name,
+      enrollmentNumber: req.body.enrollmentNumber,
+      email: req.body.email,
+      role: req.body.role,
+      password: req.body.password ? await bcrypt.hash(req.body.password, 10) : undefined
+    };
+// agar new image upload hua hai toh usko updateData mein add kar do, warna purani image rehne do
+    if (req.file) {
+      updateData.profileImage = req.file.filename;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true }
+    );
+
+    res.json(updatedUser);
+
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;
 
 // ADD ALUMNI
@@ -178,10 +209,13 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
 
     const updateData = {
       name: req.body.name,
-      company: req.body.company,
       role: req.body.role,
+      batch: req.body.batch,
+      desc: req.body.desc,
+      email: req.body.email,
+      linkedin: req.body.linkedin,
     };
-
+// agar new image upload hua hai toh usko updateData mein add kar do, warna purani image rehne do
     if (req.file) {
       updateData.image = req.file.filename;
     }
