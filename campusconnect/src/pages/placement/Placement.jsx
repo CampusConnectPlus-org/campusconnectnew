@@ -204,6 +204,10 @@ const Placement = ({ user, setUser }) => {
                 <option value="ECE">ECE</option>
                 <option value="EEE">EEE</option>
                 <option value="Civil">Civil</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Mining">Mining</option>
+                <option value="AI&DS">AI&DS</option>
+                <option value="Agriculture">Agriculture</option>
               </select>
               <input
                 type="text"
@@ -272,6 +276,10 @@ const Placement = ({ user, setUser }) => {
                 <option value="ECE">ECE</option>
                 <option value="EEE">EEE</option>
                 <option value="Civil">Civil</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Mining">Mining</option>
+                <option value="AI&DS">AI&DS</option>
+                <option value="Agriculture">Agriculture</option>
               </select>
               <input
                 type="text"

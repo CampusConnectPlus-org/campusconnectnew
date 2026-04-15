@@ -87,7 +87,7 @@ const Navbar = ({ user, setUser, admin, setAdmin }) => {
                 <p>{user ? user.email : admin.email}</p>
                 {/* <p className="role">{user ? user.role : 'Admin'}</p> */}
 
-                <button>View Profile</button>
+                {/* <button>View Profile</button> */}
                 <button className="logout" onClick={handleLogout}>Logout</button>
               </div>
             )}

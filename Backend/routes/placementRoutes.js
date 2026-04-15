@@ -150,6 +150,39 @@ router.post("/drives", verifyToken, async (req, res) => {
     }
 });
 
+// Admin: Update placement drive
+router.put("/drives/:id", verifyToken, async (req, res) => {
+    try {
+        const { company, role, branch, package: pkg, date, link } = req.body;
+
+        if (!company || !role || !pkg || !date) {
+            return res.status(400).json({ message: "Missing required fields: company, role, package, date" });
+        }
+
+        const updatedDrive = await PlacementDrive.findByIdAndUpdate(
+            req.params.id,
+            {
+                company,
+                role,
+                branch: branch || "All",
+                package: pkg,
+                date,
+                link: link || ""
+            },
+            { new: true }
+        );
+
+        if (!updatedDrive) {
+            return res.status(404).json({ message: "Drive not found" });
+        }
+
+        res.json(updatedDrive);
+    } catch (err) {
+        console.error("Error updating placement drive:", err);
+        res.status(500).json({ message: "Failed to update placement drive", error: err.message });
+    }
+});
+
 // Admin: Delete placement drive
 router.delete("/drives/:id", verifyToken, async (req, res) => {
     try {
@@ -201,6 +234,53 @@ router.post("/placed-students", verifyToken, async (req, res) => {
     }
 });
 
+// Admin: Update placed student
+router.put("/placed-students/:id", verifyToken, async (req, res) => {
+    try {
+        const { enrollmentNo, name, branch, company, package: pkg } = req.body;
+
+        if (!enrollmentNo || !name || !branch || !company || !pkg) {
+            return res.status(400).json({ message: "Missing required fields: enrollmentNo, name, branch, company, package" });
+        }
+
+        // Check if student is registered in the system
+        const registeredUser = await User.findOne({ enrollmentNumber: enrollmentNo });
+        if (!registeredUser) {
+            return res.status(404).json({ message: `Student with enrollment number ${enrollmentNo} is not registered in the system. Please check the enrollment number.` });
+        }
+
+        // Check if enrollment number is already used by another placed student (if changing enrollment number)
+        const currentStudent = await PlacedStudent.findById(req.params.id);
+        if (currentStudent && currentStudent.enrollmentNo !== enrollmentNo) {
+            const existingStudent = await PlacedStudent.findOne({ enrollmentNo });
+            if (existingStudent) {
+                return res.status(409).json({ message: `Student with enrollment number ${enrollmentNo} is already in the placed students list.` });
+            }
+        }
+
+        const updatedStudent = await PlacedStudent.findByIdAndUpdate(
+            req.params.id,
+            {
+                enrollmentNo,
+                name,
+                branch,
+                company,
+                package: pkg
+            },
+            { new: true }
+        );
+
+        if (!updatedStudent) {
+            return res.status(404).json({ message: "Placed student not found" });
+        }
+
+        res.json(updatedStudent);
+    } catch (err) {
+        console.error("Error updating placed student:", err);
+        res.status(500).json({ message: "Failed to update placed student", error: err.message });
+    }
+});
+
 // Admin: Delete placed student
 router.delete("/placed-students/:id", verifyToken, async (req, res) => {
     try {
@@ -235,6 +315,36 @@ router.post("/trends", verifyToken, async (req, res) => {
     } catch (err) {
         console.error("Error creating placement trend:", err);
         res.status(500).json({ message: "Failed to create placement trend", error: err.message });
+    }
+});
+
+// Admin: Update placement trend
+router.put("/trends/:id", verifyToken, async (req, res) => {
+    try {
+        const { year, avg, companies } = req.body;
+
+        if (!year || !avg || !companies) {
+            return res.status(400).json({ message: "Missing required fields: year, avg, companies" });
+        }
+
+        const updatedTrend = await PlacementTrend.findByIdAndUpdate(
+            req.params.id,
+            {
+                year: parseInt(year),
+                avg: parseFloat(avg),
+                companies: parseInt(companies)
+            },
+            { new: true }
+        );
+
+        if (!updatedTrend) {
+            return res.status(404).json({ message: "Trend not found" });
+        }
+
+        res.json(updatedTrend);
+    } catch (err) {
+        console.error("Error updating placement trend:", err);
+        res.status(500).json({ message: "Failed to update placement trend", error: err.message });
     }
 });
 

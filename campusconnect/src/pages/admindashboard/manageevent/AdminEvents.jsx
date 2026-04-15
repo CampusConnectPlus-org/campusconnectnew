@@ -13,7 +13,7 @@ const AdminEvents = () => {
     category: "",
     overview: "",
     highlights: [""],
-      schedule: [{ day: "", events: "" }],
+    schedule: [{ day: "", events: "" }],
   });
   const [activeTab, setActiveTab] = useState("events");
   const [editBanner, setEditBanner] = useState(null);
@@ -52,10 +52,10 @@ const AdminEvents = () => {
     formData.append("date", newEvent.date);
 
     formData.append("location", newEvent.location);
-formData.append(
-  "schedule",
-  JSON.stringify(newEvent.schedule)
-);
+    formData.append(
+      "schedule",
+      JSON.stringify(newEvent.schedule)
+    );
     formData.append("category", newEvent.category);
     formData.append("overview", newEvent.overview);
     formData.append("highlights", JSON.stringify(newEvent.highlights));
@@ -83,7 +83,7 @@ formData.append(
       category: "",
       overview: "",
       highlights: [""],
-       schedule: [{ day: "", events: "" }],
+      schedule: [{ day: "", events: "" }],
     });
 
     setBannerFile(null);
@@ -118,10 +118,10 @@ formData.append(
       "highlights",
       JSON.stringify(editEvent.details?.highlights || []),
     );
-formData.append(
-  "schedule",
-  JSON.stringify(editEvent.details?.schedule || [])
-);
+    formData.append(
+      "schedule",
+      JSON.stringify(editEvent.details?.schedule || [])
+    );
     if (editBanner) {
       formData.append("bannerImage", editBanner);
     }
@@ -271,47 +271,47 @@ formData.append(
                 })
               }
             />
-<h4>Schedule</h4>
+            <h4>Schedule</h4>
 
-{newEvent.schedule.map((s, index) => (
-  <div key={index}>
-    <input
-      placeholder="Day (e.g. Day 1)"
-      value={s.day}
-      onChange={(e) => {
-        const updated = [...newEvent.schedule];
-        updated[index].day = e.target.value;
-        setNewEvent({ ...newEvent, schedule: updated });
-      }}
-    />
+            {newEvent.schedule.map((s, index) => (
+              <div key={index}>
+                <input
+                  placeholder="Day (e.g. Day 1)"
+                  value={s.day}
+                  onChange={(e) => {
+                    const updated = [...newEvent.schedule];
+                    updated[index].day = e.target.value;
+                    setNewEvent({ ...newEvent, schedule: updated });
+                  }}
+                />
 
-    <input
-      placeholder="Events"
-      value={s.events}
-      onChange={(e) => {
-        const updated = [...newEvent.schedule];
-        updated[index].events = e.target.value;
-        setNewEvent({ ...newEvent, schedule: updated });
-      }}
-    />
+                <input
+                  placeholder="Events"
+                  value={s.events}
+                  onChange={(e) => {
+                    const updated = [...newEvent.schedule];
+                    updated[index].events = e.target.value;
+                    setNewEvent({ ...newEvent, schedule: updated });
+                  }}
+                />
 
-    <button onClick={() => {
-      const updated = newEvent.schedule.filter((_, i) => i !== index);
-      setNewEvent({ ...newEvent, schedule: updated });
-    }}>
-      ❌
-    </button>
-  </div>
-))}
+                <button onClick={() => {
+                  const updated = newEvent.schedule.filter((_, i) => i !== index);
+                  setNewEvent({ ...newEvent, schedule: updated });
+                }}>
+                  ❌
+                </button>
+              </div>
+            ))}
 
-<button onClick={() =>
-  setNewEvent({
-    ...newEvent,
-    schedule: [...newEvent.schedule, { day: "", events: "" }]
-  })
-}>
-  + Add Schedule
-</button>
+            <button onClick={() =>
+              setNewEvent({
+                ...newEvent,
+                schedule: [...newEvent.schedule, { day: "", events: "" }]
+              })
+            }>
+              + Add Schedule
+            </button>
             <h4>Highlights</h4>
 
             {newEvent.highlights.map((h, index) => (
@@ -326,11 +326,11 @@ formData.append(
                 />
 
                 <button type="button" onClick={() => {
-                    const updated = newEvent.highlights.filter(
-                      (_, i) => i !== index,
-                    );
-                    setNewEvent({ ...newEvent, highlights: updated });
-                  }}
+                  const updated = newEvent.highlights.filter(
+                    (_, i) => i !== index,
+                  );
+                  setNewEvent({ ...newEvent, highlights: updated });
+                }}
                 >
                   ❌
                 </button>
@@ -354,8 +354,8 @@ formData.append(
             />
 
             <button type="button" onClick={addEvent}>
-  Add Event
-</button>
+              Add Event
+            </button>
           </div>
 
           {/* UPCOMING EVENTS */}
@@ -462,7 +462,7 @@ formData.append(
                     Upload
                   </button>
                   <button
-                    className="btn btn-cancel"
+                    className="btn btn-cancel-admin"
                     onClick={() => setSelectedEvent(null)}
                   >
                     Cancel
@@ -533,74 +533,74 @@ formData.append(
                     })
                   }
                 />
-<h4>Schedule</h4>
+                <h4>Schedule</h4>
 
-{editEvent.details?.schedule?.map((s, index) => (
-  <div key={index}>
-    <input
-      value={s.day}
-      placeholder="Day"
-      onChange={(e) => {
-        const updated = [...editEvent.details.schedule];
-        updated[index].day = e.target.value;
+                {editEvent.details?.schedule?.map((s, index) => (
+                  <div key={index}>
+                    <input
+                      value={s.day}
+                      placeholder="Day"
+                      onChange={(e) => {
+                        const updated = [...editEvent.details.schedule];
+                        updated[index].day = e.target.value;
 
-        setEditEvent({
-          ...editEvent,
-          details: {
-            ...editEvent.details,
-            schedule: updated,
-          },
-        });
-      }}
-    />
+                        setEditEvent({
+                          ...editEvent,
+                          details: {
+                            ...editEvent.details,
+                            schedule: updated,
+                          },
+                        });
+                      }}
+                    />
 
-    <input
-      value={s.events}
-      placeholder="Events"
-      onChange={(e) => {
-        const updated = [...editEvent.details.schedule];
-        updated[index].events = e.target.value;
+                    <input
+                      value={s.events}
+                      placeholder="Events"
+                      onChange={(e) => {
+                        const updated = [...editEvent.details.schedule];
+                        updated[index].events = e.target.value;
 
-        setEditEvent({
-          ...editEvent,
-          details: {
-            ...editEvent.details,
-            schedule: updated,
-          },
-        });
-      }}
-    />
+                        setEditEvent({
+                          ...editEvent,
+                          details: {
+                            ...editEvent.details,
+                            schedule: updated,
+                          },
+                        });
+                      }}
+                    />
 
-    <button onClick={() => {
-      const updated = editEvent.details.schedule.filter((_, i) => i !== index);
+                    <button onClick={() => {
+                      const updated = editEvent.details.schedule.filter((_, i) => i !== index);
 
-      setEditEvent({
-        ...editEvent,
-        details: {
-          ...editEvent.details,
-          schedule: updated,
-        },
-      });
-    }}>
-      ❌
-    </button>
-  </div>
-))}
+                      setEditEvent({
+                        ...editEvent,
+                        details: {
+                          ...editEvent.details,
+                          schedule: updated,
+                        },
+                      });
+                    }}>
+                      ❌
+                    </button>
+                  </div>
+                ))}
 
-<button onClick={() =>
-  setEditEvent({
-    ...editEvent,
-    details: {
-      ...editEvent.details,
-      schedule: [
-        ...(editEvent.details?.schedule || []),
-        { day: "", events: "" },
-      ],
-    },
-  })
-}>
-  + Add Schedule
-</button>
+                <button onClick={() =>
+                  setEditEvent({
+                    ...editEvent,
+                    details: {
+                      ...editEvent.details,
+                      schedule: [
+                        ...(editEvent.details?.schedule || []),
+                        { day: "", events: "" },
+                      ],
+                    },
+                  })
+                }>
+                  + Add Schedule
+                </button>
                 <input
                   type="file"
                   onChange={(e) => setEditBanner(e.target.files[0])}
@@ -611,7 +611,7 @@ formData.append(
                     Save
                   </button>
                   <button
-                    className="btn btn-cancel"
+                    className="btn btn-cancel-admin"
                     onClick={() => setEditEvent(null)}
                   >
                     Cancel

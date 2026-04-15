@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 
 
 const Sidebar = () => {
- 
+
   return (
     <div className="sidebar">
       <h2>🎓 CampusConnect+</h2>
@@ -54,7 +54,7 @@ const Sidebar = () => {
         </li>
 
         {/* NEW: Placements Section */}
-      
+
         <li>
           <NavLink
             to="/admindashboard/manageplacements"
@@ -75,10 +75,10 @@ const Sidebar = () => {
         </li> */}
 
       </ul>
-      <div className="logout">Logout</div>
-    
+      {/* <div className="logout">Logout</div> */}
+
     </div>
-    
+
   );
 };
 
