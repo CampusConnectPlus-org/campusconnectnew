@@ -53,7 +53,7 @@ const AdminNavbar = ({ admin, setAdmin }) => {
                 <p>{admin.email}</p>
                 {/* <p className="role">{admin.role}</p> */}
 
-                <button>View Profile</button>
+                {/* <button>View Profile</button> */}
                 <button className="logout" onClick={handleLogout}>Logout</button>
               </div>
             )}
@@ -63,9 +63,9 @@ const AdminNavbar = ({ admin, setAdmin }) => {
             <Link to="/adminlogin">
               <button onClick={() => { navigate('/adminlogin') }} className="login-btn">Logout</button>
             </Link>
-           
+
           </div>
-          
+
 
         )}
 

@@ -2,12 +2,12 @@
 import { useEffect, useState } from "react";
 // import "./AddAlumniModal.css";
 
-const EditUserModal = ({  onUpdate, onClose,editUser ,setEditUser, userData,  }) => {
+const EditUserModal = ({ onUpdate, onClose, editUser, setEditUser, userData, }) => {
   if (!editUser) return null;
 
- 
- 
- 
+
+
+
   const [formData, setFormData] = useState({
     name: "",
     enrollmentNumber: "",
@@ -16,28 +16,29 @@ const EditUserModal = ({  onUpdate, onClose,editUser ,setEditUser, userData,  })
     password: "",
     profileImage: null,
   });
-   const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
 
-   useEffect(() =>{
+  useEffect(() => {
     // fetchAlumni();
-if(userData){
-    console.log(userData)
-    setFormData({
+    if (userData) {
+      console.log(userData)
+      setFormData({
         name: userData.name || "",
         role: userData.role || "",
-        enrollmentNumber: userData.enrollmentNumber || "",  
+        enrollmentNumber: userData.enrollmentNumber || "",
         email: userData.email || "",
         password: "" || "",
         profileImage: null,
-    });
-   } },[userData]);
+      });
+    }
+  }, [userData]);
   const handleChange = (e) => {
-    const {name, value, files} = e.target;
+    const { name, value, files } = e.target;
     if (name === "profileImage") {
       setFormData({ ...formData, profileImage: files[0] });
     }
-    else{
-        setFormData({ ...formData, [name]: value });
+    else {
+      setFormData({ ...formData, [name]: value });
     }
     // if (e.target.name === "image") {
     //   setFormData({ ...formData, image: e.target.files[0] });
@@ -49,68 +50,70 @@ if(userData){
     // setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-// UPDATE ALUMNI
+  // UPDATE USER
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submitting form with data:", formData);
-try{
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-    const dataToSend = new FormData();
+      const dataToSend = new FormData();
       dataToSend.append("name", formData.name);
-    dataToSend.append("role", formData.role);
-    dataToSend.append("batch", formData.batch);
-    dataToSend.append("desc", formData.desc);
-    dataToSend.append("email", formData.email);
-    dataToSend.append("linkedin", formData.linkedin);
-    // dataToSend.append("image", formData.image);
-    if(formData.profileImage){
-        dataToSend.append("image", formData.profileImage);
-    }
- 
+      dataToSend.append("role", formData.role);
+      dataToSend.append("email", formData.email);
+      dataToSend.append("enrollmentNumber", formData.enrollmentNumber);
+      // Only append password if it has a value
+      if (formData.password) {
+        dataToSend.append("password", formData.password);
+      }
+      // dataToSend.append("image", formData.image);
+      if (formData.profileImage) {
+        dataToSend.append("profileImage", formData.profileImage);
+      }
 
-    const response = await fetch(`http://localhost:5000/admin/update/${userData._id}`, {
-      method: "PUT",
-      headers: {
-        // "content-type": "application/json",
-        Authorization: `Bearer ${token}`
 
-      },
-      body: dataToSend
-    });
-     
-    const data = await response.json();
+      const response = await fetch(`http://localhost:5000/admin/update/${userData._id}`, {
+        method: "PUT",
+        headers: {
+          // "content-type": "application/json",
+          Authorization: `Bearer ${token}`
 
-    console.log(data)
+        },
+        body: dataToSend
+      });
+
+      const data = await response.json();
+
+      console.log(data)
       console.log("status", response.status)
-        console.log("response",data);
-    // console.log(data)
-    
-      
+      console.log("response", data);
+      // console.log(data)
 
-    if (response.ok) {
-      alert("User Updated ✅");
-    //   setAlumniFormData({
-    //             name: "",
-    //             role: "",
-    //             batch: "",
-    //             desc: "",
-    //             email: "",
-    //             linkedin: "",
-    //             image: null,
-               
-    //         });
-    onUpdate(); // refresh alumni list in parent component
-    onClose(); // close the modal   
-    //   fetchAlumni();
-    //   setShowForm(false);
-    } else {
-      alert(data.msg);
-    };
-  }
-  catch(err){
-    console.log("Error submitting form:", err);
-  }
+
+
+      if (response.ok) {
+        alert("User Updated ✅");
+        //   setAlumniFormData({
+        //             name: "",
+        //             role: "",
+        //             batch: "",
+        //             desc: "",
+        //             email: "",
+        //             linkedin: "",
+        //             image: null,
+
+        //         });
+        onUpdate(); // refresh alumni list in parent component
+        onClose(); // close the modal   
+        //   fetchAlumni();
+        //   setShowForm(false);
+      } else {
+        alert(data.msg);
+      };
+    }
+    catch (err) {
+      console.log("Error submitting form:", err);
+    }
   };
 
   return (
@@ -123,7 +126,7 @@ try{
           <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
           <input name="enrollmentNumber" placeholder="Enrollment Number" value={formData.enrollmentNumber} onChange={handleChange} />
           <input name="password" placeholder="Password" type="password" value={formData.password} onChange={handleChange} />
-          
+
           <div className="image-section">
             <label htmlFor="profileImage">Upload New Image:</label>
             <input type="file" id="profileImage" name="profileImage" accept="image/*" onChange={handleChange} />
@@ -140,7 +143,7 @@ try{
           </button>
           <button type="button" onClick={() => setEditUser(false)} className="add-btn">
             Cancel
-            </button>
+          </button>
         </form>
       </div>
     </div>

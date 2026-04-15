@@ -6,6 +6,11 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+  z-index: 100;
 }
 
 .sidebar h2 {

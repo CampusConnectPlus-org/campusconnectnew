@@ -1,5 +1,7 @@
 // server.js
 
+const dns = require("node:dns");
+dns.setServers(['8.8.8.8', '8.8.4.4'])
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -123,7 +125,7 @@ const Alumni = require("./models/Alumni");
 
 // async function createSuperAdmin() {
 //   const hashedPassword = await bcrypt.hash("123456", 10);
-   
+
 //   const admin = new Admin({
 
 //     name: "Super Admin",

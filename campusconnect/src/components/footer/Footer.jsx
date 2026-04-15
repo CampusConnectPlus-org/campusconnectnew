@@ -23,7 +23,8 @@ const Footer = () => {
             <li><a href="/">Home</a></li>
             <li><a href="/alumni">Alumni</a></li>
             <li><a href="/event">Events</a></li>
-            <li><a href="/contact">Contact</a></li>
+            <li><a href="/placement">Placements</a></li>
+            <li><a href="https://www.ctae.ac.in" target="_blank" rel="noopener noreferrer">University Portal</a></li>
           </ul>
         </div>
 

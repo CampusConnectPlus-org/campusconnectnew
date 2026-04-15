@@ -10,7 +10,6 @@ const ManagePlacements = () => {
     const [activeTab, setActiveTab] = useState('drives');
     const [drives, setDrives] = useState([]);
     const [trends, setTrends] = useState([]);
-    const [applications, setApplications] = useState([]);
     const [placedStudents, setPlacedStudents] = useState([]);
 
     // Filter states for Drives
@@ -26,9 +25,15 @@ const ManagePlacements = () => {
 
     // Modal states
     const [showAddDriveModal, setShowAddDriveModal] = useState(false);
+    const [showEditDriveModal, setShowEditDriveModal] = useState(false);
     const [showAddPlacedModal, setShowAddPlacedModal] = useState(false);
+    const [showEditPlacedModal, setShowEditPlacedModal] = useState(false);
     const [showAddTrendModal, setShowAddTrendModal] = useState(false);
+    const [showEditTrendModal, setShowEditTrendModal] = useState(false);
     const [showBranchDropdown, setShowBranchDropdown] = useState(false);
+    const [editingDriveId, setEditingDriveId] = useState(null);
+    const [editingPlacedId, setEditingPlacedId] = useState(null);
+    const [editingTrendId, setEditingTrendId] = useState(null);
 
     // Form states
     const [driveForm, setDriveForm] = useState({
@@ -86,16 +91,14 @@ const ManagePlacements = () => {
                 Authorization: `Bearer ${token}`,
             };
 
-            const [drivesRes, trendsRes, appsRes, placedRes] = await Promise.all([
+            const [drivesRes, trendsRes, placedRes] = await Promise.all([
                 axios.get(`${API_BASE}/drives`, { headers }),
                 axios.get(`${API_BASE}/trends`, { headers }),
-                axios.get(`${API_BASE}/applications`, { headers }),
                 axios.get(`${API_BASE}/placed-students`, { headers }),
             ]);
 
             setDrives(drivesRes.data || []);
             setTrends(trendsRes.data || []);
-            setApplications(appsRes.data || []);
             setPlacedStudents(placedRes.data || []);
         } catch (err) {
             console.error('Error fetching placement data:', err);
@@ -150,6 +153,50 @@ const ManagePlacements = () => {
         });
     };
 
+    const handleOpenEditDrive = (drive) => {
+        setEditingDriveId(drive._id);
+        setDriveForm({
+            company: drive.company,
+            role: drive.role,
+            branch: drive.branch,
+            package: drive.package,
+            date: drive.date,
+            link: drive.link || ''
+        });
+        setShowEditDriveModal(true);
+    };
+
+    const handleUpdateDrive = async (e) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put(`${API_BASE}/drives/${editingDriveId}`, driveForm, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setDrives(drives.map(drive => drive._id === editingDriveId ? response.data : drive));
+            closeEditDriveModal();
+            alert('Drive updated successfully');
+        } catch (err) {
+            console.error('Error updating drive:', err);
+            const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Failed to update drive';
+            alert(`Failed to update drive: ${errorMessage}`);
+        }
+    };
+
+    const closeEditDriveModal = () => {
+        setShowEditDriveModal(false);
+        setShowBranchDropdown(false);
+        setEditingDriveId(null);
+        setDriveForm({
+            company: '',
+            role: '',
+            branch: 'All',
+            package: '',
+            date: '',
+            link: ''
+        });
+    };
+
     const handleBranchChange = (branchName) => {
         if (branchName === 'All') {
             // Toggle All on/off
@@ -158,7 +205,7 @@ const ManagePlacements = () => {
             // For specific branches
             if (driveForm.branch === 'All') {
                 // If "All" is selected, convert to individual branches excluding this one
-                const allBranches = ['CSE', 'ECE', 'EEE', 'Civil'];
+                const allBranches = ['CSE', 'ECE', 'EEE', 'Civil', 'Mechanical', 'Mining', 'AI&DS', 'Agriculture'];
                 const result = allBranches.filter(b => b !== branchName).join(',');
                 setDriveForm({ ...driveForm, branch: result });
             } else {
@@ -174,9 +221,9 @@ const ManagePlacements = () => {
                     branchArray.push(branchName);
                 }
 
-                // Check if all 4 branches are selected, convert to "All"
-                const allBranches = ['CSE', 'ECE', 'EEE', 'Civil'];
-                if (branchArray.length === 4 && allBranches.every(b => branchArray.includes(b))) {
+                // Check if all branches are selected, convert to "All"
+                const allBranches = ['CSE', 'ECE', 'EEE', 'Civil', 'Mechanical', 'Mining', 'AI&DS', 'Agriculture'];
+                if (branchArray.length === 8 && allBranches.every(b => branchArray.includes(b))) {
                     setDriveForm({ ...driveForm, branch: 'All' });
                 } else {
                     setDriveForm({ ...driveForm, branch: branchArray.join(',') });
@@ -229,6 +276,47 @@ const ManagePlacements = () => {
         });
     };
 
+    const handleOpenEditPlaced = (student) => {
+        setEditingPlacedId(student._id);
+        setPlacedForm({
+            enrollmentNo: student.enrollmentNo,
+            name: student.name,
+            branch: student.branch,
+            company: student.company,
+            package: student.package
+        });
+        setShowEditPlacedModal(true);
+    };
+
+    const handleUpdatePlaced = async (e) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put(`${API_BASE}/placed-students/${editingPlacedId}`, placedForm, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setPlacedStudents(placedStudents.map(student => student._id === editingPlacedId ? response.data : student));
+            closeEditPlacedModal();
+            alert('Placed student updated successfully');
+        } catch (err) {
+            console.error('Error updating placed student:', err);
+            const errorMessage = err.response?.data?.message || 'Failed to update placed student';
+            alert(`Failed to update placed student: ${errorMessage}`);
+        }
+    };
+
+    const closeEditPlacedModal = () => {
+        setShowEditPlacedModal(false);
+        setEditingPlacedId(null);
+        setPlacedForm({
+            enrollmentNo: '',
+            name: '',
+            branch: 'CSE',
+            company: '',
+            package: ''
+        });
+    };
+
     const handleAddTrend = async (e) => {
         e.preventDefault();
         try {
@@ -247,6 +335,43 @@ const ManagePlacements = () => {
 
     const closeTrendModal = () => {
         setShowAddTrendModal(false);
+        setTrendForm({
+            year: new Date().getFullYear(),
+            avg: '',
+            companies: ''
+        });
+    };
+
+    const handleOpenEditTrend = (trend) => {
+        setEditingTrendId(trend._id);
+        setTrendForm({
+            year: trend.year,
+            avg: trend.avg,
+            companies: trend.companies
+        });
+        setShowEditTrendModal(true);
+    };
+
+    const handleUpdateTrend = async (e) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put(`${API_BASE}/trends/${editingTrendId}`, trendForm, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setTrends(trends.map(trend => trend._id === editingTrendId ? response.data : trend));
+            closeEditTrendModal();
+            alert('Trend updated successfully');
+        } catch (err) {
+            console.error('Error updating trend:', err);
+            const errorMessage = err.response?.data?.message || 'Failed to update trend';
+            alert(`Failed to update trend: ${errorMessage}`);
+        }
+    };
+
+    const closeEditTrendModal = () => {
+        setShowEditTrendModal(false);
+        setEditingTrendId(null);
         setTrendForm({
             year: new Date().getFullYear(),
             avg: '',
@@ -323,12 +448,6 @@ const ManagePlacements = () => {
                     Campus Drives ({drives.length})
                 </button>
                 <button
-                    className={`tab-btn ${activeTab === 'applications' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('applications')}
-                >
-                    Applications ({applications.length})
-                </button>
-                <button
                     className={`tab-btn ${activeTab === 'placed' ? 'active' : ''}`}
                     onClick={() => setActiveTab('placed')}
                 >
@@ -369,6 +488,10 @@ const ManagePlacements = () => {
                             <option value="ECE">ECE</option>
                             <option value="EEE">EEE</option>
                             <option value="Civil">Civil</option>
+                            <option value="Mechanical">Mechanical</option>
+                            <option value="Mining">Mining</option>
+                            <option value="AI&DS">AI&DS</option>
+                            <option value="Agriculture">Agriculture</option>
                         </select>
                         <input
                             type="text"
@@ -399,7 +522,12 @@ const ManagePlacements = () => {
                                         <td>{drive.package} LPA</td>
                                         <td>{drive.date}</td>
                                         <td>
-                                            <button className="action-btn edit">Edit</button>
+                                            <button
+                                                className="action-btn edit"
+                                                onClick={() => handleOpenEditDrive(drive)}
+                                            >
+                                                Edit
+                                            </button>
                                             <button
                                                 className="action-btn delete"
                                                 onClick={() => handleDeleteDrive(drive._id)}
@@ -413,48 +541,6 @@ const ManagePlacements = () => {
                         </table>
                     ) : (
                         <p className="empty-message">No campus drives found</p>
-                    )}
-                </section>
-            )}
-
-            {/* Applications Section */}
-            {activeTab === 'applications' && (
-                <section className="placements-section">
-                    <h2>Student Applications</h2>
-                    {applications.length > 0 ? (
-                        <table className="placements-table">
-                            <thead>
-                                <tr>
-                                    <th>Student Name</th>
-                                    <th>Company</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {applications.map((app) => (
-                                    <tr key={app._id}>
-                                        <td>{app.studentName || 'N/A'}</td>
-                                        <td>{app.company}</td>
-                                        <td>{app.role}</td>
-                                        <td>
-                                            <span className={`status-badge status-${app.status?.toLowerCase()}`}>
-                                                {app.status}
-                                            </span>
-                                        </td>
-                                        <td>{app.date}</td>
-                                        <td>
-                                            <button className="action-btn edit">Edit</button>
-                                            <button className="action-btn delete">Delete</button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : (
-                        <p className="empty-message">No applications found</p>
                     )}
                 </section>
             )}
@@ -493,6 +579,10 @@ const ManagePlacements = () => {
                             <option value="ECE">ECE</option>
                             <option value="EEE">EEE</option>
                             <option value="Civil">Civil</option>
+                            <option value="Mechanical">Mechanical</option>
+                            <option value="Mining">Mining</option>
+                            <option value="AI&DS">AI&DS</option>
+                            <option value="Agriculture">Agriculture</option>
                         </select>
                         <input
                             type="text"
@@ -523,7 +613,12 @@ const ManagePlacements = () => {
                                         <td>{student.company}</td>
                                         <td>{student.package} LPA</td>
                                         <td>
-                                            <button className="action-btn edit">Edit</button>
+                                            <button
+                                                className="action-btn edit"
+                                                onClick={() => handleOpenEditPlaced(student)}
+                                            >
+                                                Edit
+                                            </button>
                                             <button
                                                 className="action-btn delete"
                                                 onClick={() => handleDeletePlaced(student._id)}
@@ -567,7 +662,12 @@ const ManagePlacements = () => {
                                         <td>{trend.avg}</td>
                                         <td>{trend.companies}</td>
                                         <td>
-                                            <button className="action-btn edit">Edit</button>
+                                            <button
+                                                className="action-btn edit"
+                                                onClick={() => handleOpenEditTrend(trend)}
+                                            >
+                                                Edit
+                                            </button>
                                             <button
                                                 className="action-btn delete"
                                                 onClick={() => handleDeleteTrend(trend._id)}
@@ -583,6 +683,183 @@ const ManagePlacements = () => {
                         <p className="empty-message">No trends found</p>
                     )}
                 </section>
+            )}
+
+            {/* Edit Drive Modal */}
+            {showEditDriveModal && (
+                <div className="modal-overlay" onClick={closeEditDriveModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>Edit Campus Drive</h3>
+                            <button
+                                className="close-btn"
+                                onClick={closeEditDriveModal}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <form onSubmit={handleUpdateDrive}>
+                            <div className="form-group-placement">
+                                <label>Company Name *
+                                    <input
+                                        id="edit-drive-company"
+                                        type="text"
+                                        value={driveForm.company}
+                                        onChange={(e) => setDriveForm({ ...driveForm, company: e.target.value })}
+                                        required
+                                        placeholder="e.g., Google, Microsoft"
+                                    /></label>
+                            </div>
+                            <div className="form-group-placement">
+                                <label>Role *
+                                    <input
+                                        id="edit-drive-role"
+                                        type="text"
+                                        value={driveForm.role}
+                                        onChange={(e) => setDriveForm({ ...driveForm, role: e.target.value })}
+                                        required
+                                        placeholder="e.g., Software Engineer"
+                                    /></label>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group-placement">
+                                    <label>Branch
+                                        <div className="branch-dropdown-wrapper">
+                                            <button
+                                                type="button"
+                                                className="branch-dropdown-btn"
+                                                onClick={() => setShowBranchDropdown(!showBranchDropdown)}
+                                            >
+                                                {driveForm.branch === '' ? 'Select Branches' : driveForm.branch}
+                                                <span className="dropdown-arrow">▼</span>
+                                            </button>
+                                            {showBranchDropdown && (
+                                                <div className="branch-dropdown-menu">
+                                                    <label className="dropdown-checkbox-label">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={driveForm.branch === 'All'}
+                                                            onChange={() => handleBranchChange('All')}
+                                                        />
+                                                        All Branches
+                                                    </label>
+                                                    <label className="dropdown-checkbox-label">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isBranchSelected('CSE')}
+                                                            onChange={() => handleBranchChange('CSE')}
+                                                        />
+                                                        CSE
+                                                    </label>
+                                                    <label className="dropdown-checkbox-label">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isBranchSelected('ECE')}
+                                                            onChange={() => handleBranchChange('ECE')}
+                                                        />
+                                                        ECE
+                                                    </label>
+                                                    <label className="dropdown-checkbox-label">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isBranchSelected('EEE')}
+                                                            onChange={() => handleBranchChange('EEE')}
+                                                        />
+                                                        EEE
+                                                    </label>
+                                                    <label className="dropdown-checkbox-label">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isBranchSelected('Civil')}
+                                                            onChange={() => handleBranchChange('Civil')}
+                                                        />
+                                                        Civil
+                                                    </label>
+                                                    <label className="dropdown-checkbox-label">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isBranchSelected('Mechanical')}
+                                                            onChange={() => handleBranchChange('Mechanical')}
+                                                        />
+                                                        Mechanical
+                                                    </label>
+                                                    <label className="dropdown-checkbox-label">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isBranchSelected('Mining')}
+                                                            onChange={() => handleBranchChange('Mining')}
+                                                        />
+                                                        Mining
+                                                    </label>
+                                                    <label className="dropdown-checkbox-label">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isBranchSelected('AI&DS')}
+                                                            onChange={() => handleBranchChange('AI&DS')}
+                                                        />
+                                                        AI&DS
+                                                    </label>
+                                                    <label className="dropdown-checkbox-label">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isBranchSelected('Agriculture')}
+                                                            onChange={() => handleBranchChange('Agriculture')}
+                                                        />
+                                                        Agriculture
+                                                    </label>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </label>
+                                </div>
+                                <div className="form-group-placement">
+                                    <label>CTC/Package *
+                                        <input
+                                            id="edit-drive-package"
+                                            type="number"
+                                            step="0.1"
+                                            value={driveForm.package}
+                                            onChange={(e) => setDriveForm({ ...driveForm, package: e.target.value })}
+                                            required
+                                            placeholder="e.g., 12"
+                                        /></label>
+                                </div>
+                            </div>
+                            <div className="form-group-placement">
+                                <label>Date *
+                                    <input
+                                        id="edit-drive-date"
+                                        type="date"
+                                        value={driveForm.date}
+                                        onChange={(e) => setDriveForm({ ...driveForm, date: e.target.value })}
+                                        required
+                                    /></label>
+                            </div>
+                            <div className="form-group-placement">
+                                <label>Application Link
+                                    <input
+                                        id="edit-drive-link"
+                                        type="url"
+                                        value={driveForm.link}
+                                        onChange={(e) => setDriveForm({ ...driveForm, link: e.target.value })}
+                                        placeholder="https://example.com/apply"
+                                    /></label>
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn-cancel"
+                                    onClick={closeEditDriveModal}
+                                >
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn-submit">
+                                    Update Drive
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             )}
 
             {/* Add Drive Modal */}
@@ -675,6 +952,38 @@ const ManagePlacements = () => {
                                                         />
                                                         Civil
                                                     </label>
+                                                    <label className="dropdown-checkbox-label">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isBranchSelected('Mechanical')}
+                                                            onChange={() => handleBranchChange('Mechanical')}
+                                                        />
+                                                        Mechanical
+                                                    </label>
+                                                    <label className="dropdown-checkbox-label">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isBranchSelected('Mining')}
+                                                            onChange={() => handleBranchChange('Mining')}
+                                                        />
+                                                        Mining
+                                                    </label>
+                                                    <label className="dropdown-checkbox-label">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isBranchSelected('AI&DS')}
+                                                            onChange={() => handleBranchChange('AI&DS')}
+                                                        />
+                                                        AI&DS
+                                                    </label>
+                                                    <label className="dropdown-checkbox-label">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isBranchSelected('Agriculture')}
+                                                            onChange={() => handleBranchChange('Agriculture')}
+                                                        />
+                                                        Agriculture
+                                                    </label>
                                                 </div>
                                             )}
                                         </div>
@@ -730,6 +1039,101 @@ const ManagePlacements = () => {
                 </div>
             )}
 
+            {/* Edit Placed Student Modal */}
+            {showEditPlacedModal && (
+                <div className="modal-overlay" onClick={closeEditPlacedModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>Edit Placed Student</h3>
+                            <button
+                                className="close-btn"
+                                onClick={closeEditPlacedModal}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <form onSubmit={handleUpdatePlaced}>
+                            <div className="form-group-placement">
+                                <label>Enrollment Number *
+                                    <input
+                                        id="edit-placed-enrollment"
+                                        type="text"
+                                        value={placedForm.enrollmentNo}
+                                        onChange={(e) => setPlacedForm({ ...placedForm, enrollmentNo: e.target.value })}
+                                        required
+                                        placeholder="e.g., 23BCE001"
+                                    /></label>
+                            </div>
+                            <div className="form-group-placement">
+                                <label>Student Name *
+                                    <input
+                                        id="edit-placed-name"
+                                        type="text"
+                                        value={placedForm.name}
+                                        onChange={(e) => setPlacedForm({ ...placedForm, name: e.target.value })}
+                                        required
+                                        placeholder="e.g., John Doe"
+                                    /></label>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group-placement">
+                                    <label>Branch
+                                        <select
+                                            id="edit-placed-branch"
+                                            value={placedForm.branch}
+                                            onChange={(e) => setPlacedForm({ ...placedForm, branch: e.target.value })}
+                                        >
+                                            <option>CSE</option>
+                                            <option>ECE</option>
+                                            <option>EEE</option>
+                                            <option>Civil</option>
+                                            <option>Mechanical</option>
+                                            <option>Mining</option>
+                                            <option>AI&DS</option>
+                                            <option>Agriculture</option>
+                                        </select></label>
+                                </div>
+                                <div className="form-group-placement">
+                                    <label>Company *
+                                        <input
+                                            id="edit-placed-company"
+                                            type="text"
+                                            value={placedForm.company}
+                                            onChange={(e) => setPlacedForm({ ...placedForm, company: e.target.value })}
+                                            required
+                                            placeholder="e.g., Google"
+                                        /></label>
+                                </div>
+                            </div>
+                            <div className="form-group-placement">
+                                <label>Package (LPA) *
+                                    <input
+                                        id="edit-placed-package"
+                                        type="number"
+                                        step="0.1"
+                                        value={placedForm.package}
+                                        onChange={(e) => setPlacedForm({ ...placedForm, package: e.target.value })}
+                                        required
+                                        placeholder="e.g., 12"
+                                    /></label>
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn-cancel"
+                                    onClick={closeEditPlacedModal}
+                                >
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn-submit">
+                                    Update Student
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
             {/* Add Placed Student Modal */}
             {showAddPlacedModal && (
                 <div className="modal-overlay" onClick={closePlacedModal}>
@@ -778,6 +1182,10 @@ const ManagePlacements = () => {
                                             <option>ECE</option>
                                             <option>EEE</option>
                                             <option>Civil</option>
+                                            <option>Mechanical</option>
+                                            <option>Mining</option>
+                                            <option>AI&DS</option>
+                                            <option>Agriculture</option>
                                         </select></label>
                                 </div>
                                 <div className="form-group-placement">
@@ -814,6 +1222,72 @@ const ManagePlacements = () => {
                                 </button>
                                 <button type="submit" className="btn-submit">
                                     Add Student
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Edit Trend Modal */}
+            {showEditTrendModal && (
+                <div className="modal-overlay" onClick={closeEditTrendModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>Edit Placement Trend</h3>
+                            <button
+                                className="close-btn"
+                                onClick={closeEditTrendModal}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <form onSubmit={handleUpdateTrend}>
+                            <div className="form-group-placement">
+                                <label>Year *
+                                    <input
+                                        id="edit-trend-year"
+                                        type="number"
+                                        value={trendForm.year}
+                                        onChange={(e) => setTrendForm({ ...trendForm, year: parseInt(e.target.value) })}
+                                        required
+                                    /></label>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group-placement">
+                                    <label>Average Package (LPA) *
+                                        <input
+                                            id="edit-trend-avg"
+                                            type="number"
+                                            step="0.1"
+                                            value={trendForm.avg}
+                                            onChange={(e) => setTrendForm({ ...trendForm, avg: parseFloat(e.target.value) })}
+                                            required
+                                            placeholder="e.g., 8.5"
+                                        /></label>
+                                </div>
+                                <div className="form-group-placement">
+                                    <label>Number of Companies *
+                                        <input
+                                            id="edit-trend-companies"
+                                            type="number"
+                                            value={trendForm.companies}
+                                            onChange={(e) => setTrendForm({ ...trendForm, companies: parseInt(e.target.value) })}
+                                            required
+                                            placeholder="e.g., 120"
+                                        /></label>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn-cancel"
+                                    onClick={closeEditTrendModal}
+                                >
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn-submit">
+                                    Update Trend
                                 </button>
                             </div>
                         </form>

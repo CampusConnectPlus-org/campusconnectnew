@@ -119,10 +119,15 @@ router.put("/update/:id", upload.single("profileImage"), async (req, res) => {
       name: req.body.name,
       enrollmentNumber: req.body.enrollmentNumber,
       email: req.body.email,
-      role: req.body.role,
-      password: req.body.password ? await bcrypt.hash(req.body.password, 10) : undefined
+      role: req.body.role
     };
-// agar new image upload hua hai toh usko updateData mein add kar do, warna purani image rehne do
+
+    // Only update password if provided
+    if (req.body.password && req.body.password.trim()) {
+      updateData.password = await bcrypt.hash(req.body.password, 10);
+    }
+
+    // agar new image upload hua hai toh usko updateData mein add kar do, warna purani image rehne do
     if (req.file) {
       updateData.profileImage = req.file.filename;
     }
@@ -215,7 +220,7 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
       email: req.body.email,
       linkedin: req.body.linkedin,
     };
-// agar new image upload hua hai toh usko updateData mein add kar do, warna purani image rehne do
+    // agar new image upload hua hai toh usko updateData mein add kar do, warna purani image rehne do
     if (req.file) {
       updateData.image = req.file.filename;
     }
