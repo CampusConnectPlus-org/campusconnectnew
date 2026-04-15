@@ -147,6 +147,7 @@ app.use("/api/auth", authRoutes);
 app.use("/admin", userRoutes);
 app.use("/api/placements", placementRoutes);
 // app.use("/api/admin", adminRoutes);
+app.use("/images", require("express").static("images"));
 app.use("/uploads", express.static("uploads"));
 app.use("/alumniimage", express.static("alumniimage"));
 app.use("/api/clubs", clubRoutes);

@@ -1,41 +1,56 @@
-import React, { useState ,useEffect} from 'react';
-import './Event.css';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import "./Event.css";
+import { motion } from "framer-motion";
 import axios from "axios";
-import Footer from '../../components/footer/Footer';
+import Footer from "../../components/footer/Footer";
 
-  const API = "http://localhost:5000/api/events";
+const API = "http://localhost:5000/api/events";
 
 const Event = () => {
-
-const [events, setEvents] = useState([]);
+  const location = useLocation();
+  const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isParticipateOpen, setIsParticipateOpen] = useState(false);
   const [participateEvent, setParticipateEvent] = useState(null);
   const [participateForm, setParticipateForm] = useState({
-    name: '',
-    year: '',
-    branch: '',
-    email: '',
-    mobile: '',
-    gender: '',
+    name: "",
+    year: "",
+    branch: "",
+    email: "",
+    mobile: "",
+    gender: "",
   });
   const getStatus = (date) => {
-  if (!date) return "upcoming";
-  return new Date(date) < new Date() ? "past" : "upcoming";
-};
-const fetchEvents = async () => {
-  try {
-    const res = await axios.get(API);
-    const formatted = normalizeEvents(res.data);
-    setEvents(formatted);
-  } catch (err) {
-    console.log("Fetch error:", err.message);
-  }
-};
-useEffect(() => {
-  fetchEvents();
-}, []);
+    if (!date) return "upcoming";
+    return new Date(date) < new Date() ? "past" : "upcoming";
+  };
+  const fetchEvents = async () => {
+    try {
+      const res = await axios.get(API);
+      const formatted = normalizeEvents(res.data);
+      setEvents(formatted);
+    } catch (err) {
+      console.log("Fetch error:", err.message);
+    }
+  };
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const eventId = params.get("eventId");
+    if (!eventId || !events.length) return;
+
+    const eventToOpen = events.find((event) => event.id === eventId);
+    if (eventToOpen) {
+      setSelectedEvent(eventToOpen);
+      if (params.get("participate") === "true") {
+        openParticipateForm(eventToOpen);
+      }
+    }
+  }, [location.search, events]);
   // const events = [
   //   {
   //     id: 1,
@@ -203,33 +218,31 @@ useEffect(() => {
   //     }
   //   }
   // ];
-const normalizeEvents = (data) => {
-  return data.map((e) => ({
-    id: e._id,
-    title: e.title,
-    category: e.category,
-    date: e.date ? new Date(e.date).toLocaleDateString() : "",
-    location: e.location,
-    description: e.description || "",
+  const normalizeEvents = (data) => {
+    return data.map((e) => ({
+      id: e._id,
+      title: e.title,
+      category: e.category,
+      date: e.date ? new Date(e.date).toLocaleDateString() : "",
+      location: e.location,
+      description: e.description || "",
 
-    status: getStatus(e.date),   // 👈 THIS IS THE FIX
+      status: getStatus(e.date), // 👈 THIS IS THE FIX
 
-    image1: e.bannerImage
-      ? `http://localhost:5000/${e.bannerImage}`
-      : "",
+      image1: e.bannerImage ? `http://localhost:5000/${e.bannerImage}` : "",
 
-    details: {
-      overview: e.details?.overview || "",
-      highlights: e.details?.highlights || [],
-      schedule: e.details?.schedule || [],
-      galleryImages: (e.details?.galleryImages || []).map(img =>
-  typeof img === "string"
-    ? `http://localhost:5000/${img}`
-    : `http://localhost:5000/${img.url}`
-),
-    },
-  }));
-};
+      details: {
+        overview: e.details?.overview || "",
+        highlights: e.details?.highlights || [],
+        schedule: e.details?.schedule || [],
+        galleryImages: (e.details?.galleryImages || []).map((img) =>
+          typeof img === "string"
+            ? `http://localhost:5000/${img}`
+            : `http://localhost:5000/${img.url}`,
+        ),
+      },
+    }));
+  };
   const monthLookup = {
     january: 0,
     february: 1,
@@ -332,12 +345,12 @@ const normalizeEvents = (data) => {
   //   status: getEventStatus(event),
   // }));
 
- const upcomingEvents = events.filter(e => e.status === "upcoming");
-const pastEvents = events.filter(e => e.status === "past");
-  const openParticipateForm = (event) => {
+  const upcomingEvents = events.filter((e) => e.status === "upcoming");
+  const pastEvents = events.filter((e) => e.status === "past");
+  function openParticipateForm(event) {
     setParticipateEvent(event);
     setIsParticipateOpen(true);
-  };
+  }
 
   const closeParticipateForm = () => {
     setIsParticipateOpen(false);
@@ -352,377 +365,412 @@ const pastEvents = events.filter(e => e.status === "past");
     }));
   };
 
-const handleParticipateSubmit = async (e) => {
-  e.preventDefault();
+  const handleParticipateSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const res = await axios.post(
-      `http://localhost:5000/api/events/register/${participateEvent.id}`,
-      participateForm
-    );
+    try {
+      const res = await axios.post(
+        `http://localhost:5000/api/events/register/${participateEvent.id}`,
+        participateForm,
+      );
 
-    console.log(res.data);
-    alert("Registration successful");
+      console.log(res.data);
+      alert("Registration successful");
 
-    setParticipateForm({
-      name: "",
-      year: "",
-      branch: "",
-      email: "",
-      mobile: "",
-      gender: "",
-    });
+      setParticipateForm({
+        name: "",
+        year: "",
+        branch: "",
+        email: "",
+        mobile: "",
+        gender: "",
+      });
 
-    closeParticipateForm();
-  } catch (err) {
-    console.log(err);
-    alert("Registration failed");
-  }
-};
+      closeParticipateForm();
+    } catch (err) {
+      console.log(err);
+      alert("Registration failed");
+    }
+  };
 
-const getEventImages = (event) => {
-  if (!event) return [];
+  const getEventImages = (event) => {
+    if (!event) return [];
 
-  const uploadedGallery = Array.isArray(event.details?.galleryImages)
-    ? event.details.galleryImages
-    : [];
+    const uploadedGallery = Array.isArray(event.details?.galleryImages)
+      ? event.details.galleryImages
+      : [];
 
-  return [event.image1, ...uploadedGallery].filter(Boolean);
-};
+    return [event.image1, ...uploadedGallery].filter(Boolean);
+  };
 
   const selectedEventImages = getEventImages(selectedEvent);
 
   return (
     <>
-    <div className="event-container">
-      {/* Hero Section */}
-      <section className="event-hero">
-        <motion.div 
-          className="hero-content"
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h1>Campus Events & Celebrations</h1>
-          <p>Discover amazing events happening around campus throughout the year</p>
-        </motion.div>
-      </section>
+      <div className="event-container">
+        {/* Hero Section */}
+        <section className="event-hero">
+          <motion.div
+            className="hero-content"
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1>Campus Events & Celebrations</h1>
+            <p>
+              Discover amazing events happening around campus throughout the
+              year
+            </p>
+          </motion.div>
+        </section>
 
-      {/* Upcoming Events Section */}
-      <section className="upcoming-events">
-        <div className="section-heading-wrap">
-          <p className="section-tag">Plan Ahead</p>
-          <h2>Upcoming Events</h2>
-          <p className="section-subtext">
-            Explore what is coming next and reserve your participation in advance.
-          </p>
-        </div>
+        {/* Upcoming Events Section */}
+        <section className="upcoming-events">
+          <div className="section-heading-wrap">
+            <p className="section-tag">Plan Ahead</p>
+            <h2>Upcoming Events</h2>
+            <p className="section-subtext">
+              Explore what is coming next and reserve your participation in
+              advance.
+            </p>
+          </div>
 
-        <div className="upcoming-grid">
-          {upcomingEvents.map((event, index) => (
-            <motion.article
-              key={event.id}
-              className="upcoming-card"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: index * 0.08 }}
-              viewport={{ once: true }}
-            >
-              <div className="upcoming-card-head">
-                <span className="category-chip">{event.category}</span>
-                <h3>{event.title}</h3>
-              </div>
-
-              <div className="event-meta">
-                <span>📅 {event.date}</span>
-                <span>📍 {event.location}</span>
-              </div>
-
-              <p className="event-description">{event.description}</p>
-
-              <div className="event-card-actions">
-                <button className="open-btn" onClick={() => setSelectedEvent(event)}>
-                  Read Details
-                </button>
-                <button className="participate-btn" onClick={() => openParticipateForm(event)}>
-                  Participate
-                </button>
-              </div>
-            </motion.article>
-          ))}
-        </div>
-      </section>
-
-      {/* Past Events Section */}
-      <section className="all-events">
-        <div className="section-heading-wrap">
-          <p className="section-tag">Memories</p>
-          <h2>Past Events</h2>
-          <p className="section-subtext">
-            Event cards with photos that can be displayed from admin-uploaded images.
-          </p>
-        </div>
-
-        <div className="event-grid">
-          {pastEvents.map((event, index) => (
-            <motion.div
-              key={event.id}
-              className="event-card"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -8 }}
-            >
-              <div className="event-card-image">
-                <img src={event.image1 || 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=900&q=80'} alt={event.title} />
-                <div className="category-tag">{event.category}</div>
-              </div>
-              <div className="event-card-content">
-                <h3>{event.title}</h3>
-                <div className="event-meta">
-                  <span className="date">📅 {event.date}</span>
-                  <span className="location">📍 {event.location}</span>
+          <div className="upcoming-grid">
+            {upcomingEvents.map((event, index) => (
+              <motion.article
+                key={event.id}
+                className="upcoming-card"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: index * 0.08 }}
+                viewport={{ once: true }}
+              >
+                <div className="upcoming-card-head">
+                  <span className="category-chip">{event.category}</span>
+                  <h3>{event.title}</h3>
                 </div>
+
+                <div className="event-meta">
+                  <span>📅 {event.date}</span>
+                  <span>📍 {event.location}</span>
+                </div>
+
                 <p className="event-description">{event.description}</p>
-                <button className="open-btn" onClick={() => setSelectedEvent(event)}>
-                  View Highlights
-                </button>
+
+                <div className="event-card-actions">
+                  <button
+                    className="open-btn"
+                    onClick={() => setSelectedEvent(event)}
+                  >
+                    Read Details
+                  </button>
+                  <button
+                    className="participate-btn"
+                    onClick={() => openParticipateForm(event)}
+                  >
+                    Participate
+                  </button>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </section>
+
+        {/* Past Events Section */}
+        <section className="all-events">
+          <div className="section-heading-wrap">
+            <p className="section-tag">Memories</p>
+            <h2>Past Events</h2>
+            <p className="section-subtext">
+              Event cards with photos that can be displayed from admin-uploaded
+              images.
+            </p>
+          </div>
+
+          <div className="event-grid">
+            {pastEvents.map((event, index) => (
+              <motion.div
+                key={event.id}
+                className="event-card"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -8 }}
+              >
+                <div className="event-card-image">
+                  <img
+                    src={
+                      event.image1 ||
+                      "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=900&q=80"
+                    }
+                    alt={event.title}
+                  />
+                  <div className="category-tag">{event.category}</div>
+                </div>
+                <div className="event-card-content">
+                  <h3>{event.title}</h3>
+                  <div className="event-meta">
+                    <span className="date">📅 {event.date}</span>
+                    <span className="location">📍 {event.location}</span>
+                  </div>
+                  <p className="event-description">{event.description}</p>
+                  <button
+                    className="open-btn"
+                    onClick={() => setSelectedEvent(event)}
+                  >
+                    View Highlights
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Modal for Event Details */}
+        {selectedEvent && (
+          <motion.div
+            className="event-modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedEvent(null)}
+            style={{ zIndex: isParticipateOpen ? 900 : 1000 }}
+          >
+            <motion.div
+              className="event-modal-content"
+              initial={{ scale: 0.8, y: 50 }}
+              animate={{ scale: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()}
+              style={{ zIndex: isParticipateOpen ? 910 : 1010 }}
+            >
+              <button
+                className="close-btn"
+                onClick={() => setSelectedEvent(null)}
+              >
+                ✕
+              </button>
+
+              <div className="event-modal-header">
+                <img
+                  src={
+                    selectedEvent.image1 ||
+                    "https://via.placeholder.com/800x400"
+                  }
+                  alt={selectedEvent.title}
+                  className="modal-image"
+                />
+                <h2>{selectedEvent.title}</h2>
+              </div>
+
+              <div
+                className="event-modal-body
+"
+              >
+                <div className="modal-meta">
+                  <div className="meta-item">
+                    <span className="icon">📅</span>
+                    <div>
+                      <p className="meta-label">Date</p>
+                      <p className="meta-value">{selectedEvent.date}</p>
+                    </div>
+                  </div>
+                  <div className="meta-item">
+                    <span className="icon">📍</span>
+                    <div>
+                      <p className="meta-label">Location</p>
+                      <p className="meta-value">{selectedEvent.location}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="section">
+                  <h3>Overview</h3>
+                  <p>{selectedEvent.details.overview}</p>
+                </div>
+
+                <div className="section">
+                  <h3>Highlights</h3>
+                  <ul className="highlights-list">
+                    {selectedEvent.details.highlights.map(
+                      (highlight, index) => (
+                        <li key={index}>✨ {highlight}</li>
+                      ),
+                    )}
+                  </ul>
+                </div>
+
+                {selectedEvent.status === "past" &&
+                  selectedEventImages.length > 0 && (
+                    <div className="section">
+                      <h3>Past Event Moments</h3>
+                      <div className="past-gallery-grid">
+                        {selectedEventImages.map((image, index) => (
+                          <img
+                            key={`${selectedEvent.id}-gallery-${index}`}
+                            src={image}
+                            alt={`${selectedEvent.title} moment ${index + 1}`}
+                            className="past-gallery-image"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                {selectedEvent.status !== "past" &&
+                  selectedEvent.details.schedule && (
+                    <div className="section">
+                      <h3>Schedule</h3>
+                      <div className="schedule-grid">
+                        {selectedEvent.details.schedule.map((item, index) => (
+                          <div key={index} className="schedule-item">
+                            <p className="schedule-day">{item.day}</p>
+                            <p className="schedule-events">{item.events}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                {selectedEvent.status === "upcoming" && (
+                  <div className="modal-actions">
+                    <button className="share-btn">Share Event</button>
+                  </div>
+                )}
               </div>
             </motion.div>
-          ))}
-        </div>
-      </section>
+          </motion.div>
+        )}
 
-      {/* Modal for Event Details */}
-      {selectedEvent && (
-        <motion.div 
-          className="event-modal-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setSelectedEvent(null)}
-        >
+        {isParticipateOpen && (
           <motion.div
-            className="event-modal-content"
-            initial={{ scale: 0.8, y: 50 }}
-            animate={{ scale: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            onClick={(e) => e.stopPropagation()}
+            className="modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            onClick={closeParticipateForm}
           >
-            <button 
-              className="close-btn"
-              onClick={() => setSelectedEvent(null)}
+            <motion.div
+              className="participate-modal"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()}
             >
-              ✕
-            </button>
+              <button className="close-btn" onClick={closeParticipateForm}>
+                ✕
+              </button>
 
-            <div className="event-modal-header">
-              <img 
-                src={selectedEvent.image1 || 'https://via.placeholder.com/800x400'} 
-                alt={selectedEvent.title} 
-                className="modal-image"
-              />
-              <h2>{selectedEvent.title}</h2>
-            </div>
-
-            <div className="event-modal-body
-">
-              <div className="modal-meta">
-                <div className="meta-item">
-                  <span className="icon">📅</span>
-                  <div>
-                    <p className="meta-label">Date</p>
-                    <p className="meta-value">{selectedEvent.date}</p>
-                  </div>
-                </div>
-                <div className="meta-item">
-                  <span className="icon">📍</span>
-                  <div>
-                    <p className="meta-label">Location</p>
-                    <p className="meta-value">{selectedEvent.location}</p>
-                  </div>
-                </div>
+              <div className="participate-header">
+                <p className="section-tag">Participation Form</p>
+                <h2>{participateEvent?.title || "Event Participation"}</h2>
+                <p>Please fill in your details to participate in this event.</p>
               </div>
 
-              <div className="section">
-                <h3>Overview</h3>
-                <p>{selectedEvent.details.overview}</p>
-              </div>
+              <form
+                className="participate-form"
+                onSubmit={handleParticipateSubmit}
+              >
+                <label className="form-field">
+                  <span>Name</span>
+                  <input
+                    type="text"
+                    name="name"
+                    value={participateForm.name}
+                    onChange={handleParticipateInput}
+                    required
+                  />
+                </label>
 
-              <div className="section">
-                <h3>Highlights</h3>
-                <ul className="highlights-list">
-                  {selectedEvent.details.highlights.map((highlight, index) => (
-                    <li key={index}>✨ {highlight}</li>
-                  ))}
-                </ul>
-              </div>
+                <label className="form-field">
+                  <span>Year</span>
+                  <select
+                    name="year"
+                    value={participateForm.year}
+                    onChange={handleParticipateInput}
+                    required
+                  >
+                    <option value="" disabled>
+                      Select year
+                    </option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                  </select>
+                </label>
 
-              {selectedEvent.status === 'past' && selectedEventImages.length > 0 && (
-                <div className="section">
-                  <h3>Past Event Moments</h3>
-                  <div className="past-gallery-grid">
-                    {selectedEventImages.map((image, index) => (
-                      <img
-                        key={`${selectedEvent.id}-gallery-${index}`}
-                        src={image}
-                        alt={`${selectedEvent.title} moment ${index + 1}`}
-                        className="past-gallery-image"
-                      />
-                    ))}
-                  </div>
+                <label className="form-field">
+                  <span>Branch</span>
+                  <input
+                    type="text"
+                    name="branch"
+                    value={participateForm.branch}
+                    onChange={handleParticipateInput}
+                    required
+                  />
+                </label>
+
+                <label className="form-field">
+                  <span>Email</span>
+                  <input
+                    type="email"
+                    name="email"
+                    value={participateForm.email}
+                    onChange={handleParticipateInput}
+                    required
+                  />
+                </label>
+
+                <label className="form-field">
+                  <span>Mobile No.</span>
+                  <input
+                    type="tel"
+                    name="mobile"
+                    value={participateForm.mobile}
+                    onChange={handleParticipateInput}
+                    pattern="[0-9]{10}"
+                    placeholder="9876543210"
+                    required
+                  />
+                </label>
+
+                <label className="form-field">
+                  <span>Gender</span>
+                  <select
+                    name="gender"
+                    value={participateForm.gender}
+                    onChange={handleParticipateInput}
+                    required
+                  >
+                    <option value="" disabled>
+                      Select gender
+                    </option>
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                    <option value="Non-binary">Non-binary</option>
+                    <option value="Prefer not to say">Prefer not to say</option>
+                  </select>
+                </label>
+
+                <div className="participate-actions">
+                  <button
+                    type="button"
+                    className="share-btn"
+                    onClick={closeParticipateForm}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="register-btn">
+                    Submit
+                  </button>
                 </div>
-              )}
-
-              {selectedEvent.status !== 'past' && selectedEvent.details.schedule && (
-                <div className="section">
-                  <h3>Schedule</h3>
-                  <div className="schedule-grid">
-                    {selectedEvent.details.schedule.map((item, index) => (
-                      <div key={index} className="schedule-item">
-                        <p className="schedule-day">{item.day}</p>
-                        <p className="schedule-events">{item.events}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {selectedEvent.status === 'upcoming' && (
-                <div className="modal-actions">
-                  {/* <button className="register-btn" onClick={() => openParticipateForm(selectedEvent)}>
-                    Participate
-                  </button> */}
-                  <button className="share-btn">Share Event</button>
-                </div>
-              )}
-            </div>
+              </form>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
-
-      {isParticipateOpen && (
-        <motion.div
-          className="modal-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          onClick={closeParticipateForm}
-        >
-          <motion.div
-            className="participate-modal"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button className="close-btn" onClick={closeParticipateForm}>
-              ✕
-            </button>
-
-            <div className="participate-header">
-              <p className="section-tag">Participation Form</p>
-              <h2>{participateEvent?.title || 'Event Participation'}</h2>
-              <p>Please fill in your details to participate in this event.</p>
-            </div>
-
-            <form className="participate-form" onSubmit={handleParticipateSubmit}>
-              <label className="form-field">
-                <span>Name</span>
-                <input
-                  type="text"
-                  name="name"
-                  value={participateForm.name}
-                  onChange={handleParticipateInput}
-                  required
-                />
-              </label>
-
-              <label className="form-field">
-                <span>Year</span>
-                <select
-                  name="year"
-                  value={participateForm.year}
-                  onChange={handleParticipateInput}
-                  required
-                >
-                  <option value="" disabled>
-                    Select year
-                  </option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                </select>
-              </label>
-
-              <label className="form-field">
-                <span>Branch</span>
-                <input
-                  type="text"
-                  name="branch"
-                  value={participateForm.branch}
-                  onChange={handleParticipateInput}
-                  required
-                />
-              </label>
-
-              <label className="form-field">
-                <span>Email</span>
-                <input
-                  type="email"
-                  name="email"
-                  value={participateForm.email}
-                  onChange={handleParticipateInput}
-                  required
-                />
-              </label>
-
-              <label className="form-field">
-                <span>Mobile No.</span>
-                <input
-                  type="tel"
-                  name="mobile"
-                  value={participateForm.mobile}
-                  onChange={handleParticipateInput}
-                  pattern="[0-9]{10}"
-                  placeholder="9876543210"
-                  required
-                />
-              </label>
-
-              <label className="form-field">
-                <span>Gender</span>
-                <select
-                  name="gender"
-                  value={participateForm.gender}
-                  onChange={handleParticipateInput}
-                  required
-                >
-                  <option value="" disabled>
-                    Select gender
-                  </option>
-                  <option value="Female">Female</option>
-                  <option value="Male">Male</option>
-                  <option value="Non-binary">Non-binary</option>
-                  <option value="Prefer not to say">Prefer not to say</option>
-                </select>
-              </label>
-
-              <div className="participate-actions">
-                <button type="button" className="share-btn" onClick={closeParticipateForm}>
-                  Cancel
-                </button>
-                <button type="submit" className="register-btn">
-                  Submit
-                </button>
-              </div>
-            </form>
-          </motion.div>
-        </motion.div>
-      )}
-    </div>
-    <Footer />
+        )}
+      </div>
+      <Footer />
     </>
   );
 };

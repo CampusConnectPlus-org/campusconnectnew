@@ -298,6 +298,22 @@
   overflow-y: auto;
 }
 
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2100;
+  padding: 18px;
+}
+
+.participate-modal {
+  z-index: 2110;
+  position: relative;
+}
+
 .event-modal-content {
   background: white;
   border-radius: 18px;
@@ -306,6 +322,7 @@
   max-height: calc(100vh - 52px);
   overflow-y: auto;
   position: relative;
+  z-index: 1010;
   box-shadow: 0 18px 46px rgba(0, 0, 0, 0.32);
   margin: 0 auto;
 }

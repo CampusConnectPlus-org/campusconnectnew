@@ -1,86 +1,95 @@
 import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import alumni from "../../assets/alumni.jpg";
 import "./Hero.css";
-//  import AboutCtae from "../../pages/aboutctae/AboutCtae";
 import { Link } from "react-router-dom";
-// import axios from "axios`";
 
+const CTAE_SLIDE = {
+  title: "About CTAE",
+  desc: "The College of Technology and Engineering (CTAE), Udaipur, established in 1964, is a constituent college of the Maharana Pratap University of Agriculture and Technology. It began as an agricultural engineering program and has grown into a prominent institution advancing technical education and research in Rajasthan.",
+  img: "https://www.feeltheudaipur.com/wp-content/uploads/2020/02/ctae-udaipur-udaipurian.jpeg",
+  button: "Explore More",
+  path: "/aboutctae",
+};
 
-const slides = [
-  {
-    title: "Alumni MeetUp 2026",
-    desc: "Join workshops, hackathons and guest speakers.",
-    img: alumni,
-    button: "Explore More",
-    path: "/"
-  },
-  {
-    title: "Cultural Fest 2026",
-    desc: "Music, dance and celebration with campus friends.",
-    img: "https://d12m9erqbesehq.cloudfront.net/wp-content/uploads/sites/2/2023/12/10195608/Blog-Banner-Fun-events-for-college-fest.jpg",
-    button: "Explore More",
-    path: "/"
-  },
-  {
-    title: "About CTAE",
-    desc: "The College of Technology and Engineering (CTAE), Udaipur, established in 1964, is a constituent college of the Maharana Pratap University of Agriculture and Technology. It began as an agricultural engineering program, originally part of the Rajasthan College of Agriculture, and has since grown into a prominent public institution. CTAE offers undergraduate programs in engineering, particularly in agricultural engineering, and was ranked 125th by IIRF in the B.Tech category. The college plays a key role in advancing technical education and research in agriculture and technology in Rajasthan..",
-    img: "https://www.feeltheudaipur.com/wp-content/uploads/2020/02/ctae-udaipur-udaipurian.jpeg",
-    button: "Explore More",
-    path: "/aboutctae"
-  },
-];
+const DEFAULT_EVENT_IMAGE =
+  "https://d12m9erqbesehq.cloudfront.net/wp-content/uploads/sites/2/2023/12/10195608/Blog-Banner-Fun-events-for-college-fest.jpg";
+
+const buildEventSlide = (event) => ({
+  id: event._id,
+  title: event.title || "Upcoming Event",
+  desc:
+    event.description ||
+    `${event.category || "Event"} at ${event.location || "Campus"}`,
+  img: event.bannerImage
+    ? event.bannerImage.startsWith("http")
+      ? event.bannerImage
+      : `http://localhost:5000/${event.bannerImage}`
+    : DEFAULT_EVENT_IMAGE,
+  button: "View Event",
+  path: `/event?eventId=${event._id}`,
+});
 
 export default function HeroSection() {
-
-  // const [clubs, setClubs] = useState([]);
-
+  const [slides, setSlides] = useState([CTAE_SLIDE]);
   const [index, setIndex] = useState(0);
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:5000/api/clubs")
-  //     .then((res) => {
-  //       setClubs(res.data.map((c) => ({ id: c._id, name: c.name })));
-  //       const dataObj = {};
-  //       res.data.forEach((c) => {
-  //         dataObj[c._id] = c;
-  //       });
-  //       setClubData(dataObj);
-  //       if (res.data.length > 0) setSelectedClubId(res.data[0]._id);
-  //     })
-  //     .catch((err) => console.log(err))
-  //     .finally(() => setLoading(false));
-  // }, []);
-
 
   useEffect(() => {
-     const timer = setInterval(() => { 
-      setIndex((prev) => (prev + 1) % slides.length); }, 4000); 
-      return () => clearInterval(timer);
-     }, []);
+    const fetchEvents = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/events");
+        if (!res.ok) return;
+        const data = await res.json();
+        const upcomingEvents = data
+          .filter((event) => {
+            const eventDate = new Date(event.date);
+            return (
+              !Number.isNaN(eventDate.getTime()) && eventDate >= new Date()
+            );
+          })
+          .slice(0, 3)
+          .map(buildEventSlide);
+
+        setSlides([CTAE_SLIDE, ...upcomingEvents]);
+      } catch (error) {
+        console.error("Unable to load event slides:", error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % slides.length);
+    }, 4000);
+
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
+  const activeSlide = slides[index] || CTAE_SLIDE;
 
   return (
     <div className="hero-container">
-      <motion.div key={index}
-       initial={{ x: "100%", opacity: 0 }} 
-       animate={{ x: 0, opacity: 1 }}
+      <motion.div
+        key={index}
+        initial={{ x: "100%", opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
         exit={{ x: "-100%", opacity: 0 }}
-         transition={{ duration: 0.8, ease: "easeInOut" }}
-        className="hero-slide" >
+        transition={{ duration: 0.8, ease: "easeInOut" }}
+        className="hero-slide"
+      >
         <div className="hero-text">
-          <h1>{slides[index].title}</h1>
-          <p>{slides[index].desc}</p>
-          <button className="hero-btn"><Link to={slides[index].path}>{slides[index].button}</Link></button>
+          <h1>{activeSlide.title}</h1>
+          <p>{activeSlide.desc}</p>
+          <Link className="hero-btn" to={activeSlide.path}>
+            {activeSlide.button}
+          </Link>
         </div>
 
         <div className="hero-image">
-          <img src={slides[index].img} alt="event" />
+          <img src={activeSlide.img} alt={activeSlide.title} />
         </div>
       </motion.div>
     </div>
-
   );
 }
-
-

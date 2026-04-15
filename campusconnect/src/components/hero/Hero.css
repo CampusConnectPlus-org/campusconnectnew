@@ -31,23 +31,41 @@ color: white;
   line-height: 1.3rem;
 }
 
-.hero-text button {
+.hero-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.hero-btn,
+.hero-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 10px 24px;
   font-size: 16px;
-  background-color: #2563eb;
-  /* color: white; */
-  border: none;
   border-radius: 10px;
+  text-decoration: none;
+  border: none;
   cursor: pointer;
   transition: 0.3s ease;
+  color: white;
 }
-.hero-btn a{
- text-decoration: none;
- color: white;
 
+.hero-btn {
+  background-color: #2563eb;
 }
-.hero-text button:hover {
+
+.hero-btn:hover {
   background-color: #1e40af;
+}
+
+.hero-btn-secondary {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.hero-btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 .hero-image img {

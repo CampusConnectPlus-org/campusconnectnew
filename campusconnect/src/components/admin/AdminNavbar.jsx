@@ -41,7 +41,7 @@ const AdminNavbar = ({ admin, setAdmin }) => {
         {admin ? (
           <> <p>Welcome, Admin</p>
             <img
-              src={`http://localhost:5000/uploads/admin/${admin.profileImage}`}
+              src={`http://localhost:5000${admin.profileImage}`}
               alt="profile"
               className="profile-img"
             />
