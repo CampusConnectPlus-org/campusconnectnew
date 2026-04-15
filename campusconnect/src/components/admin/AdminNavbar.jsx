@@ -48,7 +48,7 @@ const AdminNavbar = ({ admin, setAdmin }) => {
 
             {showProfile && (
               <div className="profile-dropdown" onMouseEnter={handleProfileEnter} onMouseLeave={handleProfileLeave}>
-                <img src={`http://localhost:5000/uploads/admin/${admin.profileImage}`} alt="" />
+                <img src={`http://localhost:5000${admin.profileImage}`} alt="" />
                 <h4>{admin.name}</h4>
                 <p>{admin.email}</p>
                 {/* <p className="role">{admin.role}</p> */}
