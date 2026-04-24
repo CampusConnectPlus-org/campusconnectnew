@@ -1,5 +1,5 @@
 // server.js
-
+require('dotenv').config();
 const dns = require("node:dns");
 dns.setServers(['8.8.8.8', '8.8.4.4'])
 const express = require("express");
@@ -20,7 +20,24 @@ app.use(cors());
 
 // mongoose.connect("mongodb://127.0.0.1:27017/alumniDB");
 mongoose.connect("mongodb+srv://gujarrajendra015_db_user:project1020@cluster0.nehqfmw.mongodb.net/test?appName=Cluster0")
-  .then(() => { console.log("Connected to MongoDB Atlas") })
+  .then(async () => {
+    console.log("Connected to MongoDB Atlas");
+
+    // Drop the unique index on PlacedStudent.enrollmentNo if it exists
+    try {
+      const PlacedStudent = require("./models/PlacedStudent");
+      const indexes = await PlacedStudent.collection.getIndexes();
+      if (indexes.enrollmentNo_1) {
+        await PlacedStudent.collection.dropIndex("enrollmentNo_1");
+        console.log("✓ Dropped unique index on enrollmentNo");
+      }
+    } catch (err) {
+      // Silently handle any errors
+      if (err.message && !err.message.includes("ns not found")) {
+        console.log("Index check result:", err.message);
+      }
+    }
+  })
   .catch((err) => { console.error("Error connecting to MongoDB Atlas:", err) });
 
 // const User = require("./models/User");

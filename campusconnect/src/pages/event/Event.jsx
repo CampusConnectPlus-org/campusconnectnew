@@ -369,13 +369,35 @@ const Event = () => {
     e.preventDefault();
 
     try {
+      // 1. Get the 'user' string and parse it into an object
+      const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+      // Get user ID from localStorage (set during login)
+      const userId = storedUser.id || "";
+      const enrollmentNo = storedUser.enrollmentNumber || "";
+
+      if (!userId) {
+        alert("Please log in to participate in events");
+        return;
+      }
+
+      if (!enrollmentNo) {
+        alert("Enrollment number not found. Please update your profile.");
+        return;
+      }
+
+      const participationData = {
+        userId,
+        enrollmentNo,
+        ...participateForm,
+      };
+
       const res = await axios.post(
-        `http://localhost:5000/api/events/register/${participateEvent.id}`,
-        participateForm,
+        `http://localhost:5000/api/events/participate/${participateEvent.id}`,
+        participationData,
       );
 
       console.log(res.data);
-      alert("Registration successful");
+      alert("Participation request submitted! Admins will review your request and notify you via email.");
 
       setParticipateForm({
         name: "",
@@ -388,8 +410,14 @@ const Event = () => {
 
       closeParticipateForm();
     } catch (err) {
-      console.log(err);
-      alert("Registration failed");
+      console.error("Error:", err);
+      if (err.response?.status === 409) {
+        alert("You have already requested to participate in this event");
+      } else if (err.response?.data?.message) {
+        alert(err.response.data.message);
+      } else {
+        alert("Failed to submit participation request");
+      }
     }
   };
 

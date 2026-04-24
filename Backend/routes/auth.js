@@ -10,45 +10,45 @@ const jwt = require("jsonwebtoken");
 const upload = require("../middleware/Upload"); // 👈 agar already hai to ok
 console.log("AUTH ROUTES LOADED ✅");
 router.get("/test", (req, res) => {
-  res.send("Auth working ✅");
+    res.send("Auth working ✅");
 });
 // ADD ADMIN API
 router.post("/addAdmin", upload.single("profileImage"), async (req, res) => {
-  try {
-    const { name, email, password, role } = req.body;
+    try {
+        const { name, email, password, role } = req.body;
 
-    // check duplicate
-    const existingAdmin = await Admin.findOne({ email });
-    if (existingAdmin) {
-      return res.status(400).json({ message: "Admin already exists" });
+        // check duplicate
+        const existingAdmin = await Admin.findOne({ email });
+        if (existingAdmin) {
+            return res.status(400).json({ message: "Admin already exists" });
+        }
+
+        // hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // create admin
+        const newAdmin = new Admin({
+            name,
+            email,
+            password: hashedPassword,
+            role: role || "admin",
+            profileImage: req.file ? req.file.path : "",
+        });
+
+        await newAdmin.save();
+
+        res.status(201).json({
+            success: true,
+            message: "Admin created successfully",
+            data: newAdmin,
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            message: err.message,
+        });
     }
-
-    // hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // create admin
-    const newAdmin = new Admin({
-      name,
-      email,
-      password: hashedPassword,
-      role: role || "admin",
-      profileImage: req.file ? req.file.path : "",
-    });
-
-    await newAdmin.save();
-
-    res.status(201).json({
-      success: true,
-      message: "Admin created successfully",
-      data: newAdmin,
-    });
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({
-      message: err.message,
-    });
-  }
 });
 
 // admin login api
@@ -121,6 +121,7 @@ router.post("/login", async (req, res) => {
     res.json({
         token,
         user: {
+            id: user._id,
             name: user.name,
             enrollmentNumber: user.enrollmentNumber,
             email: user.email,

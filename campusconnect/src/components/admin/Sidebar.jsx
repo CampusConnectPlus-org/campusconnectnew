@@ -43,6 +43,15 @@ const Sidebar = () => {
           </NavLink>
         </li>
 
+        <li>
+          <NavLink
+            to="/admindashboard/manage-participation"
+            className={({ isActive }) => (isActive ? "nav-active" : "")}
+          >
+            Participation Requests
+          </NavLink>
+        </li>
+
         {/* NEW: Clubs Section */}
         <li>
           <NavLink

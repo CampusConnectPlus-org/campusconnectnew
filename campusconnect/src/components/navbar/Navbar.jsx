@@ -60,7 +60,8 @@ const Navbar = ({ user, setUser, admin, setAdmin }) => {
         <Link to="/clubs">CTAE Club</Link>
         <Link to="/event">Event</Link>
         <Link to="/placement">Placement</Link>
-        <Link to="/" onClick={scrollToAlumni}>Alumni</Link>
+        {/* <Link to="/" onClick={scrollToAlumni}>Alumni</Link> */}
+        <Link to="/alumni">Alumni</Link>
 
       </div>
 
