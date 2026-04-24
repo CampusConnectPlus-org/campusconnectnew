@@ -40,7 +40,7 @@ router.get("/trends", async (req, res) => {
 
 router.get("/placed-students", async (req, res) => {
     try {
-        const placedStudents = await PlacedStudent.find().sort({ name: 1 });
+        const placedStudents = await PlacedStudent.find().sort({ enrollmentNo: 1 });
         res.json(placedStudents);
     } catch (err) {
         console.error("Error fetching placed students:", err);
@@ -68,9 +68,9 @@ router.get("/placed-students", async (req, res) => {
 // };
 
 // const sampleTrends = [
-//     { year: "2023", avg: 7.5, companies: 95 },
-//     { year: "2024", avg: 8.2, companies: 110 },
-//     { year: "2025", avg: 9.2, companies: 125 }
+//     { year: "2023", avg: 7.5, studentsPlaced: 95 },
+//     { year: "2024", avg: 8.2, studentsPlaced: 110 },
+//     { year: "2025", avg: 9.2, studentsPlaced: 125 }
 // ];
 
 // const sampleApplications = (userId) => [
@@ -127,20 +127,49 @@ router.get("/applications", verifyToken, async (req, res) => {
 // Admin: Create new placement drive
 router.post("/drives", verifyToken, async (req, res) => {
     try {
-        const { company, role, branch, package: pkg, date, link } = req.body;
+        const { company, role, branch, package: pkg, openingDate, closingDate, date, venue, reportingTime, additionalInstructions, link } = req.body;
 
-        if (!company || !role || !pkg || !date) {
-            return res.status(400).json({ message: "Missing required fields: company, role, package, date" });
+        if (!company || !role || !pkg) {
+            return res.status(400).json({ message: "Missing required fields: company, role, package" });
         }
 
-        const newDrive = new PlacementDrive({
+        // Validate dates
+        if (openingDate && closingDate) {
+            const opening = new Date(openingDate);
+            const closing = new Date(closingDate);
+            if (opening > closing) {
+                return res.status(400).json({ message: "Opening date cannot be later than closing date" });
+            }
+        }
+
+        const driveData = {
             company,
             role,
             branch: branch || "All",
             package: pkg,
-            date,
             link: link || ""
-        });
+        };
+
+        if (openingDate) {
+            driveData.openingDate = openingDate;
+        }
+        if (closingDate) {
+            driveData.closingDate = closingDate;
+        }
+        if (date) {
+            driveData.date = date;
+        }
+        if (venue) {
+            driveData.venue = venue;
+        }
+        if (reportingTime) {
+            driveData.reportingTime = reportingTime;
+        }
+        if (additionalInstructions) {
+            driveData.additionalInstructions = additionalInstructions;
+        }
+
+        const newDrive = new PlacementDrive(driveData);
 
         const savedDrive = await newDrive.save();
         res.status(201).json(savedDrive);
@@ -153,22 +182,51 @@ router.post("/drives", verifyToken, async (req, res) => {
 // Admin: Update placement drive
 router.put("/drives/:id", verifyToken, async (req, res) => {
     try {
-        const { company, role, branch, package: pkg, date, link } = req.body;
+        const { company, role, branch, package: pkg, openingDate, closingDate, date, venue, reportingTime, additionalInstructions, link } = req.body;
 
-        if (!company || !role || !pkg || !date) {
-            return res.status(400).json({ message: "Missing required fields: company, role, package, date" });
+        if (!company || !role || !pkg) {
+            return res.status(400).json({ message: "Missing required fields: company, role, package" });
+        }
+
+        // Validate dates
+        if (openingDate && closingDate) {
+            const opening = new Date(openingDate);
+            const closing = new Date(closingDate);
+            if (opening > closing) {
+                return res.status(400).json({ message: "Opening date cannot be later than closing date" });
+            }
+        }
+
+        const updateData = {
+            company,
+            role,
+            branch: branch || "All",
+            package: pkg,
+            link: link || ""
+        };
+
+        if (openingDate) {
+            updateData.openingDate = openingDate;
+        }
+        if (closingDate) {
+            updateData.closingDate = closingDate;
+        }
+        if (date !== undefined) {
+            updateData.date = date;
+        }
+        if (venue !== undefined) {
+            updateData.venue = venue;
+        }
+        if (reportingTime !== undefined) {
+            updateData.reportingTime = reportingTime;
+        }
+        if (additionalInstructions !== undefined) {
+            updateData.additionalInstructions = additionalInstructions;
         }
 
         const updatedDrive = await PlacementDrive.findByIdAndUpdate(
             req.params.id,
-            {
-                company,
-                role,
-                branch: branch || "All",
-                package: pkg,
-                date,
-                link: link || ""
-            },
+            updateData,
             { new: true }
         );
 
@@ -206,18 +264,6 @@ router.post("/placed-students", verifyToken, async (req, res) => {
             return res.status(400).json({ message: "Missing required fields: enrollmentNo, name, branch, company, package" });
         }
 
-        // Check if student is registered in the system
-        const registeredUser = await User.findOne({ enrollmentNumber: enrollmentNo });
-        if (!registeredUser) {
-            return res.status(404).json({ message: `Student with enrollment number ${enrollmentNo} is not registered in the system. Please check the enrollment number.` });
-        }
-
-        // Check if student already exists in placed students list
-        const existingStudent = await PlacedStudent.findOne({ enrollmentNo });
-        if (existingStudent) {
-            return res.status(409).json({ message: `Student with enrollment number ${enrollmentNo} is already in the placed students list.` });
-        }
-
         const newPlacedStudent = new PlacedStudent({
             enrollmentNo,
             name,
@@ -241,21 +287,6 @@ router.put("/placed-students/:id", verifyToken, async (req, res) => {
 
         if (!enrollmentNo || !name || !branch || !company || !pkg) {
             return res.status(400).json({ message: "Missing required fields: enrollmentNo, name, branch, company, package" });
-        }
-
-        // Check if student is registered in the system
-        const registeredUser = await User.findOne({ enrollmentNumber: enrollmentNo });
-        if (!registeredUser) {
-            return res.status(404).json({ message: `Student with enrollment number ${enrollmentNo} is not registered in the system. Please check the enrollment number.` });
-        }
-
-        // Check if enrollment number is already used by another placed student (if changing enrollment number)
-        const currentStudent = await PlacedStudent.findById(req.params.id);
-        if (currentStudent && currentStudent.enrollmentNo !== enrollmentNo) {
-            const existingStudent = await PlacedStudent.findOne({ enrollmentNo });
-            if (existingStudent) {
-                return res.status(409).json({ message: `Student with enrollment number ${enrollmentNo} is already in the placed students list.` });
-            }
         }
 
         const updatedStudent = await PlacedStudent.findByIdAndUpdate(
@@ -298,16 +329,16 @@ router.delete("/placed-students/:id", verifyToken, async (req, res) => {
 // Admin: Create new placement trend
 router.post("/trends", verifyToken, async (req, res) => {
     try {
-        const { year, avg, companies } = req.body;
+        const { year, avg, studentsPlaced } = req.body;
 
-        if (!year || !avg || !companies) {
-            return res.status(400).json({ message: "Missing required fields: year, avg, companies" });
+        if (!year || !avg || !studentsPlaced) {
+            return res.status(400).json({ message: "Missing required fields: year, avg, studentsPlaced" });
         }
 
         const newTrend = new PlacementTrend({
             year: parseInt(year),
             avg: parseFloat(avg),
-            companies: parseInt(companies)
+            studentsPlaced: parseInt(studentsPlaced)
         });
 
         const savedTrend = await newTrend.save();
@@ -321,10 +352,10 @@ router.post("/trends", verifyToken, async (req, res) => {
 // Admin: Update placement trend
 router.put("/trends/:id", verifyToken, async (req, res) => {
     try {
-        const { year, avg, companies } = req.body;
+        const { year, avg, studentsPlaced } = req.body;
 
-        if (!year || !avg || !companies) {
-            return res.status(400).json({ message: "Missing required fields: year, avg, companies" });
+        if (!year || !avg || !studentsPlaced) {
+            return res.status(400).json({ message: "Missing required fields: year, avg, studentsPlaced" });
         }
 
         const updatedTrend = await PlacementTrend.findByIdAndUpdate(
@@ -332,7 +363,7 @@ router.put("/trends/:id", verifyToken, async (req, res) => {
             {
                 year: parseInt(year),
                 avg: parseFloat(avg),
-                companies: parseInt(companies)
+                studentsPlaced: parseInt(studentsPlaced)
             },
             { new: true }
         );

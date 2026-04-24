@@ -10,9 +10,9 @@ import './Placement.css';
 //     totalCompanies: "120+",
 //     placementRate: "94%",
 //     trends: [
-//       { year: "2023", avg: 7.5, companies: 95 },
-//       { year: "2024", avg: 8.2, companies: 110 },
-//       { year: "2025", avg: 9.2, companies: 125 }
+//       { year: "2023", avg: 7.5, studentsPlaced: 95 },
+//       { year: "2024", avg: 8.2, studentsPlaced: 110 },
+//       { year: "2025", avg: 9.2, studentsPlaced: 125 }
 //     ]
 //   };
 
@@ -47,6 +47,9 @@ const Placement = ({ user, setUser }) => {
   const [placedSearchCompany, setPlacedSearchCompany] = useState('');
   const [placedFilterBranch, setPlacedFilterBranch] = useState('All');
   const [placedFilterPackage, setPlacedFilterPackage] = useState('');
+  const [pastBranchFilter, setPastBranchFilter] = useState('All');
+  const [pastCompanySearchFilter, setPastCompanySearchFilter] = useState('');
+  const [pastPackageFilter, setPastPackageFilter] = useState('');
   const [selectedSection, setSelectedSection] = useState('drives');
   const [stats, setStats] = useState({
     highestPackage: '',
@@ -56,9 +59,38 @@ const Placement = ({ user, setUser }) => {
     trends: []
   });
   const [upcomingDrives, setUpcomingDrives] = useState([]);
+  const [pastDrives, setPastDrives] = useState([]);
   const [placedStudents, setPlacedStudents] = useState([]);
 
   const API_BASE = 'http://localhost:5000/api/placements';
+
+  const formatDateLabel = (value) => {
+    if (!value) return null;
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+      return value;
+    }
+    return parsed.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  };
+
+  const formatTimeLabel = (timeString) => {
+    if (!timeString) return null;
+    try {
+      // Parse time string (HH:MM format)
+      const [hours, minutes] = timeString.split(':').map(Number);
+      const period = hours >= 12 ? 'PM' : 'AM';
+      const displayHours = hours % 12 || 12; // Convert 0 to 12 for 12 AM
+      return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
+    } catch (error) {
+      return timeString; // Return original if parsing fails
+    }
+  };
+
+  const formatInstructions = (instructions) => {
+    if (!instructions) return '';
+    // Return plain text with line breaks preserved
+    return instructions.replace(/\n/g, '<br>');
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -78,7 +110,26 @@ const Placement = ({ user, setUser }) => {
     ])
       .then(async ([drivesRes, statsRes, trendsRes, placedRes]) => {
         if (drivesRes.ok) {
-          setUpcomingDrives(await drivesRes.json());
+          const allDrives = await drivesRes.json();
+          const currentDate = new Date();
+
+          // Separate drives into upcoming and past based on closing date
+          const upcoming = allDrives.filter(drive => {
+            if (!drive.closingDate) return true; // If no closing date, consider as upcoming
+            const endOfClosingDay = new Date(drive.closingDate);
+            endOfClosingDay.setHours(23, 59, 59, 999); // Set to end of closing day
+            return endOfClosingDay >= currentDate;
+          });
+
+          const past = allDrives.filter(drive => {
+            if (!drive.closingDate) return false; // If no closing date, not past
+            const endOfClosingDay = new Date(drive.closingDate);
+            endOfClosingDay.setHours(23, 59, 59, 999); // Set to end of closing day
+            return endOfClosingDay < currentDate;
+          });
+
+          setUpcomingDrives(upcoming);
+          setPastDrives(past);
         }
 
         const statsJson = statsRes.ok ? await statsRes.json() : {};
@@ -128,6 +179,26 @@ const Placement = ({ user, setUser }) => {
     })
     .sort((a, b) => a.company.localeCompare(b.company));
 
+  const compareEnrollmentNo = (a, b) => {
+    const normalize = (value) => value ? value.split('/').map(part => part.trim()) : [];
+    const [yearA = '', deptA = '', seqA = ''] = normalize(a.enrollmentNo || a.enrollmentNumber || '');
+    const [yearB = '', deptB = '', seqB = ''] = normalize(b.enrollmentNo || b.enrollmentNumber || '');
+
+    const yearCompare = yearA.localeCompare(yearB, undefined, { numeric: true });
+    if (yearCompare !== 0) return yearCompare;
+
+    const deptCompare = deptA.localeCompare(deptB);
+    if (deptCompare !== 0) return deptCompare;
+
+    const numA = Number(seqA);
+    const numB = Number(seqB);
+    if (!Number.isNaN(numA) && !Number.isNaN(numB)) {
+      return numA - numB;
+    }
+
+    return seqA.localeCompare(seqB);
+  };
+
   const filteredPlacedStudents = placedStudents
     .filter(student => {
       const matchesName = student.name.toLowerCase().includes(placedSearchName.toLowerCase());
@@ -135,6 +206,15 @@ const Placement = ({ user, setUser }) => {
       const matchesBranch = placedFilterBranch === 'All' || student.branch === placedFilterBranch;
       const matchesPackage = placedFilterPackage === '' || String(student.package).includes(placedFilterPackage);
       return matchesName && matchesCompany && matchesBranch && matchesPackage;
+    })
+    .sort(compareEnrollmentNo);
+
+  const filteredPastDrives = pastDrives
+    .filter(drive => {
+      const matchesBranch = pastBranchFilter === 'All' || drive.branch.includes(pastBranchFilter) || drive.branch === 'All';
+      const matchesCompany = drive.company.toLowerCase().includes(pastCompanySearchFilter.toLowerCase());
+      const matchesPackage = pastPackageFilter === '' || String(drive.package).includes(pastPackageFilter);
+      return matchesBranch && matchesCompany && matchesPackage;
     })
     .sort((a, b) => a.company.localeCompare(b.company));
 
@@ -158,6 +238,12 @@ const Placement = ({ user, setUser }) => {
           onClick={() => setSelectedSection('drives')}
         >
           Upcoming Drives
+        </button>
+        <button
+          className={`placement-tab ${selectedSection === 'past' ? 'active' : ''}`}
+          onClick={() => setSelectedSection('past')}
+        >
+          Past Drives
         </button>
         <button
           className={`placement-tab ${selectedSection === 'placed' ? 'active' : ''}`}
@@ -228,8 +314,18 @@ const Placement = ({ user, setUser }) => {
                       <div className="drive-meta">
                         <span><strong>Branch:</strong> {drive.branch}</span>
                         <span><strong>CTC:</strong> {drive.package} LPA</span>
-                        <span><strong>Date:</strong> {drive.date}</span>
+                        {drive.openingDate && drive.closingDate && <span><strong>Form open:</strong> {formatDateLabel(drive.openingDate)} - {formatDateLabel(drive.closingDate)}</span>}
+                        {/* {drive.closingDate && <span><strong>Form Closes:</strong> {formatDateLabel(drive.closingDate)}</span>} */}
+                        {drive.date && <span><strong>Drive Date:</strong> {formatDateLabel(drive.date)}</span>}
+                        {drive.venue && <span><strong>Venue:</strong> {drive.venue}</span>}
+                        {drive.reportingTime && <span><strong>Reporting Time:</strong> {formatTimeLabel(drive.reportingTime)}</span>}
                       </div>
+                      {drive.additionalInstructions && (
+                        <div className="drive-instructions">
+                          <strong>Additional Information:</strong>
+                          <div className="instructions-content" dangerouslySetInnerHTML={{ __html: formatInstructions(drive.additionalInstructions) }} />
+                        </div>
+                      )}
                     </div>
                     {isPlaced ? (
                       <button className="apply-btn disabled" disabled>Already Placed</button>
@@ -241,6 +337,79 @@ const Placement = ({ user, setUser }) => {
               </div>
             ) : (
               <div className="empty-message">No upcoming drives available at this moment. Please check back later.</div>
+            )}
+          </section>
+        )}
+
+        {/* PAST DRIVES SECTION */}
+        {selectedSection === 'past' && (
+          <section className="drives-section-full">
+            <div className="section-header">
+              <h2>Past Placement Drives</h2>
+            </div>
+            <div className="placement-filters-container">
+              <input
+                type="text"
+                placeholder="Search by company name..."
+                value={pastCompanySearchFilter}
+                onChange={(e) => setPastCompanySearchFilter(e.target.value)}
+                className="placement-filter-input"
+              />
+              <select
+                value={pastBranchFilter}
+                onChange={(e) => setPastBranchFilter(e.target.value)}
+                className="placement-filter-select"
+              >
+                <option value="All">All Branches</option>
+                <option value="CSE">CSE</option>
+                <option value="ECE">ECE</option>
+                <option value="EEE">EEE</option>
+                <option value="Civil">Civil</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Mining">Mining</option>
+                <option value="AI&DS">AI&DS</option>
+                <option value="Agriculture">Agriculture</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Filter by package (e.g., 12 LPA)..."
+                value={pastPackageFilter}
+                onChange={(e) => setPastPackageFilter(e.target.value)}
+                className="placement-filter-input"
+              />
+            </div>
+
+            {filteredPastDrives.length > 0 ? (
+              <div className="drives-grid">
+                {filteredPastDrives.map(drive => (
+                  <div className="drive-card past-drive-card" key={drive.id}>
+                    <div className="drive-info">
+                      <h4>{drive.company}</h4>
+                      <p className="role">{drive.role}</p>
+                      <div className="drive-meta">
+                        <span><strong>Branch:</strong> {drive.branch}</span>
+                        <span><strong>CTC:</strong> {drive.package} LPA</span>
+                        {drive.openingDate && drive.closingDate && <span><strong>Form opened:</strong> {formatDateLabel(drive.openingDate)} - {formatDateLabel(drive.closingDate)}</span>}
+                        {/* {drive.closingDate && <span><strong>Form Closed:</strong> {formatDateLabel(drive.closingDate)}</span>} */}
+                        {drive.date && <span><strong>Drive Date:</strong> {formatDateLabel(drive.date)}</span>}
+                        {drive.venue && <span><strong>Venue:</strong> {drive.venue}</span>}
+                        {drive.reportingTime && <span><strong>Reporting Time:</strong> {formatTimeLabel(drive.reportingTime)}</span>}
+                      </div>
+                      {drive.additionalInstructions && (
+                        <div className="drive-instructions">
+                          <strong>Additional Information:</strong>
+                          <div className="instructions-content" dangerouslySetInnerHTML={{ __html: formatInstructions(drive.additionalInstructions) }} />
+                        </div>
+                      )}
+                    </div>
+                    <div className="past-drive-status">
+                      <span className="status-badge">Form Closed</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="empty-message">No past drives available at this moment.</div>
             )}
           </section>
         )}
@@ -337,33 +506,41 @@ const Placement = ({ user, setUser }) => {
                       <h3>{t.avg} LPA</h3>
                       <p>Avg. Package</p>
                       <div className="mini-meta">
-                        <span>{t.companies} Companies</span>
+                        <span>{t.studentsPlaced} Students Placed</span>
                       </div>
                     </div>
                   ))}
                 </div>
 
                 <div className="trend-container">
-                  <h4>Average Salary Growth Visualization</h4>
-                  <div className="chart-container">
-                    <div className="y-axis">
-                      <span>10</span>
-                      <span>5</span>
-                      <span>0</span>
+                  <h4>Students Placed Growth Visualization</h4>
+                  <div className="chart-wrapper">
+                    <div className="y-axis-label">Students Placed</div>
+                    <div className="chart-container">
+                      <div className="y-axis">
+                        <span>300</span>
+                        <span>250</span>
+                        <span>200</span>
+                        <span>150</span>
+                        <span>100</span>
+                        <span>50</span>
+                        <span>0</span>
+                      </div>
+                      <div className="trend-chart-mock">
+                        {stats.trends.map(t => (
+                          <div key={t.year} className="trend-bar-wrapper">
+                            <div className="bar-value">{t.studentsPlaced}</div>
+                            {/* Scale to max 300px for 300 students */}
+                            <div
+                              className="bar"
+                              style={{ height: `${(t.studentsPlaced / 300) * 300}px` }}
+                            ></div>
+                            <span className="bar-label">{t.year}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <div className="trend-chart-mock">
-                      {stats.trends.map(t => (
-                        <div key={t.year} className="trend-bar-wrapper">
-                          <div className="bar-value">{t.avg}</div>
-                          {/* Fixed height logic: using a calc or multiplier to ensure visibility */}
-                          <div
-                            className="bar"
-                            style={{ height: `${(t.avg * 15)}px` }}
-                          ></div>
-                          <span className="bar-label">{t.year}</span>
-                        </div>
-                      ))}
-                    </div>
+                    <div className="x-axis-label">Year</div>
                   </div>
                 </div>
               </>
