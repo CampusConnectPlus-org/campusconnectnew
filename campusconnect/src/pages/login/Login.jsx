@@ -76,11 +76,11 @@ export default function Login({ setUser }) {
                         Login
                     </button>
 
-                    <div className="login-links">
-                        <a href="#">Forgot password?</a>
+                    {/* <div className="login-links"> */}
+                        {/* <a href="#">Forgot password?</a> */}
                         {/* <span> | </span>
                         <a href="#">Create account</a> */}
-                    </div>
+                    {/* </div> */}
                 </form>
             </div>
         </div>

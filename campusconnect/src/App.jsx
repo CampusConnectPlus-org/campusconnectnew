@@ -25,8 +25,8 @@ import CTAEClub from './pages/clubs/CTAEClub'
 // import ManageEvent from './pages/admindashboard/manageevent/ManageEvent'
 import AboutCtae from './pages/aboutctae/AboutCtae'
 import './App.css'
-
-
+import ManageReports from './pages/admindashboard/managereports/ManageReports';
+import Feed from "./pages/Feed/Feed";
 const App = () => {
   const location = useLocation();
   const [user, setUser] = useState(null);
@@ -95,7 +95,7 @@ const App = () => {
           <Route path='/event' element={<Event />} />
           <Route path='/clubs' element={<CTAEClub />} />
           <Route path='/aboutctae' element={<AboutCtae />} />
-
+<Route path='/feed' element={<Feed />} />
 
         </Route>
 
@@ -108,7 +108,8 @@ const App = () => {
           <Route path='manageevent' element={< AdminEvents/>} />
           <Route path='manageclubs' element={<ManageClubs/>} />
           <Route path='manageplacements' element={<ManagePlacements/>} />
-        {/* //  <Route path='adminadd' element={<AddAdmin/>} />// */}
+          {/* //  <Route path='adminadd' element={<AddAdmin/>} />// */}
+           <Route path='managereports' element={<ManageReports />} />
 
 </Route>
 <Route path='/adminlogin' element={<AdminLogin setAdmin={setAdmin}/>}/>

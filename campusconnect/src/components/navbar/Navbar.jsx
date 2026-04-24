@@ -57,6 +57,7 @@ const Navbar = ({ user, setUser, admin, setAdmin }) => {
 
       <div className={`nav-links ${menuOpen ? "active" : ""}`}>
         <Link to="/">Home</Link>
+         <Link to="/feed">Feed</Link>
         <Link to="/clubs">CTAE Club</Link>
         <Link to="/event">Event</Link>
         <Link to="/placement">Placement</Link>

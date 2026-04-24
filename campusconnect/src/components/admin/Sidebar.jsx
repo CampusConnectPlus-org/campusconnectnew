@@ -63,7 +63,9 @@ const Sidebar = () => {
             Placements
           </NavLink>
         </li>
-
+<li>
+  <Link to="/admindashboard/managereports">Manage Reports</Link>
+</li>
         {/* NEW: Add Admin Section */}
         {/* <li>
           <NavLink

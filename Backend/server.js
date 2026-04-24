@@ -1,7 +1,7 @@
 // server.js
-
-const dns = require("node:dns");
-dns.setServers(['8.8.8.8', '8.8.4.4'])
+require("dotenv").config();
+// const dns = require("node:dns");
+// dns.setServers(['8.8.8.8', '8.8.4.4'])
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -16,18 +16,26 @@ app.use(express.json());
 app.use(cors());
 // app.use("/uploads", express.static("uploads"));
 
-
+const feedRoutes = require("./routes/feedRoutes");
+const commentRoutes = require("./routes/commentRoutes");
+const reportRoutes = require("./routes/reportRoutes");
 
 // mongoose.connect("mongodb://127.0.0.1:27017/alumniDB");
-mongoose.connect("mongodb+srv://gujarrajendra015_db_user:project1020@cluster0.nehqfmw.mongodb.net/test?appName=Cluster0")
-  .then(() => { console.log("Connected to MongoDB Atlas") })
-  .catch((err) => { console.error("Error connecting to MongoDB Atlas:", err) });
+mongoose
+  .connect(
+    "mongodb+srv://gujarrajendra015_db_user:project1020@cluster0.nehqfmw.mongodb.net/test?appName=Cluster0",
+  )
+  .then(() => {
+    console.log("Connected to MongoDB Atlas");
+  })
+  .catch((err) => {
+    console.error("Error connecting to MongoDB Atlas:", err);
+  });
 
 // const User = require("./models/User");
 const Alumni = require("./models/Alumni");
 // const Admin = require("./models/Admin");
-
-
+console.log("API KEY:", process.env.OPENROUTER_API_KEY);
 
 // const Alumni = mongoose.model("Alumni", {
 //   name: String,
@@ -37,12 +45,11 @@ const Alumni = require("./models/Alumni");
 //   position: String,
 //    desc:String
 
-
 // });
 // async function createAlumni() {
 
 //   const newAlumni = new Alumni(
-//   { 
+//   {
 //        name: "Sourabh Purbia",
 //     role: "Founder & CEO, Creative Upaay",
 //     batch: "CSE(2019)",
@@ -59,13 +66,10 @@ const Alumni = require("./models/Alumni");
 
 // createAlumni();
 
-
-
-
 // async function createUser() {
 
 //   const newUser = new User(
-//   { 
+//   {
 //     name:"Rajendra Kumar",
 //     enrollmentNumber: "2022/CTAE/327",
 //     email: "gujarrajendra8955@gmail.com",
@@ -144,7 +148,6 @@ app.get("/alumni", async (req, res) => {
   res.json(data);
 });
 
-
 app.use("/api/auth", authRoutes);
 app.use("/admin", userRoutes);
 app.use("/api/placements", placementRoutes);
@@ -154,12 +157,9 @@ app.use("/uploads", express.static("uploads"));
 app.use("/alumniimage", express.static("alumniimage"));
 app.use("/api/clubs", clubRoutes);
 app.use("/api/events", eventRoutes);
-
-
-
-
-
-
+app.use("/api/feed", feedRoutes); // posts
+app.use("/api/comments", commentRoutes); // comments
+app.use("/api/report", reportRoutes);
 
 // app.post("/login", async (req, res) => {
 
@@ -196,14 +196,13 @@ app.use("/api/events", eventRoutes);
 //       success: true,
 //       message:"Login successful",
 //       user:user
-//       // userId:user._id 
+//       // userId:user._id
 //       });
 //   }
 //   else{
 //       res.json({
 //           success:false,
 //           message : "Invalid enrollmentNumber or password"
-
 
 //       })
 //   }
@@ -217,6 +216,3 @@ app.use("/api/events", eventRoutes);
 app.listen(5000, () => {
   console.log("Server running on port 5000");
 });
-
-
-
