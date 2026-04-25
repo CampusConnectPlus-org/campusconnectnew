@@ -63,7 +63,8 @@ const Navbar = ({ user, setUser, admin, setAdmin }) => {
         <Link to="/placement">Placement</Link>
         {/* <Link to="/" onClick={scrollToAlumni}>Alumni</Link> */}
         <Link to="/alumni">Alumni</Link>
-
+        <Link to="/scholarships">Scholarships</Link>
+        <Link to="/complaints">Complaints</Link>
       </div>
 
 

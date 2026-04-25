@@ -15,11 +15,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 // app.use("/uploads", express.static("uploads"));
-
+const scholarshipRoutes = require("./routes/scholarshipRoutes");
 const feedRoutes = require("./routes/feedRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const reportRoutes = require("./routes/reportRoutes");
-
+const complaintRoutes = require("./routes/complaintRoute");
 // mongoose.connect("mongodb://127.0.0.1:27017/alumniDB");
 mongoose.connect("mongodb+srv://gujarrajendra015_db_user:project1020@cluster0.nehqfmw.mongodb.net/test?appName=Cluster0")
   .then(async () => {
@@ -170,7 +170,8 @@ app.use("/api/events", eventRoutes);
 app.use("/api/feed", feedRoutes); // posts
 app.use("/api/comments", commentRoutes); // comments
 app.use("/api/report", reportRoutes);
-
+app.use("/api/complaints", complaintRoutes);
+app.use("/api/scholarships", scholarshipRoutes);
 // app.post("/login", async (req, res) => {
 
 //   const {enrollmentNumber, password } = req.body;

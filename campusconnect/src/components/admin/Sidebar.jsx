@@ -72,8 +72,24 @@ const Sidebar = () => {
             Placements
           </NavLink>
         </li>
+        <li>
+  <NavLink
+    to="/admindashboard/managescholarships"
+    className={({ isActive }) => (isActive ? "nav-active" : "")}
+  >
+    Scholarships
+  </NavLink>
+        </li>
+        <li>
+  <NavLink to="/admindashboard/managecomplaints"
+    className={({ isActive }) => (isActive ? "nav-active" : "")}>
+    Complaints
+  </NavLink>
+</li>
 <li>
-  <Link to="/admindashboard/managereports">Manage Reports</Link>
+  <NavLink to="/admindashboard/managereports" className={({ isActive }) => (isActive ? "nav-active" : "")}>
+    Manage Reports
+  </NavLink>
 </li>
         {/* NEW: Add Admin Section */}
         {/* <li>
