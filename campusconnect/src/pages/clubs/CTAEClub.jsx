@@ -10,6 +10,7 @@ const [loading, setLoading] = useState(true);
 const [selectedClubId, setSelectedClubId] = useState(null);  const [expandedEvent, setExpandedEvent] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isParticipateOpen, setIsParticipateOpen] = useState(false);
+  const [isApplicationsClosedOpen, setIsApplicationsClosedOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -33,28 +34,71 @@ const [selectedClubId, setSelectedClubId] = useState(null);  const [expandedEven
     gender: '',
   });
 useEffect(() => {
+  const loadClubs = () => {
+    setLoading(true);
 
-  axios.get("http://localhost:5000/api/clubs")
+    axios.get("http://localhost:5000/api/clubs")
 
-    .then((res) => {
+      .then((res) => {
 
-      setClubs(res.data);
+        setClubs(res.data);
 
-      if(res.data.length > 0){
+        if(res.data.length > 0){
 
-        setSelectedClubId(res.data[0]._id);
+          setSelectedClubId((prev) => prev && res.data.some((club) => club._id === prev) ? prev : res.data[0]._id);
 
-      }
+        }
 
-    })
+      })
 
-    .catch((err)=>console.log(err))
+      .catch((err)=>console.log(err))
 
-    .finally(()=>setLoading(false));
+      .finally(()=>setLoading(false));
+  };
+
+  loadClubs();
+
+  const handleClubsUpdated = () => loadClubs();
+
+  window.addEventListener("clubs-updated", handleClubsUpdated);
+  window.addEventListener("focus", handleClubsUpdated);
+
+  return () => {
+    window.removeEventListener("clubs-updated", handleClubsUpdated);
+    window.removeEventListener("focus", handleClubsUpdated);
+  };
 
 }, []);
-  const openRegistrationForm = () => {
-    setIsFormOpen(true);
+  const openRegistrationForm = async () => {
+    try {
+      const latestRes = await axios.get("http://localhost:5000/api/clubs");
+      const latestClub = latestRes.data.find((club) => club._id === selectedClubId) || selectedClub;
+
+      const joinOpen = latestClub?.joinApplicationsOpen !== false;
+      const today = new Date();
+      const start = latestClub?.joinOpenFrom
+        ? new Date(`${latestClub.joinOpenFrom}T00:00:00`)
+        : null;
+      const end = latestClub?.joinOpenUntil
+        ? new Date(`${latestClub.joinOpenUntil}T23:59:59.999`)
+        : null;
+      const withinWindow = (!start || today >= start) && (!end || today <= end);
+
+      if (!joinOpen || !withinWindow) {
+        setIsApplicationsClosedOpen(true);
+        return;
+      }
+
+      setIsFormOpen(true);
+    } catch (error) {
+      const joinOpen = selectedClub?.joinApplicationsOpen !== false;
+      if (!joinOpen) {
+        setIsApplicationsClosedOpen(true);
+        return;
+      }
+
+      setIsFormOpen(true);
+    }
   };
 
   const closeRegistrationForm = () => {
@@ -67,6 +111,10 @@ useEffect(() => {
 
   const closeParticipateForm = () => {
     setIsParticipateOpen(false);
+  };
+
+  const closeApplicationsClosedPopup = () => {
+    setIsApplicationsClosedOpen(false);
   };
 
   const handleInputChange = (event) => {
@@ -383,6 +431,104 @@ const selectedEvent = selectedClub?.upcomingEvents?.find(
   (event) => event._id === expandedEvent
 );
 
+const joinApplicationsAreOpen = () => {
+  if (!selectedClub) return false;
+
+  const explicitOpen = selectedClub.joinApplicationsOpen !== false;
+  const today = new Date();
+  const start = selectedClub.joinOpenFrom
+    ? new Date(`${selectedClub.joinOpenFrom}T00:00:00`)
+    : null;
+  const end = selectedClub.joinOpenUntil
+    ? new Date(`${selectedClub.joinOpenUntil}T23:59:59.999`)
+    : null;
+
+  return explicitOpen && (!start || today >= start) && (!end || today <= end);
+};
+
+const clubThemeSummary = {
+  coding: "Focused on problem solving, app development, and practical coding challenges.",
+  robotics: "Focused on prototypes, hardware systems, and automation-centric innovation.",
+  energy: "Focused on sustainability, clean-tech awareness, and energy innovation projects.",
+  safar: "Focused on expression, poetry, storytelling, and literary creativity.",
+  photography: "Focused on visual storytelling, photo composition, and editing skills.",
+  genesis: "Focused on startup mindset, leadership, and entrepreneurial execution."
+};
+
+const normalizedClubKey = (selectedClub?.name || "")
+  .trim()
+  .toLowerCase()
+  .replace(/\s+/g, "");
+
+const defaultSummary =
+  "Focused on building student collaboration, practical learning, and campus impact through activities.";
+
+const summaryText =
+  clubThemeSummary[normalizedClubKey] ||
+  clubThemeSummary[(selectedClub?.name || "").toLowerCase()] ||
+  defaultSummary;
+
+const leadNames = (selectedClub?.teamMembers || [])
+  .map((member) => member.name)
+  .filter(Boolean)
+  .slice(0, 3)
+  .join(", ");
+
+const heroInfoItems = [
+  {
+    label: "Active Leads",
+    value: `${selectedClub?.teamMembers?.length || 0}`,
+    note: leadNames || "Lead details are being updated",
+  },
+  {
+    label: "Upcoming Events",
+    value: `${selectedClub?.upcomingEvents?.length || 0}`,
+    note: "Workshops, sessions, and participation drives",
+  },
+  {
+    label: "Club Focus",
+    value: "Student Growth",
+    note: summaryText,
+  },
+];
+
+const aboutParagraphs = [
+  selectedClub?.about ||
+    `${selectedClub?.name || "This club"} helps students learn, collaborate, and participate in meaningful campus initiatives.`,
+  `Members of ${selectedClub?.name || "the club"} regularly collaborate on events, peer sessions, and practical activities that improve confidence, communication, and domain-specific skills through guided teamwork.`,
+  `From ideation to execution, the club offers consistent opportunities to contribute, take ownership, and build a strong portfolio of campus work while connecting with like-minded students.`,
+];
+
+const clubStats = [
+  { label: 'Team Leads', value: selectedClub?.teamMembers?.length || 0 },
+  { label: 'Upcoming Events', value: selectedClub?.upcomingEvents?.length || 0 },
+  { label: 'Achievements', value: selectedClub?.achievements?.length || 0 },
+  { label: 'Join Status', value: joinApplicationsAreOpen() ? 'Open' : 'Closed' },
+];
+
+const memberNames = (selectedClub?.teamMembers || [])
+  .map((member) => member.name)
+  .filter(Boolean)
+  .slice(0, 2)
+  .join(' & ');
+
+const valueCards = [
+  {
+    title: 'Skill Development',
+    text: 'Participate in workshops and practical sessions led by student leaders and mentors.'
+  },
+  {
+    title: 'Team Exposure',
+    text: memberNames
+      ? `Collaborate directly with leads like ${memberNames} and build execution confidence.`
+      : 'Collaborate with club leads and peers to build execution confidence.'
+  },
+  {
+    title: 'Event Opportunities',
+    text: 'Join events, present your work, and gain recognition through club activities.'
+  }
+];
+
 // ADD THIS
 if (loading || !selectedClub) {
   return <p>Loading clubs...</p>;
@@ -409,20 +555,59 @@ onClick={() => setSelectedClubId(club._id)}
           <div className="hero-text">
             <h1>{selectedClub.heroTitle}</h1>
             <p>{selectedClub.heroDescription}</p>
+            <p className="hero-support-text">{summaryText}</p>
+
+            <div className="hero-info-grid">
+              {heroInfoItems.map((item) => (
+                <article key={item.label} className="hero-info-card">
+                  <span className="hero-info-label">{item.label}</span>
+                  <h4>{item.value}</h4>
+                  <p>{item.note}</p>
+                </article>
+              ))}
+            </div>
+
             <button className="join-btn" onClick={openRegistrationForm}>Join Now</button>
           </div>
           <div className="hero-icon">
-            <div className="code-icon">{selectedClub.heroIcon}</div>
+            <div className="code-icon">{selectedClub.heroIcon || "★"}</div>
           </div>
         </div>
       </div>
+
+      <section className="club-stats-section">
+        <div className="club-stats-grid">
+          {clubStats.map((item) => (
+            <article key={item.label} className="club-stat-card">
+              <h3>{item.value}</h3>
+              <p>{item.label}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {isApplicationsClosedOpen && (
+        <div className="club-popup-overlay" onClick={closeApplicationsClosedPopup}>
+          <div className="club-popup-card" onClick={(event) => event.stopPropagation()}>
+            <h3>Applications are closed for now</h3>
+            <p>
+              {selectedClub?.joinClosedMessage || "Please check back later when the club opens registrations again."}
+            </p>
+            <button className="club-popup-btn" onClick={closeApplicationsClosedPopup}>
+              Okay
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* NEW: About Section */}
       <section className="about-section">
         <div className="about-content">
           <div className="about-text">
             <h2>About</h2>
-            <p>{selectedClub.about}</p>
+            {aboutParagraphs.map((paragraph, index) => (
+              <p key={`${selectedClub._id}-about-${index}`}>{paragraph}</p>
+            ))}
           </div>
           <div className="team-section">
             <h3>Team Leads</h3>
@@ -439,6 +624,52 @@ onClick={() => setSelectedClubId(club._id)}
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="achievements-section">
+        <h2>Club Highlights</h2>
+        {(selectedClub.achievements || []).length > 0 ? (
+          <div className="achievements-grid">
+            {selectedClub.achievements.map((achievement, index) => (
+              <motion.article
+                key={achievement._id || `${achievement.title}-${index}`}
+                className="achievement-card"
+                whileHover={{ y: -5 }}
+                transition={{ duration: 0.2 }}
+              >
+                <span className="achievement-icon">{achievement.icon || '⭐'}</span>
+                <p>{achievement.title}</p>
+              </motion.article>
+            ))}
+          </div>
+        ) : (
+          <div className="achievements-grid">
+            <article className="achievement-card">
+              <span className="achievement-icon">🚀</span>
+              <p>Hands-on sessions every semester</p>
+            </article>
+            <article className="achievement-card">
+              <span className="achievement-icon">🏆</span>
+              <p>Opportunities to showcase student projects</p>
+            </article>
+            <article className="achievement-card">
+              <span className="achievement-icon">🤝</span>
+              <p>Strong peer collaboration and mentorship</p>
+            </article>
+          </div>
+        )}
+      </section>
+
+      <section className="club-value-section">
+        <h2>What You Gain</h2>
+        <div className="club-value-grid">
+          {valueCards.map((item) => (
+            <article key={item.title} className="club-value-card">
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </article>
+          ))}
         </div>
       </section>
 

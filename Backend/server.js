@@ -20,6 +20,7 @@ const feedRoutes = require("./routes/feedRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const reportRoutes = require("./routes/reportRoutes");
 const complaintRoutes = require("./routes/complaintRoute");
+const lostFoundRoutes = require("./routes/lostFoundRoutes");
 // mongoose.connect("mongodb://127.0.0.1:27017/alumniDB");
 mongoose.connect("mongodb+srv://gujarrajendra015_db_user:project1020@cluster0.nehqfmw.mongodb.net/test?appName=Cluster0")
   .then(async () => {
@@ -172,6 +173,7 @@ app.use("/api/comments", commentRoutes); // comments
 app.use("/api/report", reportRoutes);
 app.use("/api/complaints", complaintRoutes);
 app.use("/api/scholarships", scholarshipRoutes);
+app.use("/api/lost-found", lostFoundRoutes);
 // app.post("/login", async (req, res) => {
 
 //   const {enrollmentNumber, password } = req.body;

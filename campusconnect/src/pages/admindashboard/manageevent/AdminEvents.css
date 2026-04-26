@@ -1,14 +1,14 @@
 .admin-events-container {
-  --bg: #f2f6ff;
+  --bg: #eaf2ff;
   --surface: #ffffff;
-  --surface-soft: #f7faff;
-  --text: #15233a;
-  --muted: #55708f;
+  --surface-soft: #f4f8ff;
+  --text: #172033;
+  --muted: #5c6b84;
   --border: #d8e4f5;
-  --primary: #1d4ed8;
-  --primary-2: #2563eb;
-  --primary-soft: #e9f1ff;
-  --shadow: 0 14px 34px rgba(29, 78, 216, 0.11);
+  --primary: #2f5fb8;
+  --primary-2: #4a78cf;
+  --primary-soft: #e8f0ff;
+  --shadow: 0 14px 30px rgba(15, 23, 42, 0.22);
 
   height: calc(100vh - 124px);
   overflow-y: auto;
@@ -17,9 +17,9 @@
   margin: 10px auto 0;
   border-radius: 20px;
   background:
-    radial-gradient(circle at 12% 8%, #e3edff 0%, transparent 38%),
-    radial-gradient(circle at 88% 0%, #edf4ff 0%, transparent 34%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(235, 244, 255, 0.4) 100%),
+    radial-gradient(circle at 12% 8%, rgba(96, 165, 250, 0.18) 0%, transparent 38%),
+    radial-gradient(circle at 88% 0%, rgba(147, 197, 253, 0.16) 0%, transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(223, 236, 255, 0.45) 100%),
     var(--bg);
   scroll-behavior: smooth;
 }
@@ -29,12 +29,12 @@
 }
 
 .admin-events-container::-webkit-scrollbar-thumb {
-  background: #b7c9e8;
+  background: #93b2dc;
   border-radius: 999px;
 }
 
 .admin-events-container::-webkit-scrollbar-thumb:hover {
-  background: #94add6;
+  background: #7ea3d6;
 }
 
 .admin-tabs {
@@ -47,9 +47,9 @@
 .admin-tabs button {
   padding: 12px 16px;
   border-radius: 12px;
-  border: 1px solid #c8d8ef;
-  background: #ffffff;
-  color: #17315d;
+  border: 1px solid #cfe0f6;
+  background: #f7fbff;
+  color: #1f4f8e;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
@@ -57,21 +57,21 @@
 
 .admin-tabs button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 16px rgba(29, 78, 216, 0.15);
-  background: #f5f9ff;
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+  background: #edf5ff;
 }
 
 .admin-tabs button.active {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
-  color: #ffffff;
-  border-color: transparent;
-  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.34);
+  background: #ffffff;
+  color: #1a3f76;
+  border-color: #9dbfe7;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.14);
 }
 
 .admin-events-container h2 {
   margin: 0 0 14px;
   padding-left: 12px;
-  border-left: 4px solid var(--primary);
+  border-left: 4px solid #86aee4;
   color: #17315d;
   font-size: 1.22rem;
   letter-spacing: 0.2px;
@@ -99,7 +99,7 @@
   top: -110px;
   right: -100px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.18) 0%, rgba(37, 99, 235, 0) 68%);
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.2) 0%, rgba(96, 165, 250, 0) 68%);
   pointer-events: none;
 }
 
@@ -132,15 +132,15 @@
 .modal-content input:focus,
 .modal-content textarea:focus,
 .modal-content select:focus {
-  border-color: #4f89ff;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14);
+  border-color: #7ea9e4;
+  box-shadow: 0 0 0 3px rgba(126, 169, 228, 0.22);
 }
 
 .add-event-form h4,
 .modal-content h4 {
   width: 100%;
   margin: 8px 0 2px;
-  color: #244a7a;
+  color: #2a558f;
   font-size: 0.98rem;
 }
 
@@ -152,7 +152,25 @@
 }
 
 .add-event-form button,
-.add-event-form .btn,
+.add-event-form .btn {
+  border: 1px solid #b8cff0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #24508c;
+  background: #ffffff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.add-event-form button:hover,
+.add-event-form .btn:hover {
+  transform: translateY(-1px);
+  background: #f4f9ff;
+  border-color: #97bae8;
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+}
+
 .btn {
   border: none;
   border-radius: 10px;
@@ -160,23 +178,21 @@
   cursor: pointer;
   font-weight: 600;
   color: #ffffff;
-  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  background: linear-gradient(135deg, #2f5fb8, #4a78cf);
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
-.add-event-form button:hover,
-.add-event-form .btn:hover,
 .btn:hover {
   transform: translateY(-1px);
   filter: brightness(1.03);
-  box-shadow: 0 10px 18px rgba(37, 99, 235, 0.24);
+  box-shadow: 0 10px 18px rgba(15, 23, 42, 0.22);
 }
 
 .add-event-form input[type="file"],
 .modal-content input[type="file"] {
-  border: 1px dashed #9cb7df;
-  background: #f7faff;
-  color: #214371;
+  border: 1px dashed #9bbde8;
+  background: #f3f8ff;
+  color: #2b568e;
   padding: 10px;
   cursor: pointer;
 }
@@ -206,18 +222,18 @@
   inset: 0 auto auto 0;
   width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, #1d4ed8 0%, #60a5fa 50%, #1d4ed8 100%);
+  background: linear-gradient(90deg, #4a78cf 0%, #8bb5ef 50%, #4a78cf 100%);
   opacity: 0.9;
 }
 
 .admin-event-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 26px rgba(29, 78, 216, 0.14);
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.16);
 }
 
 .admin-event-card h3 {
   margin: 0 0 8px;
-  color: #0f2955;
+  color: #1f2937;
 }
 
 .admin-event-card p {
@@ -257,17 +273,17 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: 700;
-  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(74, 120, 207, 0.2);
 }
 
 .event-status.upcoming {
-  background: #e6efff;
-  color: #1d4ed8;
+  background: #e9f3ff;
+  color: #275694;
 }
 
 .event-status.past {
-  background: #eef4ff;
-  color: #365fae;
+  background: #eef5ff;
+  color: #3f6fab;
 }
 
 .action-buttons {
@@ -278,23 +294,23 @@
 }
 
 .btn-edit {
-  background: linear-gradient(135deg, #1d4ed8, #2e6be8);
+  background: linear-gradient(135deg, #3266be, #4f7ed2);
 }
 
 .btn-delete {
-  background: linear-gradient(135deg, #244a7f, #2f5f9f);
+  background: linear-gradient(135deg, #7f1d1d, #991b1b);
 }
 
 .btn-upload {
-  background: linear-gradient(135deg, #1f57de, #3976f4);
+  background: linear-gradient(135deg, #2f5fb8, #4a78cf);
 }
 
 .btn-save {
-  background: linear-gradient(135deg, #1c4ec8, #2f63de);
+  background: linear-gradient(135deg, #2d61bc, #4878cf);
 }
 
 .btn-cancel-admin {
-  background: linear-gradient(135deg, #5d769f, #7089af);
+  background: linear-gradient(135deg, #6b96d8, #82a7e2);
 }
 
 .modal-actions {
@@ -325,7 +341,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(15, 35, 72, 0.5);
+  background: rgba(15, 23, 42, 0.58);
   backdrop-filter: blur(3px);
   display: flex;
   justify-content: center;
@@ -356,13 +372,13 @@
   right: -90px;
   bottom: -110px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.16) 0%, rgba(37, 99, 235, 0) 70%);
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.2) 0%, rgba(96, 165, 250, 0) 70%);
   pointer-events: none;
 }
 
 .modal-content h3 {
   margin: 0 0 4px;
-  color: #15305f;
+  color: #1f2937;
 }
 
 @keyframes fadeIn {
@@ -384,7 +400,7 @@
   border: 1px solid #d8e4f5;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 8px 16px rgba(29, 78, 216, 0.08);
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.1);
 }
 
 .admin-events-container th,
@@ -395,8 +411,8 @@
 }
 
 .admin-events-container th {
-  background: #edf4ff;
-  color: #23477b;
+  background: #eaf3ff;
+  color: #2a578f;
   text-align: left;
 }
 
@@ -406,7 +422,7 @@
 }
 
 .participants-section h2 {
-  color: #15305f;
+  color: #17315d;
   font-size: 1.3rem;
   margin-bottom: 20px;
   font-weight: 600;
@@ -422,7 +438,7 @@
 }
 
 .admin-event-card h3 {
-  color: #1d4ed8;
+  color: #1f2937;
   font-size: 1.1rem;
   margin: 0 0 8px;
 }
@@ -440,14 +456,14 @@
 }
 
 .participants-table thead {
-  background: linear-gradient(135deg, #edf4ff 0%, #f0f7ff 100%);
+  background: linear-gradient(135deg, #eaf3ff 0%, #f0f7ff 100%);
 }
 
 .participants-table th {
   padding: 12px;
   text-align: left;
   font-weight: 600;
-  color: #1d4ed8;
+  color: #2a578f;
   border-bottom: 2px solid #d8e4f5;
   font-size: 0.9rem;
 }
@@ -460,7 +476,7 @@
 }
 
 .participants-table tbody tr:hover {
-  background: #f7faff;
+  background: #f1f7ff;
 }
 
 .delete-btn {

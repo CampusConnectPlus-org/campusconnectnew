@@ -13,6 +13,7 @@ const Event = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isParticipateOpen, setIsParticipateOpen] = useState(false);
   const [participateEvent, setParticipateEvent] = useState(null);
+  const [showShareOptions, setShowShareOptions] = useState(false);
   const [participateForm, setParticipateForm] = useState({
     name: "",
     year: "",
@@ -433,6 +434,59 @@ const Event = () => {
 
   const selectedEventImages = getEventImages(selectedEvent);
 
+  const buildSharePayload = (event) => {
+    const shareUrl = `${window.location.origin}/event?eventId=${event.id}`;
+    const text = `Check out this campus event: ${event.title} (${event.date}) at ${event.location}`;
+    return {
+      shareUrl,
+      title: event.title,
+      text,
+    };
+  };
+
+  const copyEventLink = async (event) => {
+    const { shareUrl } = buildSharePayload(event);
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      alert("Event link copied. You can share it anywhere.");
+    } catch (err) {
+      alert(`Copy failed. Share this link manually: ${shareUrl}`);
+    }
+  };
+
+  const shareViaWhatsApp = (event) => {
+    const { shareUrl, text } = buildSharePayload(event);
+    const message = encodeURIComponent(`${text}\n${shareUrl}`);
+    window.open(`https://wa.me/?text=${message}`, "_blank", "noopener,noreferrer");
+  };
+
+  const shareViaSms = (event) => {
+    const { shareUrl, text } = buildSharePayload(event);
+    const message = encodeURIComponent(`${text}\n${shareUrl}`);
+    window.open(`sms:?&body=${message}`, "_self");
+  };
+
+  const handleShareEvent = async (event) => {
+    if (!event) return;
+
+    const { shareUrl, title, text } = buildSharePayload(event);
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title,
+          text,
+          url: shareUrl,
+        });
+        return;
+      } catch (err) {
+        if (err.name === "AbortError") return;
+      }
+    }
+
+    setShowShareOptions(true);
+  };
+
   return (
     <>
       <div className="event-container">
@@ -575,7 +629,10 @@ const Event = () => {
             >
               <button
                 className="close-btn"
-                onClick={() => setSelectedEvent(null)}
+                onClick={() => {
+                  setSelectedEvent(null);
+                  setShowShareOptions(false);
+                }}
               >
                 ✕
               </button>
@@ -663,7 +720,41 @@ const Event = () => {
 
                 {selectedEvent.status === "upcoming" && (
                   <div className="modal-actions">
-                    <button className="share-btn">Share Event</button>
+                    <button
+                      className="share-btn"
+                      onClick={() => handleShareEvent(selectedEvent)}
+                    >
+                      Share Event
+                    </button>
+                  </div>
+                )}
+
+                {showShareOptions && selectedEvent && (
+                  <div className="share-options-panel">
+                    <p>Share this event via</p>
+                    <div className="share-options-actions">
+                      <button
+                        type="button"
+                        className="share-option-btn"
+                        onClick={() => shareViaWhatsApp(selectedEvent)}
+                      >
+                        WhatsApp
+                      </button>
+                      <button
+                        type="button"
+                        className="share-option-btn"
+                        onClick={() => shareViaSms(selectedEvent)}
+                      >
+                        Text Message
+                      </button>
+                      <button
+                        type="button"
+                        className="share-option-btn"
+                        onClick={() => copyEventLink(selectedEvent)}
+                      >
+                        Copy Link
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>

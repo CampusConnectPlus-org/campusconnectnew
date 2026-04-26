@@ -41,7 +41,10 @@ const ManageClubs = () => {
   const saveChanges = () => {
     axios
       .put(`http://localhost:5000/api/clubs/${selectedClubId}`, selectedClub)
-      .then(() => alert("Club updated successfully"))
+      .then(() => {
+        alert("Club updated successfully");
+        window.dispatchEvent(new Event("clubs-updated"));
+      })
       .catch((err) => console.log(err));
   };
 
@@ -59,6 +62,10 @@ const ManageClubs = () => {
     heroTitle: "",
     heroDescription: "",
     about: "",
+    joinApplicationsOpen: true,
+    joinOpenFrom: "",
+    joinOpenUntil: "",
+    joinClosedMessage: "Applications are closed for now. Please check back later.",
     teamMembers: [],
     achievements: [],
     upcomingEvents: [],
@@ -146,6 +153,45 @@ const deleteClub = () => {
               placeholder="About the club"
               onChange={(e) => handleInputChange("about", e.target.value)}
             />
+          </section>
+
+          {/* Join Applications */}
+          <section>
+            <h2>Join Applications</h2>
+            <label>
+              <span>Open Applications</span>
+              <select
+                value={selectedClub.joinApplicationsOpen ? "open" : "closed"}
+                onChange={(e) => handleInputChange("joinApplicationsOpen", e.target.value === "open")}
+              >
+                <option value="open">Open</option>
+                <option value="closed">Closed</option>
+              </select>
+            </label>
+            <label>
+              <span>Open From</span>
+              <input
+                type="date"
+                value={selectedClub.joinOpenFrom || ""}
+                onChange={(e) => handleInputChange("joinOpenFrom", e.target.value)}
+              />
+            </label>
+            <label>
+              <span>Open Until</span>
+              <input
+                type="date"
+                value={selectedClub.joinOpenUntil || ""}
+                onChange={(e) => handleInputChange("joinOpenUntil", e.target.value)}
+              />
+            </label>
+            <label>
+              <span>Closed Message</span>
+              <textarea
+                value={selectedClub.joinClosedMessage || ""}
+                placeholder="Applications are closed for now."
+                onChange={(e) => handleInputChange("joinClosedMessage", e.target.value)}
+              />
+            </label>
           </section>
 
           {/* Team Members */}

@@ -1,5 +1,5 @@
 import "./Login.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 
@@ -8,6 +8,9 @@ export default function Login({ setUser }) {
     const [enrollmentNumber, setEnrollmentNumber] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const redirectTo = new URLSearchParams(location.search).get("redirect") || "/";
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -32,7 +35,7 @@ export default function Login({ setUser }) {
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
             setUser(data.user);
-            navigate(`/`);
+            navigate(redirectTo, { replace: true });
             console.log(data.user)
         }
         else {

@@ -2,6 +2,10 @@ const Post = require("../models/Post");
 const Report = require("../models/Report");
 const { checkModeration } = require("../utils/moderationAI");
 
+const normalizeTag = (tag) => tag.trim().replace(/^#/, "").toLowerCase();
+
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 // ➤ Create Post — AI moderation added
 const createPost = async (req, res) => {
   try {
@@ -31,7 +35,7 @@ const createPost = async (req, res) => {
     const post = await Post.create({
       userId: req.user.id,
       content,
-      tags: tags ? tags.split(",").map(t => t.trim()) : [],
+      tags: tags ? tags.split(",").map(normalizeTag).filter(Boolean) : [],
       image: req.file ? req.file.filename : null
     });
 
@@ -50,7 +54,8 @@ const getPosts = async (req, res) => {
 
     // 🔥 Tag search
     if (tag) {
-      filter.tags = { $in: [tag.toLowerCase()] };
+      const normalizedTag = normalizeTag(tag);
+      filter.tags = { $in: [new RegExp(`^${escapeRegExp(normalizedTag)}$`, "i")] };
     }
 
     // 🔥 Text search (content mein)
@@ -82,10 +87,10 @@ const getRelatedPosts = async (req, res) => {
     
     if (!tags) return res.json([]);
 
-    const tagArray = tags.split(",").map(t => t.trim());
+    const tagArray = tags.split(",").map(normalizeTag).filter(Boolean);
 
     const related = await Post.find({
-      tags: { $in: tagArray },
+      tags: { $in: tagArray.map((tag) => new RegExp(`^${escapeRegExp(tag)}$`, "i")) },
       _id: { $ne: excludeId }
     })
       .populate("userId", "name")
@@ -124,7 +129,15 @@ const deletePost = async (req, res) => {
     if (!req.user.isAdmin) {
       return res.status(403).json({ message: "Not allowed" });
     }
+
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
     await Post.findByIdAndDelete(req.params.id);
+    await Report.deleteMany({ postId: req.params.id });
+
     res.json({ message: "Post deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });

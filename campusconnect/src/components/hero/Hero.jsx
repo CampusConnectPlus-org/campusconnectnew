@@ -68,6 +68,22 @@ export default function HeroSection() {
 
   const activeSlide = slides[index] || CTAE_SLIDE;
 
+  const textContainer = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.12
+      }
+    }
+  };
+
+  const textItem = {
+    hidden: { y: 14, opacity: 0 },
+    show: { y: 0, opacity: 1, transition: { duration: 0.45, ease: "easeOut" } }
+  };
+
   return (
     <div className="hero-container">
       <motion.div
@@ -78,13 +94,23 @@ export default function HeroSection() {
         transition={{ duration: 0.8, ease: "easeInOut" }}
         className="hero-slide"
       >
-        <div className="hero-text">
-          <h1>{activeSlide.title}</h1>
-          <p>{activeSlide.desc}</p>
-          <Link className="hero-btn" to={activeSlide.path}>
-            {activeSlide.button}
-          </Link>
-        </div>
+        <motion.div
+          className="hero-text"
+          variants={textContainer}
+          initial="hidden"
+          animate="show"
+        >
+          <motion.h1 variants={textItem}>{activeSlide.title}</motion.h1>
+          <motion.p variants={textItem}>{activeSlide.desc}</motion.p>
+          <motion.div className="hero-btn-group" variants={textItem}>
+            <Link className="hero-btn" to={activeSlide.path}>
+              {activeSlide.button}
+            </Link>
+            <Link className="hero-btn-secondary" to="/competitive-exams">
+              Explore Exams
+            </Link>
+          </motion.div>
+        </motion.div>
 
         <div className="hero-image">
           <img src={activeSlide.img} alt={activeSlide.title} />

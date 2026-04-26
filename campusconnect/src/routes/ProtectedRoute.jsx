@@ -1,11 +1,13 @@
-import { Navigate,Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 function ProtectedRoute() {
+  const location = useLocation();
 
   const token = localStorage.getItem("token");
 
   if (!token) {
-    return <Navigate to="/login" /> ;
+    const redirectPath = `${location.pathname}${location.search}`;
+    return <Navigate to={`/login?redirect=${encodeURIComponent(redirectPath)}`} replace />;
     
   }
 

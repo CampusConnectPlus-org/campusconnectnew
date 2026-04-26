@@ -19,6 +19,8 @@ const timeAgo = (date) => {
   return Math.floor(diff / 86400) + "d ago";
 };
 
+const isFreshPost = (date) => (Date.now() - new Date(date)) / 1000 < 86400;
+
 const REACTIONS = ["👍", "❤️", "🔥", "🙌", "💡"];
 
 const Feed = () => {
@@ -226,7 +228,7 @@ const Feed = () => {
               </svg>
             </div>
             <div>
-              <h1 className="feed-title">Campus Feed</h1>
+              <h1 className="feed-title">Campus Feed <span className="live-pill">LIVE</span></h1>
               <p className="feed-subtitle">Ask, share & connect with your campus</p>
             </div>
           </div>
@@ -239,6 +241,10 @@ const Feed = () => {
               className={`tab-btn ${activeTab === "advice" ? "tab-active" : ""}`}
               onClick={() => { setActiveTab("advice"); setShowBookmarksOnly(false); fetchPosts("", "advice"); }}
             >💬 Advice</button>
+            <button
+              className={`tab-btn ${activeTab === "internships" ? "tab-active" : ""}`}
+              onClick={() => { setActiveTab("internships"); setShowBookmarksOnly(false); fetchPosts("", "internship"); }}
+            >💼 Internships</button>
             <button
               className={`tab-btn ${activeTab === "question" ? "tab-active" : ""}`}
               onClick={() => { setActiveTab("question"); setShowBookmarksOnly(false); fetchPosts("", "question"); }}
@@ -276,12 +282,26 @@ const Feed = () => {
           <button className="btn-clear" onClick={clearSearch}>✕</button>
         </div>
 
+        <div className="feed-trending-strip">
+          <span className="trend-label">Trending</span>
+          {["#placement", "#clubs", "#hackathon", "#internship", "#examTips"].map((topic) => (
+            <button
+              key={topic}
+              className="trend-chip"
+              onClick={() => { setSearchTag(topic.replace("#", "")); fetchPosts("", topic.replace("#", "")); }}
+            >
+              {topic}
+            </button>
+          ))}
+        </div>
+
         {/* COMPOSE */}
         <div className="compose-card">
           <div className="compose-header">
             <div className="user-avatar compose-avatar">Y</div>
             <div className="compose-placeholder-text">
               Got a question? Need advice? Share it here!
+              <p className="compose-subhint">Drop your campus thought in one line or a full story.</p>
             </div>
           </div>
           <textarea
@@ -361,6 +381,7 @@ const Feed = () => {
                   <span className="post-time">{timeAgo(post.createdAt)}</span>
                 </div>
                 <div className="post-header-actions">
+                  {isFreshPost(post.createdAt) && <span className="fresh-pill">Fresh</span>}
                   <button
                     className={`bookmark-btn ${bookmarks.includes(post._id) ? "bookmarked" : ""}`}
                     onClick={() => toggleBookmark(post._id)}

@@ -3,3 +3,27 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.home-landing {
+  background: #f8fbff;
+}
+
+.home-block {
+  position: relative;
+}
+
+.hero-block,
+.enhance-block {
+  background: transparent;
+}
+
+.alumni-block,
+.impact-block {
+  background: #ffffff;
+}
+
+.companies-block {
+  background: linear-gradient(180deg, #f6faff 0%, #eef5ff 100%);
+  border-top: 1px solid #e1ebfa;
+  border-bottom: 1px solid #e1ebfa;
+}

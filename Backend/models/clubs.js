@@ -6,6 +6,18 @@ const clubSchema = new mongoose.Schema({
   heroDescription: String,
   about: String,
 
+  joinApplicationsOpen: {
+    type: Boolean,
+    default: true
+  },
+
+  joinOpenFrom: String,
+  joinOpenUntil: String,
+  joinClosedMessage: {
+    type: String,
+    default: "Applications are closed for now. Please check back later."
+  },
+
   teamMembers: [{ name: String }],
 
   achievements: [

@@ -73,6 +73,14 @@ const Sidebar = () => {
           </NavLink>
         </li>
         <li>
+          <NavLink
+            to="/admindashboard/managecompetitiveexams"
+            className={({ isActive }) => (isActive ? "nav-active" : "")}
+          >
+            Competitive Exams
+          </NavLink>
+        </li>
+        <li>
   <NavLink
     to="/admindashboard/managescholarships"
     className={({ isActive }) => (isActive ? "nav-active" : "")}
@@ -91,6 +99,14 @@ const Sidebar = () => {
     Manage Reports
   </NavLink>
 </li>
+        <li>
+          <NavLink
+            to="/admindashboard/managelostfound"
+            className={({ isActive }) => (isActive ? "nav-active" : "")}
+          >
+            Lost & Found
+          </NavLink>
+        </li>
         {/* NEW: Add Admin Section */}
         {/* <li>
           <NavLink

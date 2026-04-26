@@ -36,8 +36,28 @@ const getReports = async (req, res) => {
   }
 };
 
+// ➤ Delete a report (Admin)
+const deleteReport = async (req, res) => {
+  try {
+    if (!req.user?.isAdmin) {
+      return res.status(403).json({ message: "Not allowed" });
+    }
+
+    const deleted = await Report.findByIdAndDelete(req.params.id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    res.json({ message: "Report deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // ➤ Export
 module.exports = {
   reportPost,
-  getReports
+  getReports,
+  deleteReport
 };
