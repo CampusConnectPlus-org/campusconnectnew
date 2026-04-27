@@ -92,6 +92,38 @@ const Placement = ({ user, setUser }) => {
     return instructions.replace(/\n/g, '<br>');
   };
 
+  // Check if application window is open for a drive
+  const isApplicationOpen = (drive) => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    if (drive.openingDate && drive.closingDate) {
+      const opening = new Date(drive.openingDate);
+      const closing = new Date(drive.closingDate);
+      opening.setHours(0, 0, 0, 0);
+      closing.setHours(23, 59, 59, 999);
+
+      if (today < opening) {
+        return { status: 'coming-soon', message: `Opens on ${formatDateLabel(drive.openingDate)}` };
+      } else if (today > closing) {
+        return { status: 'closed', message: 'Applications Closed' };
+      } else {
+        return { status: 'open', message: 'Apply Now' };
+      }
+    }
+
+    return { status: 'open', message: 'Apply Now' };
+  };
+
+  const getButtonClass = (drive) => {
+    if (isPlaced) return 'apply-btn disabled';
+    const appStatus = isApplicationOpen(drive);
+    if (appStatus.status === 'coming-soon' || appStatus.status === 'closed') {
+      return 'apply-btn disabled';
+    }
+    return 'apply-btn';
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     const headers = {
@@ -330,7 +362,18 @@ const Placement = ({ user, setUser }) => {
                     {isPlaced ? (
                       <button className="apply-btn disabled" disabled>Already Placed</button>
                     ) : (
-                      <a href={drive.link} target="_blank" rel="noreferrer" className="apply-btn">Apply Now</a>
+                      (() => {
+                        const appStatus = isApplicationOpen(drive);
+                        if (appStatus.status === 'open') {
+                          return (
+                            <a href={drive.link} target="_blank" rel="noreferrer" className="apply-btn">Apply Now</a>
+                          );
+                        } else {
+                          return (
+                            <button className="apply-btn disabled" disabled>{appStatus.message}</button>
+                          );
+                        }
+                      })()
                     )}
                   </div>
                 ))}

@@ -20,21 +20,46 @@ const clubSchema = new mongoose.Schema({
 
   teamMembers: [{ name: String }],
 
+  // NEW 👉 club members (approved registrations)
+  members: [
+    {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        auto: true
+      },
+      firstName: String,
+      lastName: String,
+      branch: String,
+      mobile: String,
+      email: String,
+      collegeYear: String,
+      gender: String,
+      dob: String,
+      hobby: String,
+      contribution: String,
+      enrollmentNo: String,
+      approvedAt: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
+
   achievements: [
     { title: String, icon: String }
   ],
 
   upcomingEvents: [
- {
-   _id:{
-     type: mongoose.Schema.Types.ObjectId,
-     auto:true
-   },
-   title:String,
-   date:String,
-   description:String
- }
-],
+    {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        auto: true
+      },
+      title: String,
+      date: String,
+      description: String
+    }
+  ],
 
   // NEW 👉 club join requests
   registrations: [
@@ -57,8 +82,8 @@ const clubSchema = new mongoose.Schema({
     }
   ],
 
-  // NEW 👉 event participation
-  eventParticipants: [
+  // NEW 👉 event participation requests (pending)
+  eventParticipationRequests: [
     {
       eventTitle: String,
       firstName: String,
@@ -69,6 +94,28 @@ const clubSchema = new mongoose.Schema({
       collegeYear: String,
       gender: String,
       createdAt: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
+
+  // NEW 👉 event participation (approved)
+  eventParticipants: [
+    {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        auto: true
+      },
+      eventTitle: String,
+      firstName: String,
+      lastName: String,
+      branch: String,
+      mobile: String,
+      email: String,
+      collegeYear: String,
+      gender: String,
+      approvedAt: {
         type: Date,
         default: Date.now
       }

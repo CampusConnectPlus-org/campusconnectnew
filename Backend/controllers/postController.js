@@ -14,7 +14,7 @@ const createPost = async (req, res) => {
     // 🔥 AI moderation check
     if (content && content.trim()) {
       const result = await checkModeration(content);
-        console.log("🔍 Moderation result:", result);
+      console.log("🔍 Moderation result:", result);
       if (result.isOffensive) {
         // Admin ko auto-report bhejo
         await Report.create({
@@ -84,7 +84,7 @@ const getPosts = async (req, res) => {
 const getRelatedPosts = async (req, res) => {
   try {
     const { tags, excludeId } = req.query;
-    
+
     if (!tags) return res.json([]);
 
     const tagArray = tags.split(",").map(normalizeTag).filter(Boolean);

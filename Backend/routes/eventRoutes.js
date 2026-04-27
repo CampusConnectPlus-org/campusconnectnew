@@ -645,4 +645,14 @@ router.delete("/participation-requests/:id", async (req, res) => {
   }
 });
 
+// EVENT REMINDER ROUTES
+const { manualTriggerReminders, getReminderStatus } = require("../controllers/eventReminderController");
+
+// GET reminder scheduler status
+router.get("/reminders/status", getReminderStatus);
+
+// MANUALLY TRIGGER reminders for events in next 24 hours
+// Optional query parameter: ?eventId=<id> to send reminders for specific event only
+router.post("/reminders/trigger", manualTriggerReminders);
+
 module.exports = router;

@@ -3,6 +3,12 @@ const Scholarship = require("../models/Scholarship");
 // Get all / filtered scholarships
 const getScholarships = async (req, res) => {
   try {
+    // Bulk-update any scholarship whose deadline has passed but is still "open"
+    await Scholarship.updateMany(
+      { deadline: { $lt: new Date() }, status: "open" },
+      { $set: { status: "closed" } }
+    );
+
     const { category, caste, income, percentage, gender } = req.query;
     let filter = {};
 
@@ -32,7 +38,7 @@ const getScholarships = async (req, res) => {
 const addScholarship = async (req, res) => {
   try {
     console.log("User from token:", req.user); // 👈 ye add karo debug ke liye
-    
+
     if (!req.user.isAdmin && req.user.role !== "admin") {
       return res.status(403).json({ message: "Admin only" });
     }
@@ -46,7 +52,7 @@ const addScholarship = async (req, res) => {
 // Delete scholarship (admin only)
 const deleteScholarship = async (req, res) => {
   try {
-    if (!req.user.isAdmin) {
+    if (!req.user.isAdmin && req.user.role !== "admin") {
       return res.status(403).json({ message: "Admin only" });
     }
     await Scholarship.findByIdAndDelete(req.params.id);
@@ -181,4 +187,18 @@ const seedScholarships = async (req, res) => {
   }
 };
 
-module.exports = { getScholarships, addScholarship, deleteScholarship, seedScholarships };
+// Update scholarship (admin only)
+const updateScholarship = async (req, res) => {
+  try {
+    if (!req.user.isAdmin && req.user.role !== "admin") {
+      return res.status(403).json({ message: "Admin only" });
+    }
+    const updated = await Scholarship.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updated) return res.status(404).json({ message: "Scholarship not found" });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = { getScholarships, addScholarship, deleteScholarship, updateScholarship, seedScholarships };

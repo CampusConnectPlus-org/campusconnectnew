@@ -5,7 +5,7 @@ const addComment = async (req, res) => {
   try {
     // 🔥 Comment bhi check hoga
     const result = await checkModeration(req.body.text);
-    
+
     if (result.isOffensive) {
       return res.status(400).json({
         message: "Comment contains inappropriate content.",

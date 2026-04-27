@@ -7,6 +7,7 @@ const PlacementTrend = require("../models/PlacementTrend");
 const PlacementStat = require("../models/PlacementStat");
 const PlacedStudent = require("../models/PlacedStudent");
 const User = require("../models/User");
+const { sendNewPlacementDriveNotification } = require("../utils/emailService");
 
 router.get("/drives", async (req, res) => {
     try {
@@ -172,6 +173,30 @@ router.post("/drives", verifyToken, async (req, res) => {
         const newDrive = new PlacementDrive(driveData);
 
         const savedDrive = await newDrive.save();
+
+        // Send notification emails if opening date is >= current date
+        if (openingDate && closingDate) {
+            const openingDateObj = new Date(openingDate);
+            const closingDateObj = new Date(closingDate);
+            const currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0); // Reset to start of day
+            openingDateObj.setHours(0, 0, 0, 0); // Reset to start of day
+            closingDateObj.setHours(23, 59, 59, 999); // Reset to end of day
+
+            if (openingDateObj >= currentDate || closingDateObj >= currentDate) {
+                // Fetch all student emails
+                const students = await User.find({ role: { $ne: "admin" } }, { email: 1 });
+                const studentEmails = students.map(s => s.email);
+
+                if (studentEmails.length > 0) {
+                    // Send emails asynchronously (don't wait for completion)
+                    sendNewPlacementDriveNotification(studentEmails, savedDrive).catch(err => {
+                        console.error("Error sending placement drive notifications:", err);
+                    });
+                }
+            }
+        }
+
         res.status(201).json(savedDrive);
     } catch (err) {
         console.error("Error creating placement drive:", err);

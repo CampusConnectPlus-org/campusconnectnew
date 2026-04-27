@@ -1,7 +1,7 @@
 // server.js
 require("dotenv").config();
-// const dns = require("node:dns");
-// dns.setServers(['8.8.8.8', '8.8.4.4'])
+const dns = require("node:dns");
+dns.setServers(['8.8.8.8', '8.8.4.4'])
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -25,6 +25,14 @@ const lostFoundRoutes = require("./routes/lostFoundRoutes");
 mongoose.connect("mongodb+srv://gujarrajendra015_db_user:project1020@cluster0.nehqfmw.mongodb.net/test?appName=Cluster0")
   .then(async () => {
     console.log("Connected to MongoDB Atlas");
+
+    // Initialize Event Reminder Scheduler
+    try {
+      const { initEventReminderScheduler } = require("./utils/eventScheduler");
+      initEventReminderScheduler();
+    } catch (error) {
+      console.error("❌ Failed to initialize event reminder scheduler:", error);
+    }
 
     // Drop the unique index on PlacedStudent.enrollmentNo if it exists
     try {
