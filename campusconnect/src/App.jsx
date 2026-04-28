@@ -24,8 +24,11 @@ import ManagePlacements from './pages/admindashboard/manageplacements/ManagePlac
 import CTAEClub from './pages/clubs/CTAEClub'
 // import ManageEvent from './pages/admindashboard/manageevent/ManageEvent'
 import AboutCtae from './pages/aboutctae/AboutCtae'
+import ComplaintPage from './pages/complaint/ComplaintPage'
+import ComplaintBox from './pages/admindashboard/viewcomplaint/ComplaintBox'
 import './App.css'
-
+import { Link } from 'react-router-dom'
+// import ComplaintPage from './pages/complaint/ComplaintPage'
 
 const App = () => {
   const location = useLocation();
@@ -71,10 +74,19 @@ const App = () => {
   console.log("Admin in App:", admin);
 
   const hideMainNavbar = location.pathname.startsWith('/admindashboard');
+  const token = localStorage.getItem("token");
+  // Show complaint link only for logged-in users (not admins)
+  const showComplaintLink = token && !admin;
 
   return (
-
-    <div>
+<>   
+ {showComplaintLink && (
+   <div className='c-box'>
+    <Link className='c-link' to="/complaints">Complaint</Link>
+  </div>
+ )}
+    <div className='app-container'>
+ 
       {!hideMainNavbar && <Navbar user={user} setUser={setUser} admin={admin} setAdmin={setAdmin} />}
       <Routes>
         <Route path='/' element={
@@ -95,6 +107,7 @@ const App = () => {
           <Route path='/event' element={<Event />} />
           <Route path='/clubs' element={<CTAEClub />} />
           <Route path='/aboutctae' element={<AboutCtae />} />
+          <Route path='/complaints' element={<ComplaintPage />} />
 
 
         </Route>
@@ -108,12 +121,19 @@ const App = () => {
           <Route path='manageevent' element={< AdminEvents/>} />
           <Route path='manageclubs' element={<ManageClubs/>} />
           <Route path='manageplacements' element={<ManagePlacements/>} />
-        {/* //  <Route path='adminadd' element={<AddAdmin/>} />// */}
+          <Route path='viewcomplaint' element={<ComplaintBox/>}/>
+          
+
+          {/* <Route path='adminadd' element={<AddAdmin/>} /> */}
+
 
 </Route>
 <Route path='/adminlogin' element={<AdminLogin setAdmin={setAdmin}/>}/>
       </Routes>
+       
     </div>
+    
+    </>
   )
 }
 

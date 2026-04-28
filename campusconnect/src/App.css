@@ -3,3 +3,26 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.c-box{
+  width: 200px;
+  height: 40px;
+  background-color: #1e293b;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  border-radius: 8px;
+  margin: 50px auto;
+  position: fixed;
+  z-index: 1000;
+ /* position: absolute;   */
+ bottom: 100px;
+ right: 0px;
+
+}
+.c-link{
+  color: #fff;
+  text-decoration: none;
+}

@@ -63,6 +63,17 @@ const Sidebar = () => {
             Placements
           </NavLink>
         </li>
+          
+
+      <li>
+        <NavLink
+          to="/admindashboard/viewcomplaint"
+          className={({ isActive }) => (isActive ? "nav-active" : "")}
+        >
+          View Complaints
+        </NavLink>  
+      </li>
+
 
         {/* NEW: Add Admin Section */}
         {/* <li>
@@ -75,8 +86,8 @@ const Sidebar = () => {
         </li> */}
 
       </ul>
-      {/* <div className="logout">Logout</div> */}
-
+  
+    
     </div>
 
   );

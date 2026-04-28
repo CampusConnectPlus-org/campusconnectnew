@@ -1,0 +1,78 @@
+/* Background */
+/* body {
+  background: #0f172a;
+  font-family: Arial, sans-serif;
+} */
+
+/* Form Container */
+.complaint-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 25px;
+  background: #1e293b;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.ac{
+    color: #fff;
+}
+/* Heading */
+.complaint-container h2 {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+/* Input Fields */
+.complaint-container input,
+.complaint-container textarea,
+.complaint-container select {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  background: #334155;
+  color: #fff;
+  font-size: 14px;
+}
+
+/* Placeholder color */
+.complaint-container input::placeholder,
+.complaint-container textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* Focus Effect */
+.complaint-container input:focus,
+.complaint-container textarea:focus,
+.complaint-container select:focus {
+  border: 2px solid #38bdf8;
+}
+
+/* Button */
+.complaint-container button {
+  width: 100%;
+  padding: 12px;
+  background: #38bdf8;
+  color: #0f172a;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Button Hover */
+.complaint-container button:hover {
+  background: #0ea5e9;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .complaint-container {
+    margin: 20px;
+  }
+}

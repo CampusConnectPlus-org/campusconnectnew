@@ -1,7 +1,7 @@
 // server.js
 
-const dns = require("node:dns");
-dns.setServers(['8.8.8.8', '8.8.4.4'])
+// const dns = require("node:dns");
+// dns.setServers(['8.8.8.8', '8.8.4.4'])
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -11,10 +11,12 @@ const userRoutes = require("./routes/userRoutes");
 const placementRoutes = require("./routes/placementRoutes");
 const eventRoutes = require("./routes/eventRoutes");
 const clubRoutes = require("./routes/clubs");
+const complaintRoutes = require("./routes/complaintRoutes");
 const app = express();
 app.use(express.json());
 app.use(cors());
 // app.use("/uploads", express.static("uploads"));
+
 
 
 
@@ -154,6 +156,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/alumniimage", express.static("alumniimage"));
 app.use("/api/clubs", clubRoutes);
 app.use("/api/events", eventRoutes);
+app.use("/api/complaints", complaintRoutes);      
 
 
 
