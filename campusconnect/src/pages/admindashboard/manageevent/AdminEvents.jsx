@@ -434,6 +434,12 @@ const AdminEvents = () => {
 
                 <div className="action-buttons">
                   <button
+                    className="btn btn-edit"
+                    onClick={() => openEditModal(event)}
+                  >
+                    Edit
+                  </button>
+                  <button
                     className="btn btn-upload"
                     onClick={() => openGalleryModal(event)}
                   >
