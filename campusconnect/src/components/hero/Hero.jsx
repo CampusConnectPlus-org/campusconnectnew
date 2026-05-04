@@ -102,18 +102,18 @@ export default function HeroSection() {
         >
           <motion.h1 variants={textItem}>{activeSlide.title}</motion.h1>
           <motion.p variants={textItem}>{activeSlide.desc}</motion.p>
-          <motion.div className="hero-btn-group" variants={textItem}>
+        </motion.div>
+
+        <div className="hero-media">
+          <div className="hero-image">
+            <img src={activeSlide.img} alt={activeSlide.title} />
+          </div>
+
+          <div className="hero-btn-group">
             <Link className="hero-btn" to={activeSlide.path}>
               {activeSlide.button}
             </Link>
-            <Link className="hero-btn-secondary" to="/competitive-exams">
-              Explore Exams
-            </Link>
-          </motion.div>
-        </motion.div>
-
-        <div className="hero-image">
-          <img src={activeSlide.img} alt={activeSlide.title} />
+          </div>
         </div>
       </motion.div>
     </div>

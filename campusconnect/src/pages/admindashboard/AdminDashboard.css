@@ -29,3 +29,33 @@
 .right {
   flex: 1;
 }
+
+@media (max-width: 1024px) {
+  .main {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .dashboard {
+    flex-direction: column;
+  }
+
+  .main {
+    padding: 16px;
+    height: auto;
+    overflow: visible;
+  }
+
+  .cards,
+  .content {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 640px) {
+  .main {
+    padding: 12px;
+  }
+}

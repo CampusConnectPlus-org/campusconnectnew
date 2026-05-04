@@ -15,6 +15,11 @@
   min-width: 200px;
   margin: 0 26px;
   text-align: center;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(187, 205, 236, 0.5);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.06);
   transition: transform 0.25s ease;
 }
 
@@ -23,9 +28,9 @@
   height: 60px;
   object-fit: contain;
   margin-bottom: 10px;
-  filter: grayscale(100%) contrast(0.95);
-  opacity: 0.8;
-  transition: filter 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
+  filter: none;
+  opacity: 1;
+  transition: transform 0.25s ease;
 }
 
 .company-card p {
@@ -39,8 +44,6 @@
 }
 
 .company-card:hover img {
-  filter: grayscale(0%);
-  opacity: 1;
   transform: scale(1.04);
 }
 

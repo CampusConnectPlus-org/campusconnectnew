@@ -1,11 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap');
+
 .lost-found-page {
   min-height: 100vh;
-  padding: 36px 24px 56px;
+  padding: 24px 18px 48px;
   background:
-    radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 34%),
-    radial-gradient(circle at right 20%, rgba(59, 130, 246, 0.14), transparent 28%),
-    #f4f8ff;
+    radial-gradient(circle at top left, rgba(45, 129, 255, 0.16), transparent 30%),
+    radial-gradient(circle at top right, rgba(0, 93, 230, 0.12), transparent 26%),
+    linear-gradient(180deg, #f3f8ff 0%, #eef5ff 52%, #f8fbff 100%);
   color: #10234a;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
 }
 
 .lost-found-hero,
@@ -26,39 +30,41 @@
 .lost-found-hero__panel,
 .lost-found-form,
 .lost-found-list {
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(191, 219, 254, 0.9);
-  box-shadow: 0 18px 50px rgba(37, 99, 235, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 100, 240, 0.14);
+  box-shadow: 0 16px 34px rgba(0, 78, 180, 0.08);
   backdrop-filter: blur(10px);
 }
 
 .lost-found-hero__content {
-  border-radius: 30px;
-  padding: 34px;
+  border-radius: 24px;
+  padding: 26px;
 }
 
 .lost-found-kicker,
 .section-heading span {
   display: inline-block;
   margin: 0 0 10px;
-  color: #2563eb;
-  font-size: 0.72rem;
+  color: #005de6;
+  font-size: 0.68rem;
   font-weight: 800;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
 }
 
 .lost-found-hero__content h1 {
   margin: 0;
-  font-size: clamp(2.2rem, 4vw, 4.2rem);
-  line-height: 0.95;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 3vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
   color: #10234a;
 }
 
 .lost-found-hero__content p {
   max-width: 700px;
   margin: 16px 0 0;
-  font-size: 1rem;
+  font-size: 0.93rem;
   line-height: 1.7;
   color: #4b5f85;
 }
@@ -71,15 +77,15 @@
 }
 
 .lost-found-stats div {
-  padding: 16px 18px;
-  border-radius: 18px;
+  padding: 14px 16px;
+  border-radius: 16px;
   background: linear-gradient(180deg, #ffffff, #edf4ff);
   border: 1px solid #d7e6ff;
 }
 
 .lost-found-stats strong {
   display: block;
-  font-size: 1.6rem;
+  font-size: 1.35rem;
   color: #1d4ed8;
 }
 
@@ -87,12 +93,12 @@
   display: block;
   margin-top: 4px;
   color: #587199;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
 }
 
 .lost-found-hero__panel {
-  border-radius: 30px;
-  padding: 28px;
+  border-radius: 24px;
+  padding: 22px;
 }
 
 .lost-found-hero__panel h3,
@@ -106,6 +112,7 @@
   padding-left: 18px;
   color: #4b5f85;
   line-height: 1.8;
+  font-size: 0.92rem;
 }
 
 .lost-found-grid {
@@ -116,8 +123,8 @@
 
 .lost-found-form,
 .lost-found-list {
-  border-radius: 28px;
-  padding: 28px;
+  border-radius: 24px;
+  padding: 22px;
 }
 
 .section-heading {
@@ -132,7 +139,8 @@
 }
 
 .section-heading h2 {
-  font-size: 1.5rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.25rem;
   line-height: 1.15;
 }
 
@@ -149,7 +157,8 @@
   background: #f8fbff;
   color: #27406f;
   border-radius: 999px;
-  padding: 10px 16px;
+  padding: 9px 14px;
+  font-size: 0.84rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -174,7 +183,7 @@
   display: block;
   margin-bottom: 14px;
   color: #27406f;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   font-weight: 700;
 }
 
@@ -188,7 +197,7 @@
   border-radius: 14px;
   border: 1px solid #cfe0ff;
   background: #f8fbff;
-  padding: 13px 14px;
+  padding: 11px 13px;
   color: #10234a;
   font: inherit;
   box-sizing: border-box;
@@ -201,7 +210,7 @@
 
 .lost-found-form textarea {
   resize: vertical;
-  min-height: 120px;
+  min-height: 108px;
 }
 
 .lost-found-form input:focus,
@@ -216,7 +225,7 @@
   border-radius: 16px;
   padding: 13px 14px;
   margin: 14px 0;
-  font-size: 0.93rem;
+  font-size: 0.86rem;
   font-weight: 600;
 }
 
@@ -234,7 +243,7 @@
   width: 100%;
   border: none;
   border-radius: 16px;
-  padding: 14px 18px;
+  padding: 12px 16px;
   background: linear-gradient(135deg, #1d4ed8, #2563eb 60%, #3b82f6);
   color: #fff;
   font: inherit;
@@ -259,8 +268,8 @@
 
 .item-card {
   border: 1px solid #d8e6ff;
-  border-radius: 22px;
-  padding: 20px;
+  border-radius: 20px;
+  padding: 18px;
   background: linear-gradient(180deg, #ffffff, #f7fbff);
 }
 
@@ -277,8 +286,8 @@
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  padding: 8px 12px;
-  font-size: 0.76rem;
+  padding: 7px 11px;
+  font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -306,7 +315,7 @@
 
 .item-card h3 {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1rem;
   color: #10234a;
 }
 
@@ -317,6 +326,7 @@
   margin: 10px 0 0;
   color: #587199;
   line-height: 1.6;
+  font-size: 0.88rem;
 }
 
 .item-reward {
@@ -334,17 +344,18 @@
 .contact-grid a {
   text-decoration: none;
   border-radius: 999px;
-  padding: 10px 14px;
+  padding: 9px 12px;
   background: #eff6ff;
   color: #1d4ed8;
   font-weight: 700;
+  font-size: 0.84rem;
 }
 
 .contact-summary {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
-  font-size: 0.88rem;
+  font-size: 0.8rem;
 }
 
 .empty-state {
@@ -392,6 +403,7 @@
   overflow: hidden;
   border: 1px solid #d8e6ff;
   background: #f8fbff;
+  width: min(100%, 320px);
 }
 
 .image-preview img,
@@ -407,4 +419,17 @@
   overflow: hidden;
   border: 1px solid #d8e6ff;
   background: #eef5ff;
+  width: min(100%, 320px);
+}
+
+.image-preview img,
+.item-image {
+  object-fit: cover;
+}
+
+@media (max-width: 720px) {
+  .image-preview,
+  .item-image-wrap {
+    width: 100%;
+  }
 }
