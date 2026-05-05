@@ -22,7 +22,7 @@
 }
 
 .hero-text h1 {
-  font-size: 43px;
+  /* font-size: 43px; */
   color: white;
   margin-bottom: 16px;
   line-height: 1.12;
@@ -34,7 +34,7 @@
   color: rgba(255, 255, 255, 0.92);
   margin-bottom: 24px;
   line-height: 1.6;
-  max-width: 560px;
+  /* max-width: 560px; */
 }
 
 .hero-btn-group {

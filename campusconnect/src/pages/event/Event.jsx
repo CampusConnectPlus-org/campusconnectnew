@@ -537,7 +537,7 @@ const Event = () => {
                   <span>📍 {event.location}</span>
                 </div>
 
-                <p className="event-description">{event.description}</p>
+                <p className="event-description">{event.details.overview}</p>
 
                 <div className="event-card-actions">
                   <button
@@ -596,7 +596,7 @@ const Event = () => {
                     <span className="date">📅 {event.date}</span>
                     <span className="location">📍 {event.location}</span>
                   </div>
-                  <p className="event-description">{event.description}</p>
+                  <p className="event-description">{event.details.overview}</p>
                   <button
                     className="open-btn"
                     onClick={() => setSelectedEvent(event)}
@@ -671,8 +671,8 @@ const Event = () => {
                 </div>
 
                 <div className="section">
-                  <h3>Overview</h3>
-                  <p>{selectedEvent.details.overview}</p>
+                  <h3>Description</h3>
+                  <p>{selectedEvent.description}</p>
                 </div>
 
                 <div className="section">

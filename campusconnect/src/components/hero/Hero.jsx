@@ -18,7 +18,7 @@ const buildEventSlide = (event) => ({
   id: event._id,
   title: event.title || "Upcoming Event",
   desc:
-    event.description ||
+    event.details.overview ||
     `${event.category || "Event"} at ${event.location || "Campus"}`,
   img: event.bannerImage
     ? event.bannerImage.startsWith("http")

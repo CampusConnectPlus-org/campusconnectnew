@@ -60,7 +60,7 @@ const AlumniSection = () => {
             <p className="year">{alumni.batch}</p>
             <p>{alumni.desc}</p>
             {/* <button  className="more-btn">View Profile</button> */}
-         <span><Link to={alumni.linkedin} ><button className="more-btn" id="linkedin" >LinkedIn</button></Link></span>
+         <span><Link to={alumni.linkedin} target="_blank"  ><button className="more-btn" id="linkedin" target="_blank"  >LinkedIn</button></Link></span>
           </div>
         </div>
       ))}

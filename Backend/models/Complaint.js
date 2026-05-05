@@ -60,42 +60,42 @@ complaintSchema
 
 // module.exports = mongoose.model("Complaint", complaintSchema);
 
-const mongoose=require("mongoose");
+// const mongoose=require("mongoose");
 
-const complaintSchema = new mongoose.Schema({
+// const complaintSchema = new mongoose.Schema({
 
-userName:String,
+// userName:String,
 
-userEmail:String,
+// userEmail:String,
 
-enrollment:String,
+// enrollment:String,
 
-department:String,
+// department:String,
 
-complaintText:{
-type:String,
-required:true
-},
+// complaintText:{
+// type:String,
+// required:true
+// },
 
-anonymous:{
-type:Boolean,
-default:false
-},
+// anonymous:{
+// type:Boolean,
+// default:false
+// },
 
-status:{
-type:String,
-default:"Pending"
-},
+// status:{
+// type:String,
+// default:"Pending"
+// },
 
-createdAt:{
-type:Date,
-default:Date.now
-}
+// createdAt:{
+// type:Date,
+// default:Date.now
+// }
 
-});
+// });
 
-module.exports=
-mongoose.model(
-"Complaint",
-complaintSchema
-);
+// module.exports=
+// mongoose.model(
+// "Complaint",
+// complaintSchema
+// );

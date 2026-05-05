@@ -1,6 +1,7 @@
 const express = require("express");
 const { reportPost, getReports, deleteReport } = require("../controllers/reportController");
 const verifyToken = require("../middleware/verifyToken");
+const Report = require("../models/Report");
 
 const router = express.Router();
 

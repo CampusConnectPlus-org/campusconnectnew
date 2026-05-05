@@ -39,6 +39,7 @@ import CompetitiveExams from './pages/competitiveexams/CompetitiveExams';
 import ManageCompetitiveExams from './pages/admindashboard/managecompetitiveexams/ManageCompetitiveExams';
 import LostFound from './pages/lostfound/LostFound';
 import ManageLostFound from './pages/admindashboard/managelostfound/ManageLostFound';
+// import { Link } from 'react-router-dom';
 const App = () => {
   const location = useLocation();
   const [user, setUser] = useState(null);
@@ -89,11 +90,11 @@ const App = () => {
 
   return (
 <>   
- {showComplaintLink && (
+ {/* {showComplaintLink && (
    <div className='c-box'>
     <Link className='c-link' to="/complaints">Complaint</Link>
   </div>
- )}
+ )} */}
     <div className='app-container'>
  
       {!hideMainNavbar && <Navbar user={user} setUser={setUser} admin={admin} setAdmin={setAdmin} />}

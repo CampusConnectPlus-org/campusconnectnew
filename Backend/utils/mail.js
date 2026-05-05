@@ -1,14 +1,15 @@
 const nodemailer = require("nodemailer");
 
 module.exports = async function (complaint) {
+    
 
     let transporter = nodemailer.createTransport({
 
         service: "gmail",
 
         auth: {
-            user: "yourgmail@gmail.com",
-            pass: "appPassword"
+           user: process.env.EMAIL_USER || "your_email@gmail.com",
+           pass: process.env.EMAIL_PASS || "your_app_password",
         }
 
     });

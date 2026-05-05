@@ -147,7 +147,7 @@ const AlumniPage = () => {
             <p className="year">{item.batch}</p>
             <p>{item.desc}</p>
             {/* <button className="more-btn">View Profile</button> */}
-         <span>  <a href={item.linkedin} >  <button className="more-btn" id="linkedin">LinkedIn</button></a></span>
+         <span>  <Link to={item.linkedin} target="_blank" ><button className="more-btn" id="linkedin" target="_blank" >LinkedIn</button></Link></span>
             
           </div>
         </div>

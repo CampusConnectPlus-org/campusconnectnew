@@ -1,22 +1,26 @@
 const express = require("express");
 const router = express.Router();
-// const nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer");
 const Complaint = require("../models/Complaint");
+const ics = require("ics");
 
 // Mailtrap Configuration (Password nahi chahiye!)
-// const transporter = nodemailer.createTransport({
-//     host: "smtp.mailtrap.io",
-//     port: 2525,
-//     auth: {
-//         user: "56803fd23a80d1", // Mailtrap se copy karo
-//         pass: "**8b2a" // Mailtrap se copy karo
-//     }
-// });
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+    auth: {
+        // user: "56803fd23a80d1", // Mailtrap se copy karo
+        // pass: "**8b2a" // Mailtrap se copy karo
+         user: process.env.EMAIL_USER ,
+           pass: process.env.EMAIL_PASS,
+    }
+});
 
 // Add Complaint with Email
 router.post("/add", async (req, res) => {
     try {
+       
         const { name, email, enrollment, department, complaintText, anonymous } = req.body;
+         
 
         // Validate complaint text is always required
         if (!complaintText || !complaintText.trim()) {
@@ -52,6 +56,7 @@ router.post("/add", async (req, res) => {
 
         await complaint.save();
 
+      
         // Send response immediately to user
         res.status(201).json({
             success: true,
@@ -65,7 +70,7 @@ router.post("/add", async (req, res) => {
             (async () => {
                 try {
                     const userEmail = {
-                        from: "noreply@compusconnect.com",
+                        from: process.env.EMAIL_USER ,
                         to: email,
                         subject: "✅ Complaint Received - CompusConnect",
                         html: `
@@ -101,11 +106,13 @@ router.post("/add", async (req, res) => {
         }
 
         // Admin Email
-        (async () => {
+        (async (adminEmail) => {
             try {
+        //          const Admin = require("../models/Admin");
+        // const { sendAdminNotification } = require("../utils/emailService");
                 const adminEmail = {
-                    from: "noreply@compusconnect.com",
-                    to: "admin@compusconnect.com",
+                    from:process.env.EMAIL_USER,
+                    to:  "gujarrajendra8955@gmail.com ",
                     subject: `🔔 New Complaint from ${name}`,
                     html: `
                         <div style="font-family: Arial;">
@@ -120,7 +127,7 @@ router.post("/add", async (req, res) => {
                 };
 
                 await transporter.sendMail(adminEmail);
-                console.log("✅ Admin email sent");
+                console.log("✅ Admin email sent to rajendra");
             } catch (emailError) {
                 console.error("⚠️ Error sending admin email:", emailError);
             }
