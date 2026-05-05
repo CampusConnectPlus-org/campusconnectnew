@@ -50,4 +50,56 @@
 /* .logout {
   margin-top: auto;
   cursor: pointer;
+<<<<<<< HEAD
 } */
+=======
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    left: auto;
+    top: auto;
+    padding: 16px;
+  }
+
+  .sidebar h2 {
+    margin-bottom: 16px;
+  }
+
+  .sidebar ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .sidebar li {
+    margin-bottom: 0;
+  }
+
+  .sidebar li a {
+    text-align: center;
+    padding: 10px 12px;
+  }
+
+  .logout {
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    padding: 14px;
+  }
+
+  .sidebar ul {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar h2 {
+    font-size: 1.15rem;
+  }
+}
+>>>>>>> 665a389004e44af6a6c2bd0a551560a0e8d580ca

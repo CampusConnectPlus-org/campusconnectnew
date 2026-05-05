@@ -77,7 +77,10 @@
 }
 
 .btn-container {
-  text-align: center;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 8px;
 }
 
 .more-btn {
@@ -132,5 +135,9 @@
   .alumni-image img {
     width: 180px;
     height: 180px;
+  }
+
+  .btn-container {
+    justify-content: center;
   }
 }

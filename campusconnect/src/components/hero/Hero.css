@@ -21,6 +21,13 @@
   padding: 4px 8px 4px 10px;
 }
 
+.hero-media {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
 .hero-text h1 {
   /* font-size: 43px; */
   color: white;
@@ -41,6 +48,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .hero-btn,
@@ -106,5 +115,18 @@
   .hero-image img {
     width: 100%;
     height: 230px;
+  }
+  .hero-media {
+    align-items: center;
+  }
+  .hero-btn-group {
+    justify-content: center;
+  }
+}
+
+@media (min-width: 769px) {
+  /* keep buttons below image on desktop but align start */
+  .hero-media {
+    align-items: flex-start;
   }
 }
