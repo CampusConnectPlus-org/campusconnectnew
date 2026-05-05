@@ -1,0 +1,273 @@
+:root {
+  --bg: #eaf2ff;
+  --surface: #ffffff;
+  --surface-soft: #f4f8ff;
+  --text: #172033;
+  --muted: #5c6b84;
+  --border: #d8e4f5;
+  --primary: #2f5fb8;
+  --primary-2: #4a78cf;
+  --primary-soft: #e8f0ff;
+  --shadow: 0 14px 30px rgba(15, 23, 42, 0.22);
+}
+
+.scholarship-wrapper {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(96, 165, 250, 0.18) 0%, transparent 38%),
+    radial-gradient(circle at 88% 0%, rgba(147, 197, 253, 0.16) 0%, transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(223, 236, 255, 0.45) 100%),
+    var(--bg);
+  padding: 26px;
+}
+
+.scholarship-container {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.scholarship-header {
+  margin-bottom: 30px;
+  padding-left: 12px;
+  border-left: 4px solid #86aee4;
+}
+
+.scholarship-header h2 {
+  font-size: 1.8rem;
+  color: #17315d;
+  margin-bottom: 6px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.scholarship-header p {
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.scholarship-message {
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  animation: slideDown 0.3s ease;
+}
+
+.scholarship-message.success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.scholarship-message.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fccf8f;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scholarship-form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+
+.form-section {
+  margin-bottom: 28px;
+}
+
+.form-section:last-child {
+  margin-bottom: 0;
+}
+
+.form-section-title {
+  font-size: 1.1rem;
+  color: #17315d;
+  margin: 0 0 18px;
+  padding-left: 12px;
+  border-left: 4px solid var(--primary);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.form-section:first-child .form-section-title {
+  margin-top: 0;
+}
+
+.form-field {
+  margin-bottom: 18px;
+}
+
+.form-field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #36454f;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.form-field-input,
+.form-field-select,
+.form-field-textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 3px solid var(--primary);
+  border-radius: 10px;
+  font-size: 14px;
+  box-sizing: border-box;
+  background: #ffffff;
+  color: var(--text);
+  transition: all 0.2s ease;
+  font-family: inherit;
+  margin-top: 6px;
+}
+
+.form-field-input:focus,
+.form-field-select:focus,
+.form-field-textarea:focus {
+  outline: none;
+  border-color: #2d61bc;
+  box-shadow: 0 0 0 3px rgba(47, 95, 184, 0.12);
+}
+
+.form-field-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.form-checkboxes {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  transition: all 0.2s ease;
+}
+
+.checkbox-item:hover {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.checkbox-item.checked {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: #17315d;
+  font-weight: 600;
+}
+
+.checkbox-item input[type="checkbox"] {
+  display: none;
+}
+
+.form-help-text {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--primary) 0%, #2d61bc 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 12px;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(47, 95, 184, 0.3);
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .scholarship-wrapper {
+    padding: 20px;
+  }
+
+  .scholarship-header h2 {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .scholarship-wrapper {
+    padding: 15px;
+  }
+
+  .scholarship-container {
+    max-width: 100%;
+  }
+
+  .scholarship-form-card {
+    padding: 20px;
+  }
+
+  .form-row,
+  .form-row-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .form-field-input,
+  .form-field-select,
+  .form-field-textarea {
+    font-size: 16px;
+  }
+
+  .scholarship-header {
+    margin-bottom: 20px;
+  }
+
+  .scholarship-header h2 {
+    font-size: 1.4rem;
+  }
+}

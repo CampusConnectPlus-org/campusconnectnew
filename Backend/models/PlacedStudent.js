@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const placedStudentSchema = new mongoose.Schema({
-    enrollmentNo: { type: String, required: true, unique: true },
+    enrollmentNo: { type: String, required: true },
     name: { type: String, required: true },
     branch: { type: String, required: true },
     company: { type: String, required: true },

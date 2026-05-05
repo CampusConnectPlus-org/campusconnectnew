@@ -7,6 +7,7 @@ import AlumniSection from './components/alumniSection/AlumniSection'
 import CompanySlider from './components/campanylist/CompanySlider'
 import Impact from './components/impacts/Impact'
 import Footer from './components/footer/Footer'
+import HomeEnhancements from './components/homeEnhancements/HomeEnhancements'
 import Login from './pages/login/Login'
 import Placement from './pages/placement/Placement'
 import Event from './pages/event/Event'
@@ -20,6 +21,7 @@ import AdminEvents from './pages/admindashboard/manageevent/AdminEvents'
 import ManageUser from './pages/admindashboard/manageuser/ManageUser'
 import ManageClubs from './pages/admindashboard/manageclubs/ManageClubs'
 import ManagePlacements from './pages/admindashboard/manageplacements/ManagePlacements'
+import ManageEventParticipation from './pages/admindashboard/manageevent/ManageEventParticipation';
 // import AddAdmin from './pages/admindashboard/adminadd/AddAdmin'
 import CTAEClub from './pages/clubs/CTAEClub'
 // import ManageEvent from './pages/admindashboard/manageevent/ManageEvent'
@@ -27,9 +29,16 @@ import AboutCtae from './pages/aboutctae/AboutCtae'
 import ComplaintPage from './pages/complaint/ComplaintPage'
 import ComplaintBox from './pages/admindashboard/viewcomplaint/ComplaintBox'
 import './App.css'
-import { Link } from 'react-router-dom'
-// import ComplaintPage from './pages/complaint/ComplaintPage'
-
+import ManageReports from './pages/admindashboard/managereports/ManageReports';
+import Feed from "./pages/Feed/Feed";
+import AdminScholarshipForm from './pages/admindashboard/AdminScholarshipForm/AdminScholarshipForm';
+import Scholarships from './pages/Scholarships/Scholarships';
+import ComplaintForm from './pages/Complaint/ComplaintForm';
+import ManageComplaints from './pages/admindashboard/ManageComplaints/ManageComplaints';
+import CompetitiveExams from './pages/competitiveexams/CompetitiveExams';
+import ManageCompetitiveExams from './pages/admindashboard/managecompetitiveexams/ManageCompetitiveExams';
+import LostFound from './pages/lostfound/LostFound';
+import ManageLostFound from './pages/admindashboard/managelostfound/ManageLostFound';
 const App = () => {
   const location = useLocation();
   const [user, setUser] = useState(null);
@@ -90,13 +99,26 @@ const App = () => {
       {!hideMainNavbar && <Navbar user={user} setUser={setUser} admin={admin} setAdmin={setAdmin} />}
       <Routes>
         <Route path='/' element={
-          <>
-            <Hero />
-            <AlumniSection />
-            <CompanySlider />
-            <Impact />
-            <Footer />
-          </>
+          <div className="home-landing">
+            <section className="home-block hero-block">
+              <Hero />
+            </section>
+            <section className="home-block enhance-block">
+              <HomeEnhancements />
+            </section>
+            <section className="home-block alumni-block">
+              <AlumniSection />
+            </section>
+            <section className="home-block companies-block">
+              <CompanySlider />
+            </section>
+            <section className="home-block impact-block">
+              <Impact />
+            </section>
+            <section className="home-block footer-block">
+              <Footer />
+            </section>
+          </div>
         } />
 
         <Route path="/login" element={<Login setUser={setUser} />} />
@@ -107,9 +129,11 @@ const App = () => {
           <Route path='/event' element={<Event />} />
           <Route path='/clubs' element={<CTAEClub />} />
           <Route path='/aboutctae' element={<AboutCtae />} />
-          <Route path='/complaints' element={<ComplaintPage />} />
-
-
+          <Route path='/feed' element={<Feed />} />
+          <Route path='/scholarships' element={<Scholarships />} />
+            <Route path='/competitive-exams' element={<CompetitiveExams />} />
+          <Route path='/lost-found' element={<LostFound />} />
+<Route path='/complaints' element={<ComplaintForm />} />
         </Route>
 
 
@@ -121,14 +145,19 @@ const App = () => {
           <Route path='manageevent' element={< AdminEvents/>} />
           <Route path='manageclubs' element={<ManageClubs/>} />
           <Route path='manageplacements' element={<ManagePlacements/>} />
-          <Route path='viewcomplaint' element={<ComplaintBox/>}/>
-          
-
-          {/* <Route path='adminadd' element={<AddAdmin/>} /> */}
-
-
-</Route>
-<Route path='/adminlogin' element={<AdminLogin setAdmin={setAdmin}/>}/>
+          {/* //  <Route path='adminadd' element={<AddAdmin/>} />// */}
+           <Route path='managereports' element={<ManageReports />} />
+          {/* //<Route path='manageevent' element={< AdminEvents />} /> */}
+          <Route path='manage-participation' element={<ManageEventParticipation />} />
+          {/* <Route path='manageclubs' element={<ManageClubs />} /> */}
+          {/* <Route path='manageplacements' element={<ManagePlacements />} /> */}
+          {/* //  <Route path='adminadd' element={<AddAdmin/>} />// */}
+          <Route path='managescholarships' element={<AdminScholarshipForm />} />
+          <Route path='managecomplaints' element={<ManageComplaints />} />
+          <Route path='managecompetitiveexams' element={<ManageCompetitiveExams />} />
+          <Route path='managelostfound' element={<ManageLostFound />} />
+        </Route>
+        <Route path='/adminlogin' element={<AdminLogin setAdmin={setAdmin} />} />
       </Routes>
        
     </div>

@@ -168,6 +168,20 @@ const AdminEvents = () => {
     setGalleryFiles([]);
   };
 
+  // Delete participant from event
+  const deleteParticipant = async (eventId, participantEmail) => {
+    if (!window.confirm("Delete this participant from the event?")) return;
+
+    try {
+      await axios.delete(`${API}/events/${eventId}/participants/${participantEmail}`);
+      fetchEvents();
+      alert("Participant deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting participant:", error);
+      alert("Failed to delete participant");
+    }
+  };
+
   const upcomingEvents = events.filter(
     (event) => getStatus(event.date) === "upcoming",
   );
@@ -642,6 +656,7 @@ const AdminEvents = () => {
                       <th>Branch</th>
                       <th>Email</th>
                       <th>Mobile</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
 
@@ -653,6 +668,14 @@ const AdminEvents = () => {
                         <td>{p.branch}</td>
                         <td>{p.email}</td>
                         <td>{p.mobile}</td>
+                        <td>
+                          <button
+                            className="delete-btn"
+                            onClick={() => deleteParticipant(event._id, p.email)}
+                          >
+                            🗑️ Delete
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

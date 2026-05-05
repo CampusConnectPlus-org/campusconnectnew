@@ -1,0 +1,181 @@
+EVENT PARTICIPATION REQUEST FEATURE - SETUP GUIDE
+=====================================================
+
+OVERVIEW
+--------
+This feature allows users to request participation in events, and admins can approve or reject these requests.
+When an admin reviews a request, the user receives an email notification about the decision.
+
+FILES CREATED/MODIFIED
+-----------------------
+
+1. BACKEND FILES:
+   ✓ Backend/models/EventParticipation.js - New model for tracking participation requests
+   ✓ Backend/utils/emailService.js - Email notification service
+   ✓ Backend/routes/eventRoutes.js - Updated with new participation endpoints
+   ✓ Backend/.env.example - Email configuration template
+
+2. FRONTEND FILES:
+   ✓ campusconnect/src/pages/event/Event.jsx - Updated participation form
+   ✓ campusconnect/src/pages/admindashboard/manageevent/ManageEventParticipation.jsx - Admin management page
+   ✓ campusconnect/src/pages/admindashboard/manageevent/ManageEventParticipation.css - Styling
+
+SETUP INSTRUCTIONS
+-------------------
+
+1. EMAIL CONFIGURATION:
+   a) Go to Backend/.env.example and create a .env file in the Backend folder
+   b) For Gmail:
+      - Go to https://myaccount.google.com/apppasswords
+      - Select "Mail" and "Windows Computer" (or your device)
+      - Generate an App Password
+      - Copy it to the .env file
+      
+   Example .env file:
+   EMAIL_USER=your_email@gmail.com
+   EMAIL_PASS=your_app_specific_password
+   
+   c) The emailService.js will automatically use these credentials
+
+2. BACKEND SETUP:
+   ✓ EventParticipation model is ready
+   ✓ All endpoints are added to eventRoutes.js
+   ✓ Email notifications are configured
+
+3. FRONTEND SETUP:
+   a) The Event.jsx component is updated to use the new /participate endpoint
+   b) Users need to be logged in with userId and enrollmentNo in localStorage
+   c) The ManageEventParticipation.jsx needs to be imported in the admin dashboard
+
+4. INTEGRATE MANAGEMENT PAGE IN ADMIN DASHBOARD:
+   Import and add this component to your admin dashboard routes/navigation:
+   
+   import ManageEventParticipation from "./manageevent/ManageEventParticipation";
+   
+   Then add it to your admin dashboard's route handling.
+
+NEW API ENDPOINTS
+-----------------
+
+1. USER ENDPOINTS:
+   POST /api/events/participate/:eventId
+   - Creates a participation request
+   - Body: { userId, name, email, enrollmentNo, year, branch, mobile, gender }
+   - Response: Returns created participation request and sends email to admins
+
+2. ADMIN ENDPOINTS:
+   GET /api/events/participation-requests
+   - Gets all participation requests (can filter by status using query param)
+   - Query: ?status=pending|approved|rejected|all
+   
+   GET /api/events/participation-requests/event/:eventId
+   - Gets participation requests for a specific event
+   
+   PUT /api/events/participation-requests/:id/approve
+   - Approves a participation request
+   - Body: { adminId }
+   - Sends approval email to user
+   
+   PUT /api/events/participation-requests/:id/reject
+   - Rejects a participation request
+   - Body: { adminId, adminMessage }
+   - Sends rejection email to user with message
+
+DATABASE SCHEMA
+---------------
+
+EventParticipation Schema:
+{
+  event: ObjectId (reference to Event),
+  user: ObjectId (reference to User),
+  name: String,
+  email: String,
+  enrollmentNo: String,
+  year: String,
+  branch: String,
+  mobile: String,
+  gender: String,
+  eventTitle: String,
+  status: "pending" | "approved" | "rejected",
+  appliedAt: Date,
+  reviewedAt: Date,
+  reviewedBy: ObjectId (reference to Admin),
+  adminMessage: String
+}
+
+USER FLOW
+---------
+
+1. User logs in and navigates to an event
+2. User clicks "Participate" button
+3. User fills out participation form and submits
+4. Backend creates an EventParticipation request with status "pending"
+5. Emails are sent to all admins notifying them of the request
+6. Admin logs into the admin dashboard
+7. Admin navigates to "Manage Event Participation"
+8. Admin views pending requests and can:
+   - Click "View Details" to see full information
+   - Click "Approve" to accept (user gets approval email)
+   - Click "Reject" to reject with optional message (user gets rejection email)
+9. User receives email with approval or rejection status
+
+EMAIL TEMPLATES
+---------------
+
+The feature includes three email templates:
+1. Admin Notification - Notifies admin of new participation request
+2. Approval Email - Confirms user's participation is approved
+3. Rejection Email - Informs user their request was rejected
+
+All emails are HTML-formatted with professional styling.
+
+TESTING CHECKLIST
+------------------
+
+□ Start backend server
+□ Check .env file is configured with email credentials
+□ Create test event in the system
+□ Log in as a user with valid enrollmentNo
+□ Click participate on an event
+□ Fill out and submit the form
+□ Check admin email for notification
+□ Log in as admin
+□ Navigate to Manage Event Participation
+□ View pending request details
+□ Test approve button - check user receives approval email
+□ Test reject button with message - check user receives rejection email
+□ Test filtering by status (pending, approved, rejected)
+
+TROUBLESHOOTING
+---------------
+
+1. "Failed to create participation request" error:
+   - Check that user is logged in
+   - Check that enrollmentNo is stored in localStorage
+   - Check backend logs for more details
+
+2. Emails not sending:
+   - Verify .env file has correct EMAIL_USER and EMAIL_PASS
+   - For Gmail, ensure App Password is used (not regular password)
+   - Check internet connection
+   - Check Gmail account security settings
+
+3. Admin doesn't see requests:
+   - Refresh the page
+   - Check that participation requests were actually created
+   - Verify admin user is properly authenticated
+
+4. Status filtering not working:
+   - Clear browser cache
+   - Check network tab in browser dev tools
+   - Verify query parameters are being sent correctly
+
+FUTURE ENHANCEMENTS
+-------------------
+
+- Add bulk approval/rejection feature for admins
+- Add notification history/archive
+- Add user dashboard to view their participation requests
+- Add reminder emails for pending requests
+- Add SMS notifications (requires SMS gateway integration)
+- Add event statistics dashboard (total applicants, approval rate, etc.)

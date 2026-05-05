@@ -1,21 +1,21 @@
 .slider-container {
   width: 100%;
   overflow: hidden;
-  background: #f8f9fa;
-  padding: 30px 0;
+  background: transparent;
+  padding: 34px 0;
 }
 
 .slider-track {
   display: flex;
   width: max-content;
-  animation: scroll 20s linear infinite;
+  animation: scroll 26s linear infinite;
 }
 
 .company-card {
   min-width: 200px;
-  margin: 0 30px;
+  margin: 0 26px;
   text-align: center;
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease;
 }
 
 .company-card img {
@@ -23,15 +23,25 @@
   height: 60px;
   object-fit: contain;
   margin-bottom: 10px;
+  filter: grayscale(100%) contrast(0.95);
+  opacity: 0.8;
+  transition: filter 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
 }
 
 .company-card p {
   font-weight: 600;
-  font-size: 16px;
+  font-size: 14px;
+  color: #2f4e7c;
 }
 
 .company-card:hover {
-  transform: scale(1.1);
+  transform: translateY(-2px);
+}
+
+.company-card:hover img {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.04);
 }
 
 /* Animation */

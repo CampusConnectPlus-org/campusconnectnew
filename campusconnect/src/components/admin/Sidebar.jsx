@@ -43,6 +43,15 @@ const Sidebar = () => {
           </NavLink>
         </li>
 
+        <li>
+          <NavLink
+            to="/admindashboard/manage-participation"
+            className={({ isActive }) => (isActive ? "nav-active" : "")}
+          >
+            Participation Requests
+          </NavLink>
+        </li>
+
         {/* NEW: Clubs Section */}
         <li>
           <NavLink
@@ -63,18 +72,41 @@ const Sidebar = () => {
             Placements
           </NavLink>
         </li>
-          
-
-      <li>
-        <NavLink
-          to="/admindashboard/viewcomplaint"
-          className={({ isActive }) => (isActive ? "nav-active" : "")}
-        >
-          View Complaints
-        </NavLink>  
-      </li>
-
-
+        <li>
+          <NavLink
+            to="/admindashboard/managecompetitiveexams"
+            className={({ isActive }) => (isActive ? "nav-active" : "")}
+          >
+            Competitive Exams
+          </NavLink>
+        </li>
+        <li>
+  <NavLink
+    to="/admindashboard/managescholarships"
+    className={({ isActive }) => (isActive ? "nav-active" : "")}
+  >
+    Scholarships
+  </NavLink>
+        </li>
+        <li>
+  <NavLink to="/admindashboard/managecomplaints"
+    className={({ isActive }) => (isActive ? "nav-active" : "")}>
+    Complaints
+  </NavLink>
+</li>
+<li>
+  <NavLink to="/admindashboard/managereports" className={({ isActive }) => (isActive ? "nav-active" : "")}>
+    Manage Reports
+  </NavLink>
+</li>
+        <li>
+          <NavLink
+            to="/admindashboard/managelostfound"
+            className={({ isActive }) => (isActive ? "nav-active" : "")}
+          >
+            Lost & Found
+          </NavLink>
+        </li>
         {/* NEW: Add Admin Section */}
         {/* <li>
           <NavLink

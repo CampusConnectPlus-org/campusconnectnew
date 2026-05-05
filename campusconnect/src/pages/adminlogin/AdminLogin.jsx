@@ -62,10 +62,10 @@ export default function AdminLogin({setAdmin}) {
                         Login
                     </button>
 
-                    <div className="login-links">
+                    {/* <div className="login-links">
                         <a href="#">Forgot password?</a>
                        
-                    </div>
+                    </div> */}
                 </form>
             </div>
         </div>

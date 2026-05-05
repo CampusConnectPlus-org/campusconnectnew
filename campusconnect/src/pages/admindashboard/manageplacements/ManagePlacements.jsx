@@ -41,7 +41,12 @@ const ManagePlacements = () => {
         role: '',
         branch: 'All',
         package: '',
+        openingDate: '',
+        closingDate: '',
         date: '',
+        venue: '',
+        reportingTime: '',
+        additionalInstructions: '',
         link: ''
     });
 
@@ -56,7 +61,7 @@ const ManagePlacements = () => {
     const [trendForm, setTrendForm] = useState({
         year: new Date().getFullYear(),
         avg: '',
-        companies: ''
+        studentsPlaced: ''
     });
 
     const API_BASE = 'http://localhost:5000/api/placements';
@@ -125,6 +130,17 @@ const ManagePlacements = () => {
 
     const handleAddDrive = async (e) => {
         e.preventDefault();
+
+        // Validate dates
+        if (driveForm.openingDate && driveForm.closingDate) {
+            const openingDate = new Date(driveForm.openingDate);
+            const closingDate = new Date(driveForm.closingDate);
+            if (openingDate > closingDate) {
+                alert('Opening date cannot be later than closing date');
+                return;
+            }
+        }
+
         try {
             const token = localStorage.getItem('token');
             const response = await axios.post(`${API_BASE}/drives`, driveForm, {
@@ -148,9 +164,33 @@ const ManagePlacements = () => {
             role: '',
             branch: 'All',
             package: '',
+            openingDate: '',
+            closingDate: '',
             date: '',
+            venue: '',
+            reportingTime: '',
+            additionalInstructions: '',
             link: ''
         });
+    };
+
+    const formatISODate = (dateValue) => {
+        if (!dateValue) return '';
+        const parsed = new Date(dateValue);
+        return Number.isNaN(parsed.getTime()) ? '' : parsed.toISOString().slice(0, 10);
+    };
+
+    const formatTimeLabel = (timeString) => {
+        if (!timeString) return null;
+        try {
+            // Parse time string (HH:MM format)
+            const [hours, minutes] = timeString.split(':').map(Number);
+            const period = hours >= 12 ? 'PM' : 'AM';
+            const displayHours = hours % 12 || 12; // Convert 0 to 12 for 12 AM
+            return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
+        } catch (error) {
+            return timeString; // Return original if parsing fails
+        }
     };
 
     const handleOpenEditDrive = (drive) => {
@@ -160,7 +200,12 @@ const ManagePlacements = () => {
             role: drive.role,
             branch: drive.branch,
             package: drive.package,
-            date: drive.date,
+            openingDate: formatISODate(drive.openingDate),
+            closingDate: formatISODate(drive.closingDate),
+            date: formatISODate(drive.date),
+            venue: drive.venue || '',
+            reportingTime: drive.reportingTime || '',
+            additionalInstructions: drive.additionalInstructions || '',
             link: drive.link || ''
         });
         setShowEditDriveModal(true);
@@ -168,6 +213,17 @@ const ManagePlacements = () => {
 
     const handleUpdateDrive = async (e) => {
         e.preventDefault();
+
+        // Validate dates
+        if (driveForm.openingDate && driveForm.closingDate) {
+            const openingDate = new Date(driveForm.openingDate);
+            const closingDate = new Date(driveForm.closingDate);
+            if (openingDate > closingDate) {
+                alert('Opening date cannot be later than closing date');
+                return;
+            }
+        }
+
         try {
             const token = localStorage.getItem('token');
             const response = await axios.put(`${API_BASE}/drives/${editingDriveId}`, driveForm, {
@@ -192,7 +248,12 @@ const ManagePlacements = () => {
             role: '',
             branch: 'All',
             package: '',
+            openingDate: '',
+            closingDate: '',
             date: '',
+            venue: '',
+            reportingTime: '',
+            additionalInstructions: '',
             link: ''
         });
     };
@@ -241,6 +302,7 @@ const ManagePlacements = () => {
         e.preventDefault();
         try {
             const token = localStorage.getItem('token');
+            console.log('Submitting placed student form:', placedForm);
             const response = await axios.post(`${API_BASE}/placed-students`, placedForm, {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -249,12 +311,16 @@ const ManagePlacements = () => {
             alert('Placed student added successfully');
         } catch (err) {
             console.error('Error adding placed student:', err);
+            console.error('Error details:', {
+                status: err.response?.status,
+                message: err.response?.data?.message,
+                error: err.response?.data?.error,
+                fullError: err.response?.data
+            });
             let errorMessage = 'Failed to add placed student';
 
             if (err.response?.status === 404) {
                 errorMessage = err.response?.data?.message || 'Student not found. Please verify the enrollment number.';
-            } else if (err.response?.status === 409) {
-                errorMessage = err.response?.data?.message || 'This student is already in the placed students list.';
             } else if (err.response?.status === 400) {
                 errorMessage = err.response?.data?.message || 'Please fill in all required fields.';
             } else if (err.response?.data?.message) {
@@ -338,7 +404,7 @@ const ManagePlacements = () => {
         setTrendForm({
             year: new Date().getFullYear(),
             avg: '',
-            companies: ''
+            studentsPlaced: ''
         });
     };
 
@@ -347,7 +413,7 @@ const ManagePlacements = () => {
         setTrendForm({
             year: trend.year,
             avg: trend.avg,
-            companies: trend.companies
+            studentsPlaced: trend.studentsPlaced
         });
         setShowEditTrendModal(true);
     };
@@ -375,7 +441,7 @@ const ManagePlacements = () => {
         setTrendForm({
             year: new Date().getFullYear(),
             avg: '',
-            companies: ''
+            studentsPlaced: ''
         });
     };
 
@@ -411,6 +477,26 @@ const ManagePlacements = () => {
         }
     };
 
+    const compareEnrollmentNo = (a, b) => {
+        const normalize = (value) => value ? value.split('/').map(part => part.trim()) : [];
+        const [yearA = '', deptA = '', seqA = ''] = normalize(a.enrollmentNo || a.enrollmentNumber || '');
+        const [yearB = '', deptB = '', seqB = ''] = normalize(b.enrollmentNo || b.enrollmentNumber || '');
+
+        const yearCompare = yearA.localeCompare(yearB, undefined, { numeric: true });
+        if (yearCompare !== 0) return yearCompare;
+
+        const deptCompare = deptA.localeCompare(deptB);
+        if (deptCompare !== 0) return deptCompare;
+
+        const numA = Number(seqA);
+        const numB = Number(seqB);
+        if (!Number.isNaN(numA) && !Number.isNaN(numB)) {
+            return numA - numB;
+        }
+
+        return seqA.localeCompare(seqB);
+    };
+
     if (loading) {
         return <div className="manage-placements"><p>Loading placement data...</p></div>;
     }
@@ -424,13 +510,15 @@ const ManagePlacements = () => {
     });
 
     // Filter logic for Placed Students
-    const filteredPlacedStudents = placedStudents.filter(student => {
-        const matchesName = student.name.toLowerCase().includes(placedSearchName.toLowerCase());
-        const matchesCompany = student.company.toLowerCase().includes(placedSearchCompany.toLowerCase());
-        const matchesBranch = placedFilterBranch === 'All' || student.branch === placedFilterBranch;
-        const matchesPackage = placedFilterPackage === '' || String(student.package).includes(placedFilterPackage);
-        return matchesName && matchesCompany && matchesBranch && matchesPackage;
-    });
+    const filteredPlacedStudents = placedStudents
+        .filter(student => {
+            const matchesName = student.name.toLowerCase().includes(placedSearchName.toLowerCase());
+            const matchesCompany = student.company.toLowerCase().includes(placedSearchCompany.toLowerCase());
+            const matchesBranch = placedFilterBranch === 'All' || student.branch === placedFilterBranch;
+            const matchesPackage = placedFilterPackage === '' || String(student.package).includes(placedFilterPackage);
+            return matchesName && matchesCompany && matchesBranch && matchesPackage;
+        })
+        .sort(compareEnrollmentNo);
 
     return (
         <div className="manage-placements">
@@ -509,7 +597,12 @@ const ManagePlacements = () => {
                                     <th>Role</th>
                                     <th>Branch</th>
                                     <th>CTC</th>
-                                    <th>Date</th>
+                                    <th>Form Open</th>
+                                    <th>Form Close</th>
+                                    <th>Drive Date</th>
+                                    <th>Venue</th>
+                                    <th>Reporting</th>
+                                    <th>Information</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -520,7 +613,14 @@ const ManagePlacements = () => {
                                         <td>{drive.role}</td>
                                         <td>{drive.branch}</td>
                                         <td>{drive.package} LPA</td>
-                                        <td>{drive.date}</td>
+                                        <td>{formatISODate(drive.openingDate) || '-'}</td>
+                                        <td>{formatISODate(drive.closingDate) || '-'}</td>
+                                        <td>{formatISODate(drive.date) || '-'}</td>
+                                        <td>{drive.venue || '-'}</td>
+                                        <td>{formatTimeLabel(drive.reportingTime) || '-'}</td>
+                                        <td style={{ maxWidth: '200px', wordWrap: 'break-word' }}>
+                                            {drive.additionalInstructions || '-'}
+                                        </td>
                                         <td>
                                             <button
                                                 className="action-btn edit"
@@ -651,7 +751,7 @@ const ManagePlacements = () => {
                                 <tr>
                                     <th>Year</th>
                                     <th>Average Package (LPA)</th>
-                                    <th>Companies</th>
+                                    <th>Students Placed</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -660,7 +760,7 @@ const ManagePlacements = () => {
                                     <tr key={trend._id}>
                                         <td>{trend.year}</td>
                                         <td>{trend.avg}</td>
-                                        <td>{trend.companies}</td>
+                                        <td>{trend.studentsPlaced}</td>
                                         <td>
                                             <button
                                                 className="action-btn edit"
@@ -817,22 +917,72 @@ const ManagePlacements = () => {
                                         <input
                                             id="edit-drive-package"
                                             type="number"
-                                            step="0.1"
+                                            step="0.01"
                                             value={driveForm.package}
                                             onChange={(e) => setDriveForm({ ...driveForm, package: e.target.value })}
                                             required
-                                            placeholder="e.g., 12"
+                                            placeholder="e.g., 12.50"
+                                        /></label>
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group-placement">
+                                    <label>Form Opening Date
+                                        <input
+                                            id="edit-drive-openingDate"
+                                            type="date"
+                                            value={driveForm.openingDate}
+                                            onChange={(e) => setDriveForm({ ...driveForm, openingDate: e.target.value })}
+                                        /></label>
+                                </div>
+                                <div className="form-group-placement">
+                                    <label>Form Closing Date
+                                        <input
+                                            id="edit-drive-closingDate"
+                                            type="date"
+                                            value={driveForm.closingDate}
+                                            onChange={(e) => setDriveForm({ ...driveForm, closingDate: e.target.value })}
+                                        /></label>
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group-placement">
+                                    <label>Drive Date
+                                        <input
+                                            id="edit-drive-date"
+                                            type="date"
+                                            value={driveForm.date}
+                                            onChange={(e) => setDriveForm({ ...driveForm, date: e.target.value })}
+                                        /></label>
+                                </div>
+                                <div className="form-group-placement">
+                                    <label>Venue
+                                        <input
+                                            id="edit-drive-venue"
+                                            type="text"
+                                            value={driveForm.venue}
+                                            onChange={(e) => setDriveForm({ ...driveForm, venue: e.target.value })}
+                                            placeholder="e.g., Seminar Hall, Room 101"
                                         /></label>
                                 </div>
                             </div>
                             <div className="form-group-placement">
-                                <label>Date *
+                                <label>Reporting Time
                                     <input
-                                        id="edit-drive-date"
-                                        type="date"
-                                        value={driveForm.date}
-                                        onChange={(e) => setDriveForm({ ...driveForm, date: e.target.value })}
-                                        required
+                                        id="edit-drive-reportingTime"
+                                        type="time"
+                                        value={driveForm.reportingTime}
+                                        onChange={(e) => setDriveForm({ ...driveForm, reportingTime: e.target.value })}
+                                    /></label>
+                            </div>
+                            <div className="form-group-placement">
+                                <label>Additional Information
+                                    <textarea
+                                        id="edit-drive-additionalInstructions"
+                                        value={driveForm.additionalInstructions}
+                                        onChange={(e) => setDriveForm({ ...driveForm, additionalInstructions: e.target.value })}
+                                        placeholder="Enter any additional information for candidates"
+                                        rows="4"
                                     /></label>
                             </div>
                             <div className="form-group-placement">
@@ -994,22 +1144,72 @@ const ManagePlacements = () => {
                                         <input
                                             id="drive-package"
                                             type="number"
-                                            step="0.1"
+                                            step="0.01"
                                             value={driveForm.package}
                                             onChange={(e) => setDriveForm({ ...driveForm, package: e.target.value })}
                                             required
-                                            placeholder="e.g., 12"
+                                            placeholder="e.g., 12.50"
+                                        /></label>
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group-placement">
+                                    <label>Form Opening Date
+                                        <input
+                                            id="drive-openingDate"
+                                            type="date"
+                                            value={driveForm.openingDate}
+                                            onChange={(e) => setDriveForm({ ...driveForm, openingDate: e.target.value })}
+                                        /></label>
+                                </div>
+                                <div className="form-group-placement">
+                                    <label>Form Closing Date
+                                        <input
+                                            id="drive-closingDate"
+                                            type="date"
+                                            value={driveForm.closingDate}
+                                            onChange={(e) => setDriveForm({ ...driveForm, closingDate: e.target.value })}
+                                        /></label>
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group-placement">
+                                    <label>Drive Date
+                                        <input
+                                            id="drive-date"
+                                            type="date"
+                                            value={driveForm.date}
+                                            onChange={(e) => setDriveForm({ ...driveForm, date: e.target.value })}
+                                        /></label>
+                                </div>
+                                <div className="form-group-placement">
+                                    <label>Venue
+                                        <input
+                                            id="drive-venue"
+                                            type="text"
+                                            value={driveForm.venue}
+                                            onChange={(e) => setDriveForm({ ...driveForm, venue: e.target.value })}
+                                            placeholder="e.g., Seminar Hall, Room 101"
                                         /></label>
                                 </div>
                             </div>
                             <div className="form-group-placement">
-                                <label>Date *
+                                <label>Reporting Time
                                     <input
-                                        id="drive-date"
-                                        type="date"
-                                        value={driveForm.date}
-                                        onChange={(e) => setDriveForm({ ...driveForm, date: e.target.value })}
-                                        required
+                                        id="drive-reportingTime"
+                                        type="time"
+                                        value={driveForm.reportingTime}
+                                        onChange={(e) => setDriveForm({ ...driveForm, reportingTime: e.target.value })}
+                                    /></label>
+                            </div>
+                            <div className="form-group-placement">
+                                <label>Additional Information
+                                    <textarea
+                                        id="drive-additionalInstructions"
+                                        value={driveForm.additionalInstructions}
+                                        onChange={(e) => setDriveForm({ ...driveForm, additionalInstructions: e.target.value })}
+                                        placeholder="Enter any additional information for candidates"
+                                        rows="4"
                                     /></label>
                             </div>
                             <div className="form-group-placement">
@@ -1110,11 +1310,11 @@ const ManagePlacements = () => {
                                     <input
                                         id="edit-placed-package"
                                         type="number"
-                                        step="0.1"
+                                        step="0.01"
                                         value={placedForm.package}
-                                        onChange={(e) => setPlacedForm({ ...placedForm, package: e.target.value })}
+                                        onChange={(e) => setPlacedForm({ ...placedForm, package: e.target.value === '' ? '' : parseFloat(e.target.value) })}
                                         required
-                                        placeholder="e.g., 12"
+                                        placeholder="e.g., 12.50"
                                     /></label>
                             </div>
                             <div className="modal-footer">
@@ -1205,11 +1405,11 @@ const ManagePlacements = () => {
                                     <input
                                         id="placed-package"
                                         type="number"
-                                        step="0.1"
+                                        step="0.01"
                                         value={placedForm.package}
-                                        onChange={(e) => setPlacedForm({ ...placedForm, package: e.target.value })}
+                                        onChange={(e) => setPlacedForm({ ...placedForm, package: e.target.value === '' ? '' : parseFloat(e.target.value) })}
                                         required
-                                        placeholder="e.g., 12"
+                                        placeholder="e.g., 12.50"
                                     /></label>
                             </div>
                             <div className="modal-footer">
@@ -1259,20 +1459,20 @@ const ManagePlacements = () => {
                                         <input
                                             id="edit-trend-avg"
                                             type="number"
-                                            step="0.1"
+                                            step="0.01"
                                             value={trendForm.avg}
                                             onChange={(e) => setTrendForm({ ...trendForm, avg: parseFloat(e.target.value) })}
                                             required
-                                            placeholder="e.g., 8.5"
+                                            placeholder="e.g., 8.50"
                                         /></label>
                                 </div>
                                 <div className="form-group-placement">
-                                    <label>Number of Companies *
+                                    <label>Students Placed *
                                         <input
-                                            id="edit-trend-companies"
+                                            id="edit-trend-studentsPlaced"
                                             type="number"
-                                            value={trendForm.companies}
-                                            onChange={(e) => setTrendForm({ ...trendForm, companies: parseInt(e.target.value) })}
+                                            value={trendForm.studentsPlaced}
+                                            onChange={(e) => setTrendForm({ ...trendForm, studentsPlaced: parseInt(e.target.value) })}
                                             required
                                             placeholder="e.g., 120"
                                         /></label>
@@ -1325,20 +1525,20 @@ const ManagePlacements = () => {
                                         <input
                                             id="trend-avg"
                                             type="number"
-                                            step="0.1"
+                                            step="0.01"
                                             value={trendForm.avg}
                                             onChange={(e) => setTrendForm({ ...trendForm, avg: e.target.value })}
                                             required
-                                            placeholder="e.g., 12.5"
+                                            placeholder="e.g., 12.50"
                                         /></label>
                                 </div>
                                 <div className="form-group-placement">
-                                    <label>Companies Count *
+                                    <label>Students Placed *
                                         <input
-                                            id="trend-companies"
+                                            id="trend-studentsPlaced"
                                             type="number"
-                                            value={trendForm.companies}
-                                            onChange={(e) => setTrendForm({ ...trendForm, companies: e.target.value })}
+                                            value={trendForm.studentsPlaced}
+                                            onChange={(e) => setTrendForm({ ...trendForm, studentsPlaced: e.target.value })}
                                             required
                                             placeholder="e.g., 45"
                                         /></label>

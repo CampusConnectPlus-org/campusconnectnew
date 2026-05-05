@@ -139,6 +139,19 @@
   font-size: 1.08rem;
 }
 
+.club-admin-main section label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.club-admin-main section label span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+}
+
 .club-admin-main input,
 .club-admin-main textarea {
   width: 100%;
