@@ -13,21 +13,25 @@ const addComment = async (req, res) => {
       });
     }
 
-    const comment = await Comment.create({
-      postId: req.body.postId,
-      userId: req.user.id,
-      text: req.body.text
-    });
+const comment = await Comment.create({
+  postId: req.body.postId,
+  userId: req.user.id,
+  text: req.body.text
+});
 
-    res.json(comment);
+const populatedComment = await Comment.findById(comment._id)
+  .populate("userId", "name");
+
+res.json(populatedComment);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
 const getComments = async (req, res) => {
-  const comments = await Comment.find({ postId: req.params.postId })
-    .sort({ createdAt: -1 });
+ const comments = await Comment.find({ postId: req.params.postId })
+  .populate("userId", "name")
+  .sort({ createdAt: -1 });
   res.json(comments);
 };
 
